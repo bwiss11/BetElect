@@ -7,7 +7,10 @@ const Home = () => {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    setData(GetGames());
+    GetGames().then((res) => {
+      console.log("executing");
+      setData(res);
+    });
     // fetch("http://192.168.0.155:3000/test", {
     //   method: "GET",
     // })
