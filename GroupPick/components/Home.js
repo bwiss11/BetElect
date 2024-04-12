@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import { GetGames } from "../backend/functions";
 import { Game } from "../components/Game";
@@ -14,56 +14,43 @@ const Home = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log("data is ", data);
-    // for (let i = 0; i < data.length; i++) {
-    //   console.log("game is", data[i]);
-    //   console.log(
-    //     "team1: ",
-    //     data[i].teams.away.team.name,
-    //     "team2: ",
-    //     data[i].teams.home.team.name
-    //   );
-    // }
-  }, [data]);
+  useEffect(() => {}, [data]);
+
   if (data) {
     return (
-      <View>
-        <Text>{name}</Text>
-        <Pressable
-          onPress={() => {
-            setName("Blaine");
-          }}
-        >
-          <Text>Press me!</Text>
-        </Pressable>
-        {data.map((game, index) => (
-          <Game
-            key={index}
-            awayTeam={game.teams.away.team.name}
-            homeTeam={game.teams.home.team.name}
-          />
-        ))}
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text>{name}</Text>
+          <Pressable
+            onPress={() => {
+              setName("Blaine");
+            }}
+          >
+            <Text>Press me!</Text>
+          </Pressable>
+          {data.map((game, index) => (
+            <Game
+              key={index}
+              awayTeam={game.teams.away.team.name}
+              awayTeamWins={game.teams.away.leagueRecord.wins}
+              awayTeamLosses={game.teams.away.leagueRecord.losses}
+              homeTeam={game.teams.home.team.name}
+              homeTeamWins={game.teams.home.leagueRecord.wins}
+              homeTeamLosses={game.teams.home.leagueRecord.losses}
+            />
+          ))}
+        </View>
+      </ScrollView>
     );
-  } else {
-    return <div>No data</div>;
   }
 };
 
 export default Home;
 
-// console.log(
-//     "game, index",
-//     game.teams.away.team.name,
-//     game.teams.home.team.name,
-//     index
-//   )
-
-{
-  /* <tr key={index}>
-<td>{game.teams.away.team.name}</td>
-<td>{game.teams.home.team.name}</td>
-
-</tr> */
-}
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    backgroundColor: "red",
+    justifyContent: "center",
+  },
+});
