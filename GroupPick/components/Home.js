@@ -1,20 +1,25 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { GetGames } from "../backend/functions";
+import { GetGames, GetOdds } from "../backend/functions";
 import { Game } from "../components/Game";
 
 const Home = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
+  const [odds, setOdds] = useState("");
 
   useEffect(() => {
     GetGames().then((res) => {
-      console.log("executing");
       setData(res);
     });
+    let odds = GetOdds();
+    console.log("odds are:", odds);
+    setOdds(odds);
   }, []);
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    console.log("data is", data);
+  }, [data]);
 
   if (data) {
     return (
@@ -31,6 +36,7 @@ const Home = () => {
           {data.map((game, index) => (
             <Game
               key={index}
+              time={game.gameDate}
               awayTeam={game.teams.away.team.name}
               awayTeamWins={game.teams.away.leagueRecord.wins}
               awayTeamLosses={game.teams.away.leagueRecord.losses}
@@ -51,6 +57,5 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     backgroundColor: "red",
-    justifyContent: "center",
   },
 });

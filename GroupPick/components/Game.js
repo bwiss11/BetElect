@@ -1,23 +1,35 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
+import { WinningChoices } from "./WinningChoices";
+import { TotalsChoices } from "./TotalsChoices";
+import { Team } from "./Team";
 
 const Game = (props) => {
-  console.log("game props", props);
+  //   console.log("game props", props);
+  let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
-      <View style={styles.teams}>
+      <View>
         <Text>
-          {props.awayTeam} @ {props.homeTeam}
+          {myTime.toLocaleTimeString([], {
+            timeStyle: "short",
+          })}
         </Text>
       </View>
-      <View style={styles.records}>
-        <Text>
-          ({props.awayTeamWins} - {props.awayTeamLosses})
-        </Text>
-        <Text>
-          ({props.homeTeamWins} - {props.homeTeamLosses})
-        </Text>
+      <View style={styles.teamsContainer}>
+        <Team
+          team={props.awayTeam}
+          wins={props.awayTeamWins}
+          losses={props.awayTeamLosses}
+        />
+        <Team
+          team={props.homeTeam}
+          wins={props.homeTeamWins}
+          losses={props.homeTeamLosses}
+        />
       </View>
+      <WinningChoices />
+      <TotalsChoices />
     </View>
   );
 };
@@ -25,32 +37,23 @@ const Game = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    color: "black",
+    backgroundColor: "aqua",
+    alignItems: "center",
     margin: 10,
     borderColor: "black",
     borderWidth: 2,
-    padding: 5,
-    borderRadius: 10,
+    overflow: "hide",
   },
-  teams: {
-    margin: 1,
+  teams: {},
+  recordsContainer: {
+    flexDirection: "row",
   },
   records: {
-    flexDirection: "row",
-    margin: 1,
+    paddingRight: 100,
   },
-  //   title: {
-  //     marginTop: 16,
-  //     paddingVertical: 8,
-  //     borderWidth: 4,
-  //     borderColor: "#20232a",
-  //     borderRadius: 6,
-  //     backgroundColor: "#61dafb",
-  //     color: "#20232a",
-  //     textAlign: "center",
-  //     fontSize: 30,
-  //     fontWeight: "bold",
-  //   },
+  teamsContainer: {
+    flexDirection: "row",
+  },
 });
 
 export { Game };
