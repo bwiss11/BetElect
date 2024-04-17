@@ -5,7 +5,7 @@ import { TotalsChoices } from "./TotalsChoices";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  //   console.log("game props", props);
+  console.log("game props", props);
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
@@ -28,8 +28,17 @@ const Game = (props) => {
           losses={props.homeTeamLosses}
         />
       </View>
-      <WinningChoices />
-      <TotalsChoices />
+      <WinningChoices
+        homeML={props.homeML}
+        awayML={props.awayML}
+        homeSpreadOdds={props.homeSpreadOdds}
+        awaySpreadOdds={props.awaySpreadOdds}
+      />
+      <TotalsChoices
+        total={props.total}
+        over={props.over}
+        under={props.under}
+      />
     </View>
   );
 };

@@ -1,17 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-const TotalsChoices = () => {
+const TotalsChoices = (props) => {
   return (
     <View style={styles.container}>
       <Pressable style={styles.button25}>
         <Text>Under</Text>
+        <Text>{props.under}</Text>
       </Pressable>
       <Pressable style={styles.button50}>
         <Text>O/U: </Text>
+        <Text>{props.total}</Text>
       </Pressable>
       <Pressable style={styles.button25}>
         <Text>Over</Text>
+        <Text>{props.over}</Text>
       </Pressable>
     </View>
   );

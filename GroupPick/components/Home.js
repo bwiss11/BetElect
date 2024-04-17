@@ -43,6 +43,13 @@ const Home = () => {
               homeTeam={game.teams.home.team.name}
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
+              homeML={odds[index].homeML}
+              awayML={odds[index].awayML}
+              homeSpreadOdds={odds[index].homeSpread}
+              awaySpreadOdds={odds[index].awaySpread}
+              total={odds[index].total}
+              over={odds[index].over}
+              under={odds[index].under}
             />
           ))}
         </View>
