@@ -5,11 +5,12 @@ const Team = (props) => {
   // console.log("Team props", props);
   return (
     <View style={styles.container}>
-      <View style={styles.team}>
-        <Text>{props.team}</Text>
-        <Text>
-          {props.wins} - {props.losses}
+      <View style={styles.gameInfo}>
+        <Text style={styles.teamName}>{props.team}</Text>
+        <Text style={styles.record}>
+          ({props.wins} - {props.losses})
         </Text>
+        <Text style={styles.starter}>{props.starter}</Text>
       </View>
     </View>
   );
@@ -18,15 +19,22 @@ const Team = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "aqua",
+    backgroundColor: "white",
     alignItems: "center",
     borderColor: "black",
     borderWidth: 1,
   },
-  team: {
-    alignItems: "center",
+  gameInfo: {
     padding: 10,
+    alignItems: "center",
   },
+  teamName: {
+    alignItems: "center",
+    fontWeight: "bold",
+    fontStyle: "bold",
+  },
+  record: {},
+  starter: {},
 });
 
 export { Team };

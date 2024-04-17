@@ -1,7 +1,9 @@
 import React from "react";
 
 function GetGames() {
-  return fetch("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1")
+  return fetch(
+    "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher"
+  )
     .then((res) => {
       data = res.json();
       return data;

@@ -19,6 +19,14 @@ const Home = () => {
 
   useEffect(() => {
     console.log("data is", data);
+    // for (let i = 0; i < data.length; i++) {
+    //   console.log(
+    //     "game is",
+    //     data[i].teams.away.probablePitcher
+    //       ? data[i].teams.away.probablePitcher
+    //       : "TBD"
+    //   );
+    // }
   }, [data]);
 
   if (data) {
@@ -38,9 +46,19 @@ const Home = () => {
               key={index}
               time={game.gameDate}
               awayTeam={game.teams.away.team.name}
+              awayStarter={
+                game.teams.away.probablePitcher
+                  ? game.teams.away.probablePitcher.fullName
+                  : "TBD"
+              }
               awayTeamWins={game.teams.away.leagueRecord.wins}
               awayTeamLosses={game.teams.away.leagueRecord.losses}
               homeTeam={game.teams.home.team.name}
+              homeStarter={
+                game.teams.home.probablePitcher
+                  ? game.teams.home.probablePitcher.fullName
+                  : "TBD"
+              }
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
               homeML={odds[index].homeML}
@@ -63,6 +81,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    backgroundColor: "red",
+    backgroundColor: "black",
   },
 });

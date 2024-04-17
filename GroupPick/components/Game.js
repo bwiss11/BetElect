@@ -10,7 +10,7 @@ const Game = (props) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text>
+        <Text style={styles.time}>
           {myTime.toLocaleTimeString([], {
             timeStyle: "short",
           })}
@@ -21,11 +21,13 @@ const Game = (props) => {
           team={props.awayTeam}
           wins={props.awayTeamWins}
           losses={props.awayTeamLosses}
+          starter={props.awayStarter}
         />
         <Team
           team={props.homeTeam}
           wins={props.homeTeamWins}
           losses={props.homeTeamLosses}
+          starter={props.homeStarter}
         />
       </View>
       <WinningChoices
@@ -46,14 +48,16 @@ const Game = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "aqua",
+    backgroundColor: "white",
     alignItems: "center",
     margin: 10,
     borderColor: "black",
     borderWidth: 2,
     overflow: "hide",
   },
-  teams: {},
+  time: {
+    padding: 5,
+  },
   recordsContainer: {
     flexDirection: "row",
   },

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     borderColor: "black",
-    backgroundColor: "yellow",
+    backgroundColor: "rgb(2, 190, 252)",
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,

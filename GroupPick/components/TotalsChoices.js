@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 const TotalsChoices = (props) => {
   return (
@@ -24,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     borderColor: "black",
-    backgroundColor: "yellow",
+    backgroundColor: "rgb(2, 190, 252)",
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,
@@ -41,6 +47,7 @@ const styles = StyleSheet.create({
   button50: {
     width: "50%",
     borderColor: "black",
+    backgroundColor: "white",
     borderWidth: 2,
     alignItems: "center",
     paddingTop: 5,
