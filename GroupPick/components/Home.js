@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { GetGames, GetOdds } from "../backend/functions";
+import { GetGames, GetOdds, GetPitcherStats } from "../backend/functions";
 import { Game } from "../components/Game";
 
 const Home = () => {
@@ -51,6 +51,11 @@ const Home = () => {
                   ? game.teams.away.probablePitcher.fullName
                   : "TBD"
               }
+              awayStarterPlayerID={
+                game.teams.away.probablePitcher
+                  ? game.teams.away.probablePitcher.id
+                  : "NA"
+              }
               awayTeamWins={game.teams.away.leagueRecord.wins}
               awayTeamLosses={game.teams.away.leagueRecord.losses}
               homeTeam={game.teams.home.team.name}
@@ -58,6 +63,11 @@ const Home = () => {
                 game.teams.home.probablePitcher
                   ? game.teams.home.probablePitcher.fullName
                   : "TBD"
+              }
+              homeStarterPlayerID={
+                game.teams.home.probablePitcher
+                  ? game.teams.home.probablePitcher.id
+                  : "NA"
               }
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
@@ -80,7 +90,10 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: "100%",
-    backgroundColor: "black",
+    backgroundColor: "grey",
+    //     backgroundImage:
+    //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
   },
 });

@@ -190,4 +190,19 @@ function GetOdds() {
   return odds;
 }
 
-export { GetGames, GetOdds };
+function GetPitcherStats(playerID) {
+  if (playerID) {
+    return fetch(
+      "https://statsapi.mlb.com/api/v1/people?personIds=" +
+        playerID.toString() +
+        "&hydrate=stats(group=[pitching],type=season,season=2024)"
+    ).then((res) => {
+      data = res.json();
+      return data;
+    });
+  } else {
+    return {};
+  }
+}
+
+export { GetGames, GetOdds, GetPitcherStats };

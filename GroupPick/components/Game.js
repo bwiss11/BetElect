@@ -22,12 +22,14 @@ const Game = (props) => {
           wins={props.awayTeamWins}
           losses={props.awayTeamLosses}
           starter={props.awayStarter}
+          starterID={props.awayStarterPlayerID}
         />
         <Team
           team={props.homeTeam}
           wins={props.homeTeamWins}
           losses={props.homeTeamLosses}
           starter={props.homeStarter}
+          starterID={props.homeStarterPlayerID}
         />
       </View>
       <WinningChoices
@@ -66,6 +68,7 @@ const styles = StyleSheet.create({
   },
   teamsContainer: {
     flexDirection: "row",
+    backgroundColor: "red",
   },
 });
 
