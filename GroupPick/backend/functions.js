@@ -1,4 +1,6 @@
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import fakeOdds from "../odds.json";
 
 function GetGames() {
   const curDate = new Date(Date.now()).toISOString().split("T")[0];
@@ -222,18 +224,30 @@ function GetTeamData(teamID) {
   }
 }
 
-// function GetTeamLogo(teamID) {
-//   if (teamID) {
-//     return fetch(
-//       "https://www.mlbstatic.com/team-logos/team-cap-on-dark/" +
-//         teamID.toString() +
-//         ".svg"
-//     ).then((res) => {
-//       return res.url;
-//     });
-//   } else {
-//     return {};
-//   }
-// }
+const StoreData = async () => {
+  try {
+    // Call to bets API to get value
+    const jsonValue = JSON.stringify(fakeOdds);
+    const curDate = new Date(Date.now()).toISOString().split("T")[0];
+    console.log("StoreData curDate", curDate);
+    // Store json object response as "current data":"betting odds object"
+    await AsyncStorage.setItem("placeholderDate1", jsonValue);
+  } catch (e) {
+    // saving error
+  }
+};
 
-export { GetGames, GetOdds, GetPitcherStats, GetTeamData };
+const GetData = async () => {
+  try {
+    // Get current date object in YYYY-MM-DD format
+    const curDate = new Date(Date.now()).toISOString().split("T")[0];
+    console.log("GetData curDate", curDate);
+    // Use current date's key to get the associated odds if they've already been stored, else return null
+    const jsonValue = await AsyncStorage.getItem("placeholderDate1");
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    // error reading value
+  }
+};
+
+export { GetGames, GetOdds, GetPitcherStats, GetTeamData, StoreData, GetData };

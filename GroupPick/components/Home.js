@@ -1,12 +1,13 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { GetGames, GetOdds, GetPitcherStats } from "../backend/functions";
+import { GetGames, GetOdds, StoreData, GetData } from "../backend/functions";
 import { Game } from "../components/Game";
 
 const Home = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
+  const [oddsBool, setOddsBool] = useState(false);
 
   useEffect(() => {
     GetGames().then((res) => {
@@ -14,7 +15,27 @@ const Home = () => {
     });
     let odds = GetOdds();
     setOdds(odds);
+    GetData("placeholderDate1").then((res) => {
+      if (!res) {
+        console.log("fumbled response is", res);
+        StoreData().then(() => {
+          console.log("storing my data now");
+        });
+      } else {
+        console.log("retrieved:", res);
+      }
+    });
+    // StoreData("my-value").then(() => {
+    //   console.log("setting oddsbool to true");
+    //   setOddsBool(true);
+    // });
   }, []);
+
+  useEffect(() => {
+    GetData().then((res) => {
+      if (oddsBool) console.log("res from GetData", res);
+    });
+  }, [oddsBool]);
 
   if (data) {
     return (
