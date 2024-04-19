@@ -96,15 +96,15 @@ const Team = (props) => {
   } else if (pitcherStats) {
     if (props.starterID) {
       return (
-        <View style={styles.container}>
+        <View style={dynamicStyle(props.teamType)}>
           <View style={styles.teamInfo}>
             <Text style={styles.teamName}>{teamData[0]}</Text>
             <Text style={styles.teamName}>{teamData[1]}</Text>
             <Text style={styles.record}>
               ({props.wins} - {props.losses})
             </Text>
-            <Image style={styles.image} source={{ uri: imageLink }}></Image>
           </View>
+          <Image style={styles.image} source={{ uri: imageLink }}></Image>
           <View style={styles.pitcherInfo}>
             <Text style={styles.starter}>{props.starter}</Text>
             <Text style={styles.starterStats}>(0 - 0, 0.00)</Text>
