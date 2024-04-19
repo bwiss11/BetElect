@@ -17,21 +17,9 @@ const Home = () => {
     setOdds(odds);
   }, []);
 
-  useEffect(() => {
-    console.log("data is", data);
-    // for (let i = 0; i < data.length; i++) {
-    //   console.log(
-    //     "game is",
-    //     data[i].teams.away.probablePitcher
-    //       ? data[i].teams.away.probablePitcher
-    //       : "TBD"
-    //   );
-    // }
-  }, [data]);
-
   if (data) {
     return (
-      <ScrollView>
+      <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
           <Text>{name}</Text>
           <Pressable
@@ -45,7 +33,7 @@ const Home = () => {
             <Game
               key={index}
               time={game.gameDate}
-              awayTeam={game.teams.away.team.name}
+              awayTeamID={game.teams.away.team.id}
               awayStarter={
                 game.teams.away.probablePitcher
                   ? game.teams.away.probablePitcher.fullName
@@ -58,7 +46,7 @@ const Home = () => {
               }
               awayTeamWins={game.teams.away.leagueRecord.wins}
               awayTeamLosses={game.teams.away.leagueRecord.losses}
-              homeTeam={game.teams.home.team.name}
+              homeTeamID={game.teams.home.team.id}
               homeStarter={
                 game.teams.home.probablePitcher
                   ? game.teams.home.probablePitcher.fullName
@@ -89,6 +77,7 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  outermostContainer: { minWidth: "50%" },
   container: {
     flex: 1,
     width: "100%",

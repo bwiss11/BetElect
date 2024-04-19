@@ -205,4 +205,31 @@ function GetPitcherStats(playerID) {
   }
 }
 
-export { GetGames, GetOdds, GetPitcherStats };
+function GetTeamData(teamID) {
+  if (teamID) {
+    return fetch(
+      "https://statsapi.mlb.com/api/v1/teams/" + teamID.toString()
+    ).then((res) => {
+      data = res.json();
+      return data;
+    });
+  } else {
+    return {};
+  }
+}
+
+// function GetTeamLogo(teamID) {
+//   if (teamID) {
+//     return fetch(
+//       "https://www.mlbstatic.com/team-logos/team-cap-on-dark/" +
+//         teamID.toString() +
+//         ".svg"
+//     ).then((res) => {
+//       return res.url;
+//     });
+//   } else {
+//     return {};
+//   }
+// }
+
+export { GetGames, GetOdds, GetPitcherStats, GetTeamData };

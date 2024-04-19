@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { WinningChoices } from "./WinningChoices";
-import { TotalsChoices } from "./TotalsChoices";
+import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
@@ -18,6 +17,8 @@ const Game = (props) => {
       </View>
       <View style={styles.teamsContainer}>
         <Team
+          teamType="away"
+          teamID={props.awayTeamID}
           team={props.awayTeam}
           wins={props.awayTeamWins}
           losses={props.awayTeamLosses}
@@ -25,6 +26,8 @@ const Game = (props) => {
           starterID={props.awayStarterPlayerID}
         />
         <Team
+          teamType="home"
+          teamID={props.homeTeamID}
           team={props.homeTeam}
           wins={props.homeTeamWins}
           losses={props.homeTeamLosses}
@@ -32,13 +35,11 @@ const Game = (props) => {
           starterID={props.homeStarterPlayerID}
         />
       </View>
-      <WinningChoices
+      <PickOptions
         homeML={props.homeML}
         awayML={props.awayML}
         homeSpreadOdds={props.homeSpreadOdds}
         awaySpreadOdds={props.awaySpreadOdds}
-      />
-      <TotalsChoices
         total={props.total}
         over={props.over}
         under={props.under}
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
     borderColor: "black",
-    borderWidth: 2,
+    borderWidth: 3,
     overflow: "hide",
   },
   time: {
@@ -68,7 +69,11 @@ const styles = StyleSheet.create({
   },
   teamsContainer: {
     flexDirection: "row",
-    backgroundColor: "red",
+  },
+  awayTeam: {
+    rightBorderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "black",
   },
 });
 
