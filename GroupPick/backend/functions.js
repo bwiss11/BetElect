@@ -1,8 +1,12 @@
 import React from "react";
 
 function GetGames() {
+  const curDate = new Date(Date.now()).toISOString().split("T")[0];
   return fetch(
-    "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher"
+    "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher&startDate=" +
+      curDate +
+      "&endDate=" +
+      curDate
   )
     .then((res) => {
       data = res.json();

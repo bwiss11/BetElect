@@ -13,7 +13,6 @@ const Home = () => {
       setData(res);
     });
     let odds = GetOdds();
-    console.log("odds are:", odds);
     setOdds(odds);
   }, []);
 
@@ -42,7 +41,7 @@ const Home = () => {
               awayStarterPlayerID={
                 game.teams.away.probablePitcher
                   ? game.teams.away.probablePitcher.id
-                  : "NA"
+                  : ""
               }
               awayTeamWins={game.teams.away.leagueRecord.wins}
               awayTeamLosses={game.teams.away.leagueRecord.losses}
@@ -55,7 +54,7 @@ const Home = () => {
               homeStarterPlayerID={
                 game.teams.home.probablePitcher
                   ? game.teams.home.probablePitcher.id
-                  : "NA"
+                  : ""
               }
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
@@ -77,11 +76,12 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  outermostContainer: { minWidth: "50%" },
+  outermostContainer: { minWidth: "40%" },
   container: {
     flex: 1,
     width: "100%",
     backgroundColor: "grey",
+    alignItems: "center",
     //     backgroundImage:
     //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
   },

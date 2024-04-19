@@ -4,11 +4,11 @@ import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  console.log("game props", props);
+  //   console.log("game props", props);
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.timeHolder}>
         <Text style={styles.time}>
           {myTime.toLocaleTimeString([], {
             timeStyle: "short",
@@ -51,11 +51,12 @@ const Game = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    maxWidth: 900,
     backgroundColor: "white",
     alignItems: "center",
     margin: 10,
     borderColor: "black",
-    borderWidth: 3,
+    borderWidth: 4,
     overflow: "hide",
   },
   time: {
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   },
   teamsContainer: {
     flexDirection: "row",
+
   },
   awayTeam: {
     rightBorderWidth: 1,

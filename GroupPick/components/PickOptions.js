@@ -18,7 +18,6 @@ const PickOptions = (props) => {
     Number(props.homeML.slice(1, props.homeML.length)) >
       Number(props.awayML.slice(1, props.awayML.length))
   ) {
-    console.log(Number(props.homeML.slice(1, props.homeML.length)));
     homeSpread = "-1.5";
     awaySpread = "+1.5";
   } else {
@@ -32,55 +31,80 @@ const PickOptions = (props) => {
     <>
       <View style={styles.container}>
         <Pressable
-          onPress={() => setUserPick("awayML")}
+          onPress={() => setUserPick("awaySpread")}
           style={
-            userPick == "awayML" ? styles.button25Selected : styles.button25
+            userPick == "awaySpread"
+              ? styles.button25FarLeftSelected
+              : styles.button25FarLeft
           }
         >
-          <Text style={userPick == "awayML" ? styles.textSelected : ""}>
-            ML
+          <Text
+            style={userPick == "awaySpread" ? styles.textSelected : styles.text}
+          >
+            {awaySpread}
           </Text>
-          <Text style={userPick == "awayML" ? styles.textSelected : ""}>
-            {props.awayML}
+          <Text
+            style={userPick == "awaySpread" ? styles.textSelected : styles.text}
+          >
+            {props.awaySpreadOdds}
           </Text>
         </Pressable>
         <Pressable
-          onPress={() => setUserPick("awaySpread")}
+          onPress={() => setUserPick("awayML")}
           style={
-            userPick == "awaySpread" ? styles.button25Selected : styles.button25
+            userPick == "awayML"
+              ? styles.button25MiddleLeftSelected
+              : styles.button25MiddleLeft
           }
         >
-          <Text style={userPick == "awaySpread" ? styles.textSelected : ""}>
-            {awaySpread}
+          <Text
+            style={userPick == "awayML" ? styles.textSelected : styles.text}
+          >
+            ML
           </Text>
-          <Text style={userPick == "awaySpread" ? styles.textSelected : ""}>
-            {props.awaySpreadOdds}
+          <Text
+            style={userPick == "awayML" ? styles.textSelected : styles.text}
+          >
+            {props.awayML}
+          </Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => setUserPick("homeML")}
+          style={
+            userPick == "homeML"
+              ? styles.button25MiddleRightSelected
+              : styles.button25MiddleRight
+          }
+        >
+          <Text
+            style={userPick == "homeML" ? styles.textSelected : styles.text}
+          >
+            ML
+          </Text>
+          <Text
+            style={userPick == "homeML" ? styles.textSelected : styles.text}
+          >
+            {props.homeML}
           </Text>
         </Pressable>
         <Pressable
           onPress={() => setUserPick("homeSpread")}
           style={
-            userPick == "homeSpread" ? styles.button25Selected : styles.button25
+            userPick == "homeSpread"
+              ? styles.button25FarRightSelected
+              : styles.button25FarRight
           }
         >
-          <Text style={userPick == "homeSpread" ? styles.textSelected : ""}>
+          <Text
+            style={userPick == "homeSpread" ? styles.textSelected : styles.text}
+          >
             {homeSpread}
           </Text>
-          <Text style={userPick == "homeSpread" ? styles.textSelected : ""}>
+          <Text
+            style={userPick == "homeSpread" ? styles.textSelected : styles.text}
+          >
             {props.homeSpreadOdds}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setUserPick("homeML")}
-          style={
-            userPick == "homeML" ? styles.button25Selected : styles.button25
-          }
-        >
-          <Text style={userPick == "homeML" ? styles.textSelected : ""}>
-            ML
-          </Text>
-          <Text style={userPick == "homeML" ? styles.textSelected : ""}>
-            {props.homeML}
           </Text>
         </Pressable>
       </View>
@@ -88,24 +112,30 @@ const PickOptions = (props) => {
         <Pressable
           onPress={() => setUserPick("under")}
           style={
-            userPick == "under" ? styles.button50Selected : styles.button50
+            userPick == "under"
+              ? styles.button50LeftSelected
+              : styles.button50Left
           }
         >
-          <Text style={userPick == "under" ? styles.textSelected : ""}>
+          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
             Under {props.total}
           </Text>
-          <Text style={userPick == "under" ? styles.textSelected : ""}>
+          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
             {props.under}
           </Text>
         </Pressable>
         <Pressable
           onPress={() => setUserPick("over")}
-          style={userPick == "over" ? styles.button50Selected : styles.button50}
+          style={
+            userPick == "over"
+              ? styles.button50RightSelected
+              : styles.button50Right
+          }
         >
-          <Text style={userPick == "over" ? styles.textSelected : ""}>
+          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
             Over {props.total}
           </Text>
-          <Text style={userPick == "over" ? styles.textSelected : ""}>
+          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
             {props.over}
           </Text>
         </Pressable>
@@ -117,7 +147,9 @@ const PickOptions = (props) => {
             userPick == "optOut" ? styles.button100Selected : styles.button100
           }
         >
-          <Text style={userPick == "optOut" ? styles.textSelected : ""}>
+          <Text
+            style={userPick == "optOut" ? styles.textSelected : styles.text}
+          >
             Opt Out
           </Text>
         </Pressable>
@@ -134,40 +166,128 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: "wrap",
   },
-  button25: {
+  button25FarLeft: {
     width: "25%",
     borderColor: "black",
     backgroundColor: "#cccccc",
-    borderWidth: 1,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
   },
-  button25Selected: {
+  button25FarLeftSelected: {
     width: "25%",
     borderColor: "black",
-    color: "white",
     backgroundColor: "rgb(60, 90, 190)",
-    borderWidth: 1,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
   },
-  button50: {
+  button25MiddleLeft: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25MiddleLeftSelected: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25MiddleRight: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25MiddleRightSelected: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25FarRight: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    alignItems: "center",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25FarRightSelected: {
+    width: "25%",
+    borderColor: "black",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button50Left: {
     width: "50%",
     borderColor: "black",
     backgroundColor: "#cccccc",
-    borderWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
   },
-  button50Selected: {
+  button50LeftSelected: {
     width: "50%",
     borderColor: "black",
     color: "white",
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
     backgroundColor: "rgb(60, 90, 190)",
-    borderWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button50Right: {
+    width: "50%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button50RightSelected: {
+    width: "50%",
+    borderColor: "black",
+    color: "white",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    backgroundColor: "rgb(60, 90, 190)",
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
@@ -176,7 +296,6 @@ const styles = StyleSheet.create({
     width: "100%",
     borderColor: "black",
     backgroundColor: "#cccccc",
-    borderWidth: 1,
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
@@ -186,7 +305,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     backgroundColor: "rgb(60, 90, 190)",
     fontColor: "white",
-    borderWidth: 1,
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
