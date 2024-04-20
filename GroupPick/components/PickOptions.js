@@ -8,22 +8,24 @@ import {
 } from "react-native";
 
 const PickOptions = (props) => {
-  let homeSpread;
-  if (props.homeML[0] == "-" && props.awayML[0] == "+") {
-    homeSpread = "-1.5";
-    awaySpread = "+1.5";
-  } else if (
-    props.homeML[0] == "-" &&
-    props.awayML[0] == "-" &&
-    Number(props.homeML.slice(1, props.homeML.length)) >
-      Number(props.awayML.slice(1, props.awayML.length))
-  ) {
-    homeSpread = "-1.5";
-    awaySpread = "+1.5";
-  } else {
-    homeSpread = "+1.5";
-    awaySpread = "-1.5";
-  }
+  console.log("pickoption props", props);
+  // let homeSpread;
+  // if (props.homeML && props.homeML[0] == "-" && props.awayML[0] == "+") {
+  //   homeSpread = "-1.5";
+  //   awaySpread = "+1.5";
+  // } else if (
+  //   props.homeML &&
+  //   props.homeML[0] == "-" &&
+  //   props.awayML[0] == "-" &&
+  //   Number(props.homeML.slice(1, props.homeML.length)) >
+  //     Number(props.awayML.slice(1, props.awayML.length))
+  // ) {
+  //   homeSpread = "-1.5";
+  //   awaySpread = "+1.5";
+  // } else {
+  //   homeSpread = "+1.5";
+  //   awaySpread = "-1.5";
+  // }
 
   const [userPick, setUserPick] = useState("optOut");
 
@@ -41,12 +43,16 @@ const PickOptions = (props) => {
           <Text
             style={userPick == "awaySpread" ? styles.textSelected : styles.text}
           >
-            {awaySpread}
+            {Number(props.awaySpread) > 0
+              ? "+" + props.awaySpread
+              : props.awaySpread}
           </Text>
           <Text
             style={userPick == "awaySpread" ? styles.textSelected : styles.text}
           >
-            {props.awaySpreadOdds}
+            {Number(props.awaySpreadOdds) > 0
+              ? "+" + props.awaySpreadOdds
+              : props.awaySpreadOdds}
           </Text>
         </Pressable>
         <Pressable
@@ -65,7 +71,7 @@ const PickOptions = (props) => {
           <Text
             style={userPick == "awayML" ? styles.textSelected : styles.text}
           >
-            {props.awayML}
+            {Number(props.awayML) > 0 ? "+" + props.awayML : props.awayML}
           </Text>
         </Pressable>
 
@@ -85,7 +91,7 @@ const PickOptions = (props) => {
           <Text
             style={userPick == "homeML" ? styles.textSelected : styles.text}
           >
-            {props.homeML}
+            {Number(props.homeML) > 0 ? "+" + props.homeML : props.homeML}
           </Text>
         </Pressable>
         <Pressable
@@ -99,12 +105,16 @@ const PickOptions = (props) => {
           <Text
             style={userPick == "homeSpread" ? styles.textSelected : styles.text}
           >
-            {homeSpread}
+            {Number(props.homeSpread) > 0
+              ? "+" + props.homeSpread
+              : props.homeSpread}
           </Text>
           <Text
             style={userPick == "homeSpread" ? styles.textSelected : styles.text}
           >
-            {props.homeSpreadOdds}
+            {Number(props.homeSpreadOdds) > 0
+              ? "+" + props.homeSpreadOdds
+              : props.homeSpreadOdds}
           </Text>
         </Pressable>
       </View>

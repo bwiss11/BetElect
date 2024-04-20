@@ -4,7 +4,7 @@ import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  //   console.log("game props", props);
+  console.log("game props", props);
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
@@ -38,6 +38,8 @@ const Game = (props) => {
       <PickOptions
         homeML={props.homeML}
         awayML={props.awayML}
+        homeSpread={props.homeSpread}
+        awaySpread={props.awaySpread}
         homeSpreadOdds={props.homeSpreadOdds}
         awaySpreadOdds={props.awaySpreadOdds}
         total={props.total}
@@ -70,7 +72,6 @@ const styles = StyleSheet.create({
   },
   teamsContainer: {
     flexDirection: "row",
-
   },
   awayTeam: {
     rightBorderWidth: 1,

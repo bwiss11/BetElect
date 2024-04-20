@@ -6,6 +6,8 @@ import {
   StoreData,
   GetData,
   clearAll,
+  GetFormattedDate,
+  OddsMaker,
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
@@ -13,14 +15,13 @@ const Home = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
-  const [oddsBool, setOddsBool] = useState(false);
 
   useEffect(() => {
     GetGames().then((res) => {
       setData(res);
     });
-    let odds = GetOdds();
-    setOdds(odds);
+    // let odds = GetOdds();
+    // setOdds(odds);
 
     const curDate = new Date(Date.now()).toISOString().split("T")[0];
     GetData(curDate).then((res) => {
@@ -32,14 +33,16 @@ const Home = () => {
         console.log("retrieved:", res);
       }
     });
-
-    // StoreData("my-value").then(() => {
-    //   console.log("setting oddsbool to true");
-    //   setOddsBool(true);
-    // });
   }, []);
 
-  if (data) {
+  useEffect(() => {
+    OddsMaker(data).then((res) => {
+      setOdds(res);
+    });
+  }, [data]);
+
+  if (data && odds) {
+    console.log("are there really odds", odds, odds[0], odds[1]);
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
@@ -81,13 +84,15 @@ const Home = () => {
               }
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
-              homeML={odds[index].homeML}
-              awayML={odds[index].awayML}
-              homeSpreadOdds={odds[index].homeSpread}
-              awaySpreadOdds={odds[index].awaySpread}
+              homeML={odds[index].homeMLOdds}
+              awayML={odds[index].awayMLOdds}
+              awaySpread={odds[index].awaySpread}
+              homeSpread={odds[index].homeSpread}
+              homeSpreadOdds={odds[index].homeSpreadOdds}
+              awaySpreadOdds={odds[index].awaySpreadOdds}
               total={odds[index].total}
-              over={odds[index].over}
-              under={odds[index].under}
+              over={odds[index].overOdds}
+              under={odds[index].underOdds}
             />
           ))}
         </View>

@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import fakeOdds from "../odds.json";
 
 function GetGames() {
-  const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  const curDate = GetFormattedDate();
   return fetch(
     "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher&startDate=" +
       curDate +
@@ -232,7 +232,7 @@ const StoreData = async () => {
   const data = await response.json();
   try {
     const jsonValue = JSON.stringify(data);
-    const curDate = new Date(Date.now()).toISOString().split("T")[0];
+    const curDate = GetFormattedDate();
     // Store json object response as "current data":"betting odds object"
     await AsyncStorage.setItem(curDate, jsonValue).then(() => {
       console.log("placed data");
@@ -245,7 +245,7 @@ const StoreData = async () => {
 const GetData = async () => {
   try {
     // Get current date object in YYYY-MM-DD format
-    const curDate = new Date(Date.now()).toISOString().split("T")[0];
+    const curDate = GetFormattedDate();
     console.log("GetData curDate", curDate);
     // Use current date's key to get the associated odds if they've already been stored, else return null
     const jsonValue = await AsyncStorage.getItem(curDate);
@@ -265,6 +265,167 @@ const clearAll = async () => {
   console.log("Done.");
 };
 
+const OddsMaker = async (data) => {
+  console.log("\n\n\nCALLING ODDSMAKER\n\n\n\n");
+  if (!data) {
+    console.log("returning null");
+    return null;
+  }
+  console.log("\n\n\n");
+  const fullOdds = await GetData();
+  console.log("fullodds", fullOdds);
+  object = {};
+  if (data) {
+    for (let i = 0; i < data.length; i++) {
+      //   console.log("data", data[i]);
+      object[i] = {
+        awayMLOdds: "",
+        homeMLOdds: "",
+        awaySpread: "",
+        homeSpread: "",
+        awaySpreadOdds: "",
+        homeSpreadOdds: "",
+        total: "",
+        overOdds: "",
+        underOdds: "",
+      };
+      awayTeam = data[i].teams.away.team.name;
+      homeTeam = data[i].teams.home.team.name;
+      gameDate = data[i].gameDate;
+      console.log(gameDate);
+      for (let j = 0; j < fullOdds.length; j++) {
+        // console.log("cur object", fullOdds[j]);
+        // console.log(fullOdds[j].commence_time.split("T")[0]);
+        let awayMLOdds;
+        let homeMLOdds;
+        let awaySpread;
+        let homeSpread;
+        let awaySpreadOdds;
+        let homeSpreadOdds;
+        let total;
+        let overOdds;
+        let underOdds;
+
+        if (
+          fullOdds[j].away_team == awayTeam &&
+          fullOdds[j].home_team == homeTeam &&
+          gameDate == fullOdds[j].commence_time
+        ) {
+          for (let k = 0; k < fullOdds[j].bookmakers[0].markets.length; k++) {
+            marketName = fullOdds[j].bookmakers[0].markets[k].key;
+
+            console.log();
+
+            if (marketName == "h2h") {
+              // Assigning money line odds to variables
+              console.log(
+                awayTeam,
+                homeTeam,
+                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+              );
+              if (
+                awayTeam ==
+                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+              ) {
+                awayMLOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                homeMLOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+              } else if (
+                homeTeam ==
+                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+              ) {
+                awayMLOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                homeMLOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+              }
+            } else if (marketName == "spreads") {
+              // Assigning spreads and spread odds to variables
+              console.log(fullOdds[j].bookmakers[0].markets[k].outcomes[0]);
+              if (
+                awayTeam ==
+                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+              ) {
+                awaySpreadOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                awaySpread =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+                homeSpreadOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                homeSpread =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
+              } else if (
+                homeTeam ==
+                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+              ) {
+                awaySpreadOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                awaySpread =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
+                homeSpreadOdds =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                homeSpread =
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+              }
+            } else if (marketName == "totals") {
+              // Assigning totals and over/under odds to variables
+              total = fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+              overOdds = fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+              underOdds =
+                fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+            }
+          }
+
+          console.log(
+            "oddsfull keys are",
+            awayTeam,
+            homeTeam,
+            awayMLOdds,
+            homeMLOdds,
+            awaySpread,
+            homeSpread,
+            awaySpreadOdds,
+            homeSpreadOdds,
+            total,
+            overOdds,
+            underOdds
+          );
+
+          object[i].awayMLOdds = awayMLOdds;
+          object[i].homeMLOdds = homeMLOdds;
+          object[i].awaySpread = awaySpread;
+          object[i].homeSpread = homeSpread;
+          object[i].awaySpreadOdds = awaySpreadOdds;
+          object[i].homeSpreadOdds = homeSpreadOdds;
+          object[i].total = total;
+          object[i].overOdds = overOdds;
+          object[i].underOdds = underOdds;
+        }
+      }
+    }
+  }
+  //   console.log(object);
+  //   console.log(object[1]);
+  console.log(data[1]);
+  console.log("returning ", object);
+  if (object != {}) {
+    return object;
+  } else {
+    console.log("returning null");
+    return null;
+  }
+};
+
+const GetFormattedDate = () => {
+  t = new Date(Date.now());
+  z = t.getTimezoneOffset() * 60 * 1000;
+  tLocal = t - z;
+  tLocal = new Date(tLocal);
+  iso = tLocal.toISOString().split("T")[0];
+  return iso;
+};
+
 export {
   GetGames,
   GetOdds,
@@ -273,4 +434,6 @@ export {
   StoreData,
   GetData,
   clearAll,
+  OddsMaker,
+  GetFormattedDate,
 };
