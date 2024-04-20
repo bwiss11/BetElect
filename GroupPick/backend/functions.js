@@ -291,94 +291,96 @@ const OddsMaker = async (data) => {
       awayTeam = data[i].teams.away.team.name;
       homeTeam = data[i].teams.home.team.name;
       gameDate = data[i].gameDate;
+      if (fullOdds) {
+        for (let j = 0; j < fullOdds.length; j++) {
+          // console.log("cur object", fullOdds[j]);
+          // console.log(fullOdds[j].commence_time.split("T")[0]);
+          let awayMLOdds;
+          let homeMLOdds;
+          let awaySpread;
+          let homeSpread;
+          let awaySpreadOdds;
+          let homeSpreadOdds;
+          let total;
+          let overOdds;
+          let underOdds;
 
-      for (let j = 0; j < fullOdds.length; j++) {
-        // console.log("cur object", fullOdds[j]);
-        // console.log(fullOdds[j].commence_time.split("T")[0]);
-        let awayMLOdds;
-        let homeMLOdds;
-        let awaySpread;
-        let homeSpread;
-        let awaySpreadOdds;
-        let homeSpreadOdds;
-        let total;
-        let overOdds;
-        let underOdds;
+          if (
+            fullOdds[j].away_team == awayTeam &&
+            fullOdds[j].home_team == homeTeam &&
+            gameDate == fullOdds[j].commence_time
+          ) {
+            for (let k = 0; k < fullOdds[j].bookmakers[0].markets.length; k++) {
+              marketName = fullOdds[j].bookmakers[0].markets[k].key;
 
-        if (
-          fullOdds[j].away_team == awayTeam &&
-          fullOdds[j].home_team == homeTeam &&
-          gameDate == fullOdds[j].commence_time
-        ) {
-          for (let k = 0; k < fullOdds[j].bookmakers[0].markets.length; k++) {
-            marketName = fullOdds[j].bookmakers[0].markets[k].key;
+              if (marketName == "h2h") {
+                // Assigning money line odds to variables
 
-            if (marketName == "h2h") {
-              // Assigning money line odds to variables
+                if (
+                  awayTeam ==
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+                ) {
+                  awayMLOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                  homeMLOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                } else if (
+                  homeTeam ==
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+                ) {
+                  awayMLOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                  homeMLOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                }
+              } else if (marketName == "spreads") {
+                // Assigning spreads and spread odds to variables
 
-              if (
-                awayTeam ==
-                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
-              ) {
-                awayMLOdds =
+                if (
+                  awayTeam ==
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+                ) {
+                  awaySpreadOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                  awaySpread =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+                  homeSpreadOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                  homeSpread =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
+                } else if (
+                  homeTeam ==
+                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
+                ) {
+                  awaySpreadOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
+                  awaySpread =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
+                  homeSpreadOdds =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
+                  homeSpread =
+                    fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+                }
+              } else if (marketName == "totals") {
+                // Assigning totals and over/under odds to variables
+                total = fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
+                overOdds =
                   fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
-                homeMLOdds =
+                underOdds =
                   fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
-              } else if (
-                homeTeam ==
-                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
-              ) {
-                awayMLOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
-                homeMLOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
               }
-            } else if (marketName == "spreads") {
-              // Assigning spreads and spread odds to variables
-
-              if (
-                awayTeam ==
-                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
-              ) {
-                awaySpreadOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
-                awaySpread =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
-                homeSpreadOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
-                homeSpread =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
-              } else if (
-                homeTeam ==
-                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
-              ) {
-                awaySpreadOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
-                awaySpread =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[1].point;
-                homeSpreadOdds =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
-                homeSpread =
-                  fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
-              }
-            } else if (marketName == "totals") {
-              // Assigning totals and over/under odds to variables
-              total = fullOdds[j].bookmakers[0].markets[k].outcomes[0].point;
-              overOdds = fullOdds[j].bookmakers[0].markets[k].outcomes[0].price;
-              underOdds =
-                fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
             }
-          }
 
-          object[i].awayMLOdds = awayMLOdds;
-          object[i].homeMLOdds = homeMLOdds;
-          object[i].awaySpread = awaySpread;
-          object[i].homeSpread = homeSpread;
-          object[i].awaySpreadOdds = awaySpreadOdds;
-          object[i].homeSpreadOdds = homeSpreadOdds;
-          object[i].total = total;
-          object[i].overOdds = overOdds;
-          object[i].underOdds = underOdds;
+            object[i].awayMLOdds = awayMLOdds;
+            object[i].homeMLOdds = homeMLOdds;
+            object[i].awaySpread = awaySpread;
+            object[i].homeSpread = homeSpread;
+            object[i].awaySpreadOdds = awaySpreadOdds;
+            object[i].homeSpreadOdds = homeSpreadOdds;
+            object[i].total = total;
+            object[i].overOdds = overOdds;
+            object[i].underOdds = underOdds;
+          }
         }
       }
     }

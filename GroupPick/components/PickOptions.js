@@ -27,7 +27,7 @@ const PickOptions = (props) => {
   //   awaySpread = "-1.5";
   // }
 
-  const [userPick, setUserPick] = useState("optOut");
+  const [userPick, setUserPick] = useState("");
 
   return (
     <>
