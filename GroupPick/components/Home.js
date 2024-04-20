@@ -22,15 +22,16 @@ const Home = () => {
     });
     // let odds = GetOdds();
     // setOdds(odds);
+    // clearAll();
 
     const curDate = new Date(Date.now()).toISOString().split("T")[0];
     GetData(curDate).then((res) => {
       if (!res) {
         StoreData().then(() => {
-          console.log("storing my data now");
+          //   console.log("storing my data now");
         });
       } else {
-        console.log("retrieved:", res);
+        // console.log("retrieved:", res);
       }
     });
   }, []);
@@ -42,7 +43,6 @@ const Home = () => {
   }, [data]);
 
   if (data && odds) {
-    console.log("are there really odds", odds, odds[0], odds[1]);
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>

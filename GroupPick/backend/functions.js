@@ -228,14 +228,14 @@ const StoreData = async () => {
   const response = await fetch(
     "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/?apiKey=a1a8c66ce88c82f5342af641c0ecd4a8&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
   );
-  console.log("called api");
+  console.log("\n\n\nCALLING API\n\n\n\n");
   const data = await response.json();
   try {
     const jsonValue = JSON.stringify(data);
     const curDate = GetFormattedDate();
     // Store json object response as "current data":"betting odds object"
     await AsyncStorage.setItem(curDate, jsonValue).then(() => {
-      console.log("placed data");
+      //   console.log("placed data");
     });
   } catch (e) {
     // saving error
@@ -246,7 +246,6 @@ const GetData = async () => {
   try {
     // Get current date object in YYYY-MM-DD format
     const curDate = GetFormattedDate();
-    console.log("GetData curDate", curDate);
     // Use current date's key to get the associated odds if they've already been stored, else return null
     const jsonValue = await AsyncStorage.getItem(curDate);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -271,9 +270,9 @@ const OddsMaker = async (data) => {
     console.log("returning null");
     return null;
   }
-  console.log("\n\n\n");
+
   const fullOdds = await GetData();
-  console.log("fullodds", fullOdds);
+
   object = {};
   if (data) {
     for (let i = 0; i < data.length; i++) {
@@ -292,7 +291,7 @@ const OddsMaker = async (data) => {
       awayTeam = data[i].teams.away.team.name;
       homeTeam = data[i].teams.home.team.name;
       gameDate = data[i].gameDate;
-      console.log(gameDate);
+
       for (let j = 0; j < fullOdds.length; j++) {
         // console.log("cur object", fullOdds[j]);
         // console.log(fullOdds[j].commence_time.split("T")[0]);
@@ -314,15 +313,9 @@ const OddsMaker = async (data) => {
           for (let k = 0; k < fullOdds[j].bookmakers[0].markets.length; k++) {
             marketName = fullOdds[j].bookmakers[0].markets[k].key;
 
-            console.log();
-
             if (marketName == "h2h") {
               // Assigning money line odds to variables
-              console.log(
-                awayTeam,
-                homeTeam,
-                fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
-              );
+
               if (
                 awayTeam ==
                 fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
@@ -342,7 +335,7 @@ const OddsMaker = async (data) => {
               }
             } else if (marketName == "spreads") {
               // Assigning spreads and spread odds to variables
-              console.log(fullOdds[j].bookmakers[0].markets[k].outcomes[0]);
+
               if (
                 awayTeam ==
                 fullOdds[j].bookmakers[0].markets[k].outcomes[0].name
@@ -377,21 +370,6 @@ const OddsMaker = async (data) => {
             }
           }
 
-          console.log(
-            "oddsfull keys are",
-            awayTeam,
-            homeTeam,
-            awayMLOdds,
-            homeMLOdds,
-            awaySpread,
-            homeSpread,
-            awaySpreadOdds,
-            homeSpreadOdds,
-            total,
-            overOdds,
-            underOdds
-          );
-
           object[i].awayMLOdds = awayMLOdds;
           object[i].homeMLOdds = homeMLOdds;
           object[i].awaySpread = awaySpread;
@@ -407,12 +385,10 @@ const OddsMaker = async (data) => {
   }
   //   console.log(object);
   //   console.log(object[1]);
-  console.log(data[1]);
-  console.log("returning ", object);
+
   if (object != {}) {
     return object;
   } else {
-    console.log("returning null");
     return null;
   }
 };

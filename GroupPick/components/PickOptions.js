@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 const PickOptions = (props) => {
-  console.log("pickoption props", props);
+  // console.log("pickoption props", props);
   // let homeSpread;
   // if (props.homeML && props.homeML[0] == "-" && props.awayML[0] == "+") {
   //   homeSpread = "-1.5";
@@ -76,6 +76,37 @@ const PickOptions = (props) => {
         </Pressable>
 
         <Pressable
+          onPress={() => setUserPick("under")}
+          style={
+            userPick == "under"
+              ? styles.button25LeftRightSelected
+              : styles.button25LeftRight
+          }
+        >
+          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
+            u{props.total}
+          </Text>
+          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
+            {props.under}
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setUserPick("over")}
+          style={
+            userPick == "over"
+              ? styles.button25RightLeftSelected
+              : styles.button25RightLeft
+          }
+        >
+          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
+            o{props.total}
+          </Text>
+          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
+            {props.over}
+          </Text>
+        </Pressable>
+
+        <Pressable
           onPress={() => setUserPick("homeML")}
           style={
             userPick == "homeML"
@@ -120,38 +151,6 @@ const PickOptions = (props) => {
       </View>
       <View style={styles.container}>
         <Pressable
-          onPress={() => setUserPick("under")}
-          style={
-            userPick == "under"
-              ? styles.button50LeftSelected
-              : styles.button50Left
-          }
-        >
-          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
-            Under {props.total}
-          </Text>
-          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
-            {props.under}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setUserPick("over")}
-          style={
-            userPick == "over"
-              ? styles.button50RightSelected
-              : styles.button50Right
-          }
-        >
-          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
-            Over {props.total}
-          </Text>
-          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
-            {props.over}
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.container}>
-        <Pressable
           onPress={() => setUserPick("optOut")}
           style={
             userPick == "optOut" ? styles.button100Selected : styles.button100
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   button25FarLeft: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "#cccccc",
     borderRightWidth: 1,
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25FarLeftSelected: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "rgb(60, 90, 190)",
     borderRightWidth: 1,
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25MiddleLeft: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "#cccccc",
     borderRightWidth: 1,
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25MiddleLeftSelected: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "rgb(60, 90, 190)",
     borderRightWidth: 1,
@@ -216,8 +215,48 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
   },
+  button25LeftRight: {
+    width: "16.666666%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25LeftRightSelected: {
+    width: "16.666666%",
+    borderColor: "black",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25RightLeft: {
+    width: "16.666666%",
+    borderColor: "black",
+    backgroundColor: "#cccccc",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  button25RightLeftSelected: {
+    width: "16.666666%",
+    borderColor: "black",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
   button25MiddleRight: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "#cccccc",
     borderLeftWidth: 1,
@@ -227,7 +266,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25MiddleRightSelected: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "rgb(60, 90, 190)",
     borderLeftWidth: 1,
@@ -237,7 +276,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25FarRight: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "#cccccc",
     alignItems: "center",
@@ -247,7 +286,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button25FarRightSelected: {
-    width: "25%",
+    width: "16.666666%",
     borderColor: "black",
     backgroundColor: "rgb(60, 90, 190)",
     borderLeftWidth: 1,
@@ -309,6 +348,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    borderTopWidth: 2,
   },
   button100Selected: {
     width: "100%",
@@ -318,10 +358,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    borderTopWidth: 2,
   },
+  text: { fontSize: 12 },
   textSelected: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 12,
   },
 });
 

@@ -71,8 +71,9 @@ const Team = (props) => {
     return (
       <View style={dynamicStyle(props.teamType)}>
         <View style={styles.teamInfo}>
-          <Text style={styles.teamName}>{teamData[0]}</Text>
-          <Text style={styles.teamName}>{teamData[1]}</Text>
+          <Text style={styles.teamName}>
+            {teamData[0]} {teamData[1]}
+          </Text>
           <Text style={styles.record}>
             ({props.wins} - {props.losses})
           </Text>
@@ -92,8 +93,9 @@ const Team = (props) => {
       return (
         <View style={dynamicStyle(props.teamType)}>
           <View style={styles.teamInfo}>
-            <Text style={styles.teamName}>{teamData[0]}</Text>
-            <Text style={styles.teamName}>{teamData[1]}</Text>
+            <Text style={styles.teamName}>
+              {teamData[0]} {teamData[1]}
+            </Text>
             <Text style={styles.record}>
               ({props.wins} - {props.losses})
             </Text>
@@ -110,8 +112,9 @@ const Team = (props) => {
     return (
       <View style={dynamicStyle(props.teamType)}>
         <View style={styles.teamInfo}>
-          <Text style={styles.teamName}>{teamData[0]}</Text>
-          <Text style={styles.teamName}>{teamData[1]}</Text>
+          <Text style={styles.teamName}>
+            {teamData[0]} {teamData[1]}
+          </Text>
           <Text style={styles.record}>
             ({props.wins} - {props.losses})
           </Text>
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
   teamName: {
     alignItems: "center",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 12,
   },
   pitcherInfo: {
     alignItems: "center",
@@ -167,9 +170,9 @@ const styles = StyleSheet.create({
   away: {
     backgroundColor: "green",
   },
-  record: {},
-  starter: { fontSize: 13 },
-  starterStats: { fontSize: 13 },
+  record: { fontSize: 12 },
+  starter: { fontSize: 12 },
+  starterStats: { fontSize: 12 },
 });
 
 export { Team };
