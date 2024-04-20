@@ -1,6 +1,12 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { GetGames, GetOdds, StoreData, GetData } from "../backend/functions";
+import {
+  GetGames,
+  GetOdds,
+  StoreData,
+  GetData,
+  clearAll,
+} from "../backend/functions";
 import { Game } from "../components/Game";
 
 const Home = () => {
@@ -15,9 +21,10 @@ const Home = () => {
     });
     let odds = GetOdds();
     setOdds(odds);
-    GetData("placeholderDate1").then((res) => {
+
+    const curDate = new Date(Date.now()).toISOString().split("T")[0];
+    GetData(curDate).then((res) => {
       if (!res) {
-        console.log("fumbled response is", res);
         StoreData().then(() => {
           console.log("storing my data now");
         });
@@ -25,17 +32,12 @@ const Home = () => {
         console.log("retrieved:", res);
       }
     });
+
     // StoreData("my-value").then(() => {
     //   console.log("setting oddsbool to true");
     //   setOddsBool(true);
     // });
   }, []);
-
-  useEffect(() => {
-    GetData().then((res) => {
-      if (oddsBool) console.log("res from GetData", res);
-    });
-  }, [oddsBool]);
 
   if (data) {
     return (

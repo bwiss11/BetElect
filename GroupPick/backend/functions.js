@@ -225,13 +225,18 @@ function GetTeamData(teamID) {
 }
 
 const StoreData = async () => {
+  const response = await fetch(
+    "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/?apiKey=a1a8c66ce88c82f5342af641c0ecd4a8&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
+  );
+  console.log("called api");
+  const data = await response.json();
   try {
-    // Call to bets API to get value
-    const jsonValue = JSON.stringify(fakeOdds);
+    const jsonValue = JSON.stringify(data);
     const curDate = new Date(Date.now()).toISOString().split("T")[0];
-    console.log("StoreData curDate", curDate);
     // Store json object response as "current data":"betting odds object"
-    await AsyncStorage.setItem("placeholderDate1", jsonValue);
+    await AsyncStorage.setItem(curDate, jsonValue).then(() => {
+      console.log("placed data");
+    });
   } catch (e) {
     // saving error
   }
@@ -243,11 +248,29 @@ const GetData = async () => {
     const curDate = new Date(Date.now()).toISOString().split("T")[0];
     console.log("GetData curDate", curDate);
     // Use current date's key to get the associated odds if they've already been stored, else return null
-    const jsonValue = await AsyncStorage.getItem("placeholderDate1");
+    const jsonValue = await AsyncStorage.getItem(curDate);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     // error reading value
   }
 };
 
-export { GetGames, GetOdds, GetPitcherStats, GetTeamData, StoreData, GetData };
+const clearAll = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    // clear error
+  }
+
+  console.log("Done.");
+};
+
+export {
+  GetGames,
+  GetOdds,
+  GetPitcherStats,
+  GetTeamData,
+  StoreData,
+  GetData,
+  clearAll,
+};
