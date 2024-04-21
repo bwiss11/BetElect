@@ -87,7 +87,7 @@ const PickOptions = (props) => {
             u{props.total}
           </Text>
           <Text style={userPick == "under" ? styles.textSelected : styles.text}>
-            {props.under}
+            {Number(props.under) > 0 ? "+" + props.under : props.under}
           </Text>
         </Pressable>
         <Pressable
@@ -102,7 +102,7 @@ const PickOptions = (props) => {
             o{props.total}
           </Text>
           <Text style={userPick == "over" ? styles.textSelected : styles.text}>
-            {props.over}
+            {Number(props.over) > 0 ? "+" + props.over : props.over}
           </Text>
         </Pressable>
 
