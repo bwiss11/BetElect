@@ -1,5 +1,4 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
   GetGames,
@@ -9,6 +8,7 @@ import {
   clearAll,
   GetFormattedDate,
   OddsMaker,
+  GetLocalPicks,
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
@@ -17,6 +17,7 @@ const Home = () => {
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
+  const [picks, setPicks] = useState([]);
 
   const curDate = new Date(Date.now()).toISOString().split("T")[0];
 
@@ -25,8 +26,24 @@ const Home = () => {
       setData(res);
     });
 
+    GetLocalPicks().then((GLPRes) => {
+      if (GLPRes) {
+        setPicks(GLPRes);
+      } else {
+        picksList = [];
+        for (let i = 0; i < data.length; i++) {
+          picksList.push("");
+        }
+        setPicks(picksList);
+      }
+    });
+
     // clearAll();
   }, []);
+
+  // useEffect(() => {
+  //   console.log("picks updated to", picks);
+  // }, [picks]);
 
   useEffect(() => {
     if (data) {
@@ -98,6 +115,9 @@ const Home = () => {
                   ? game.teams.home.probablePitcher.id
                   : ""
               }
+              index={index}
+              picks={picks}
+              setPicks={setPicks}
               homeTeamWins={game.teams.home.leagueRecord.wins}
               homeTeamLosses={game.teams.home.leagueRecord.losses}
               homeML={odds[index].homeMLOdds}

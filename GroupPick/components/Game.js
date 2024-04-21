@@ -36,6 +36,9 @@ const Game = (props) => {
         />
       </View>
       <PickOptions
+        index={props.index}
+        picks={props.picks}
+        setPicks={props.setPicks}
         homeML={props.homeML}
         awayML={props.awayML}
         homeSpread={props.homeSpread}

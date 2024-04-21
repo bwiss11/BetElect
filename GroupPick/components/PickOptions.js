@@ -7,6 +7,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
+import { UpdateLocalPicks, GetLocalPicks } from "../backend/functions";
+
+// const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
+
 const PickOptions = (props) => {
   // console.log("pickoption props", props);
   // let homeSpread;
@@ -27,13 +31,28 @@ const PickOptions = (props) => {
   //   awaySpread = "-1.5";
   // }
 
+  // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
+  picksCopy = props.picks;
+  useEffect(() => {
+    if (userPick) {
+      UpdateLocalPicks(props.index, userPick, picksCopy);
+    }
+  }, [userPick]);
+
+  useEffect(() => {
+    if (picksCopy[props.index]) {
+      setUserPick(picksCopy[props.index]);
+    }
+  }, []);
 
   return (
     <>
       <View style={styles.container}>
         <Pressable
-          onPress={() => setUserPick("awaySpread")}
+          onPress={() => {
+            setUserPick("awaySpread");
+          }}
           style={
             userPick == "awaySpread"
               ? styles.button25FarLeftSelected

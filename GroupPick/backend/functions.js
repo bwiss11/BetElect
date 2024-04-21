@@ -225,6 +225,8 @@ function GetTeamData(teamID) {
 }
 
 const StoreData = async () => {
+  // If this function is called, it means there is no data for today's games in local storage, so local storage can be cleared
+  await AsyncStorage.clear();
   console.log("\n\n\nCALLING API\n\n\n\n");
   const response = await fetch(
     "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/?apiKey=a1a8c66ce88c82f5342af641c0ecd4a8&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
@@ -405,6 +407,33 @@ const GetFormattedDate = () => {
   return iso;
 };
 
+const UpdateLocalPicks = async (index, pick, picksCopy) => {
+  try {
+    // Records user picks to local storage
+    const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
+    if (!jsonValue) {
+      await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
+    } else {
+      jsonValue[index] = pick;
+      await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
+    }
+  } catch (e) {
+    // error reading value
+  }
+};
+
+const GetLocalPicks = async () => {
+  // Records user picks to local storage
+  ans = await AsyncStorage.getItem("picks").then((res) => {
+    if (res) {
+      return JSON.parse(res);
+    } else {
+      return null;
+    }
+  });
+  return ans;
+};
+
 export {
   GetGames,
   GetOdds,
@@ -415,4 +444,6 @@ export {
   clearAll,
   OddsMaker,
   GetFormattedDate,
+  UpdateLocalPicks,
+  GetLocalPicks,
 };
