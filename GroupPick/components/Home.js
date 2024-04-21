@@ -1,4 +1,5 @@
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
   GetGames,
@@ -15,34 +16,49 @@ const Home = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
+  const [oddsBool, setOddsBool] = useState(false);
+
+  const curDate = new Date(Date.now()).toISOString().split("T")[0];
 
   useEffect(() => {
     GetGames().then((res) => {
       setData(res);
     });
-    // let odds = GetOdds();
-    // setOdds(odds);
-    // clearAll();
 
-    const curDate = new Date(Date.now()).toISOString().split("T")[0];
-    GetData(curDate).then((res) => {
-      if (!res) {
-        StoreData().then(() => {
-          //   console.log("storing my data now");
-        });
-      } else {
-        // console.log("retrieved:", res);
-      }
-    });
+    // clearAll();
   }, []);
 
   useEffect(() => {
-    OddsMaker(data).then((res) => {
-      setOdds(res);
-    });
+    if (data) {
+      // console.log("data is", data);
+      // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
+      //   console.log("are the odds set", res);
+      // });
+      GetData(curDate).then((res) => {
+        if (!res) {
+          StoreData().then(() => {
+            //   console.log("storing my data now");
+            OddsMaker(data).then((res) => {
+              setOdds(res);
+            });
+            setOddsBool(true);
+          });
+        } else {
+          OddsMaker(data).then((res) => {
+            setOdds(res);
+          });
+          setOddsBool(true);
+          // console.log("retrieved:", res);
+        }
+      });
+    }
   }, [data]);
 
-  if (data && odds) {
+  // useEffect(() => {
+  //   console.log("odds are", odds);
+  // }, [odds]);
+
+  if (data && odds && oddsBool) {
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>

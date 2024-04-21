@@ -225,10 +225,11 @@ function GetTeamData(teamID) {
 }
 
 const StoreData = async () => {
+  console.log("\n\n\nCALLING API\n\n\n\n");
   const response = await fetch(
     "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/?apiKey=a1a8c66ce88c82f5342af641c0ecd4a8&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
   );
-  console.log("\n\n\nCALLING API\n\n\n\n");
+  // await clearAll();
   const data = await response.json();
   try {
     const jsonValue = JSON.stringify(data);
@@ -261,7 +262,7 @@ const clearAll = async () => {
     // clear error
   }
 
-  console.log("Done.");
+  console.log("Done clearing local storage.");
 };
 
 const OddsMaker = async (data) => {
