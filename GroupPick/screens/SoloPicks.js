@@ -55,6 +55,7 @@ const SoloPicks = () => {
         if (!res) {
           StoreData().then(() => {
             //   console.log("storing my data now");
+            setPicks([]);
             OddsMaker(data).then((res) => {
               setOdds(res);
             });
