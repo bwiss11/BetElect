@@ -12,7 +12,7 @@ import {
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
-const Home = () => {
+const SoloPicks = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
@@ -55,6 +55,7 @@ const Home = () => {
         if (!res) {
           StoreData().then(() => {
             //   console.log("storing my data now");
+            setPicks([]);
             OddsMaker(data).then((res) => {
               setOdds(res);
             });
@@ -137,7 +138,7 @@ const Home = () => {
   }
 };
 
-export default Home;
+export default SoloPicks;
 
 const styles = StyleSheet.create({
   outermostContainer: { minWidth: "40%" },

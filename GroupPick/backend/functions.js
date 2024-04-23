@@ -1,6 +1,5 @@
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import fakeOdds from "../odds.json";
 
 function GetGames() {
   const curDate = GetFormattedDate();
