@@ -80,14 +80,6 @@ const SoloPicks = () => {
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
-          <Text>{name}</Text>
-          <Pressable
-            onPress={() => {
-              setName("Blaine");
-            }}
-          >
-            <Text>Press me!</Text>
-          </Pressable>
           {data.map((game, index) => (
             <Game
               key={index}
