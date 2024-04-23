@@ -80,6 +80,7 @@ const SoloPicks = () => {
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
+          <Text style={styles.text}>{curDate}</Text>
           {data.map((game, index) => (
             <Game
               key={index}
@@ -141,5 +142,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     //     backgroundImage:
     //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
+  },
+  text: {
+    color: "white",
+    marginTop: 30,
+    marginBottom: 20,
+    fontSize: 20,
   },
 });

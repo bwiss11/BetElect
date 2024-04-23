@@ -368,6 +368,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     borderTopWidth: 2,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
   },
   button100Selected: {
     width: "100%",
@@ -378,6 +380,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     borderTopWidth: 2,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
   },
   text: { fontSize: 12 },
   textSelected: {

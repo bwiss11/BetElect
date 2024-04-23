@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 const screenOptions = {
   tabBarShowLabel: false,
-  tabBarActiveTintColor: "aqua",
+  tabBarActiveTintColor: "rgb(150, 150, 255, 100)",
   tabBarInactiveTintColor: "white",
   headerStyle: {
     backgroundColor: "black",
@@ -29,7 +29,6 @@ const screenOptions = {
     color: "white",
   },
 };
-
 
 export default function App() {
   return (
@@ -47,7 +46,7 @@ export default function App() {
                   <FontAwesome6
                     name="person"
                     size={24}
-                    color={focused ? "aqua" : "white"}
+                    color={focused ? "white" : "grey"}
                   />
                   <Text
                     style={
@@ -55,12 +54,12 @@ export default function App() {
                         ? {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "aqua",
+                            color: "white",
                           }
                         : {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "white",
+                            color: "grey",
                           }
                     }
                   >
@@ -83,7 +82,7 @@ export default function App() {
                   <FontAwesome6
                     name="handshake"
                     size={24}
-                    color={focused ? "aqua" : "white"}
+                    color={focused ? "white" : "grey"}
                   />
                   <Text
                     style={
@@ -91,12 +90,12 @@ export default function App() {
                         ? {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "aqua",
+                            color: "white",
                           }
                         : {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "white",
+                            color: "grey",
                           }
                     }
                   >
@@ -119,7 +118,7 @@ export default function App() {
                   <Entypo
                     name="bar-graph"
                     size={24}
-                    color={focused ? "aqua" : "white"}
+                    color={focused ? "white" : "grey"}
                   />
                   <Text
                     style={
@@ -127,12 +126,12 @@ export default function App() {
                         ? {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "aqua",
+                            color: "white",
                           }
                         : {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "white",
+                            color: "grey",
                           }
                     }
                   >
@@ -155,7 +154,7 @@ export default function App() {
                   <Octicons
                     name="feed-person"
                     size={24}
-                    color={focused ? "aqua" : "white"}
+                    color={focused ? "white" : "grey"}
                     tintColor="red"
                   />
                   <Text
@@ -164,12 +163,12 @@ export default function App() {
                         ? {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "aqua",
+                            color: "white",
                           }
                         : {
                             fontSize: 11,
                             fontWeight: "bold",
-                            color: "white",
+                            color: "grey",
                           }
                     }
                   >
@@ -181,7 +180,6 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
-
     </NavigationContainer>
   );
 }

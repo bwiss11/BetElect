@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
     borderColor: "black",
-    borderWidth: 4,
+    borderWidth: 3,
+    borderRadius: 10,
     overflow: "hide",
   },
   time: {
