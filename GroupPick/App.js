@@ -30,6 +30,7 @@ const screenOptions = {
   },
 };
 
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -180,6 +181,7 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
+
     </NavigationContainer>
   );
 }
