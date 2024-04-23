@@ -1,13 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Home from "./components/Home";
+import SoloPicks from "./screens/SoloPicks";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Home />
+    <NavigationContainer>
+      <SoloPicks />
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 }
 

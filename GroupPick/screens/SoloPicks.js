@@ -12,7 +12,7 @@ import {
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
-const Home = () => {
+const SoloPicks = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
@@ -137,7 +137,7 @@ const Home = () => {
   }
 };
 
-export default Home;
+export default SoloPicks;
 
 const styles = StyleSheet.create({
   outermostContainer: { minWidth: "40%" },
