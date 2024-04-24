@@ -4,11 +4,13 @@ import SoloPicks from "./screens/SoloPicks";
 import GroupPicks from "./screens/GroupPicks";
 import Stats from "./screens/Stats";
 import ProfilePage from "./screens/ProfilePage";
+import Tracker from "./screens/Tracker";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -100,6 +102,42 @@ export default function App() {
                     }
                   >
                     Group
+                  </Text>
+                </View>
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Tracker"
+          component={Tracker}
+          options={{
+            tabBarIcon: ({ focused }) => {
+              return (
+                <View
+                  style={{ alignItems: "center", justifyContent: "center" }}
+                >
+                  <MaterialCommunityIcons
+                    name="scoreboard"
+                    size={24}
+                    color={focused ? "white" : "grey"}
+                  />
+                  <Text
+                    style={
+                      focused
+                        ? {
+                            fontSize: 11,
+                            fontWeight: "bold",
+                            color: "white",
+                          }
+                        : {
+                            fontSize: 11,
+                            fontWeight: "bold",
+                            color: "grey",
+                          }
+                    }
+                  >
+                    Tracker
                   </Text>
                 </View>
               );

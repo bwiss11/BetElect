@@ -36,11 +36,7 @@ const SoloPicks = () => {
 
     GetLocalPicks().then((GLPRes) => {
       if (GLPRes) {
-        console.log("GLPRes", GLPRes);
-        console.log(data, "data length");
-        console.log("GLP length", GLPRes.length);
         GetLocalGames().then((GLGRes) => {
-          console.log("GLG length", GLGRes.length);
           if (GLPRes.length < GLGRes.length) {
             for (i = GLPRes.length; i < GLGRes.length; i++) {
               GLPRes.push("");
@@ -49,13 +45,6 @@ const SoloPicks = () => {
         });
         setPicks(GLPRes);
       } else {
-        picksList = [];
-        console.log("data and length", data, data.length);
-        for (let i = 0; i < 20; i++) {
-          picksList.push("");
-        }
-        console.log("setting picks to", picksList);
-        setPicks(picksList);
       }
     });
 
