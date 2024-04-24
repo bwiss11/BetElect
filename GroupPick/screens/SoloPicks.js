@@ -60,9 +60,9 @@ const SoloPicks = () => {
       // });
       GetData(curDate).then((res) => {
         if (!res) {
+          setPicks([])
           StoreData().then(() => {
             //   console.log("storing my data now");
-            setPicks([]);
             OddsMaker(data).then((res) => {
               setOdds(res);
             });
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     height: 25,
     width: 47,
     margin: 5,
-    marginRight: 20,
+    marginRight: 10,
     marginTop: 15,
   },
 });

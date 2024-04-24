@@ -411,6 +411,7 @@ const UpdateLocalPicks = async (index, pick, picksCopy) => {
     // Records user picks to local storage
     const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
     if (!jsonValue) {
+      picksCopy[index] = pick;
       await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
     } else {
       jsonValue[index] = pick;
