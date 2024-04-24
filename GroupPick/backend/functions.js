@@ -434,6 +434,16 @@ const GetLocalPicks = async () => {
   return ans;
 };
 
+const GetLocalGames = async () => {
+  const curDate = GetFormattedDate();
+  ans = await AsyncStorage.getItem(curDate);
+  if (ans) {
+    return JSON.parse(ans);
+  } else {
+    return null;
+  }
+};
+
 export {
   GetGames,
   GetOdds,
@@ -446,4 +456,5 @@ export {
   GetFormattedDate,
   UpdateLocalPicks,
   GetLocalPicks,
+  GetLocalGames,
 };

@@ -16,6 +16,7 @@ import {
   GetFormattedDate,
   OddsMaker,
   GetLocalPicks,
+  GetLocalGames,
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
@@ -35,22 +36,31 @@ const SoloPicks = () => {
 
     GetLocalPicks().then((GLPRes) => {
       if (GLPRes) {
+        console.log("GLPRes", GLPRes);
+        console.log(data, "data length");
+        console.log("GLP length", GLPRes.length);
+        GetLocalGames().then((GLGRes) => {
+          console.log("GLG length", GLGRes.length);
+          if (GLPRes.length < GLGRes.length) {
+            for (i = GLPRes.length; i < GLGRes.length; i++) {
+              GLPRes.push("");
+            }
+          }
+        });
         setPicks(GLPRes);
       } else {
         picksList = [];
-        for (let i = 0; i < data.length; i++) {
+        console.log("data and length", data, data.length);
+        for (let i = 0; i < 20; i++) {
           picksList.push("");
         }
+        console.log("setting picks to", picksList);
         setPicks(picksList);
       }
     });
 
     // clearAll();
   }, []);
-
-  // useEffect(() => {
-  //   console.log("picks updated to", picks);
-  // }, [picks]);
 
   useEffect(() => {
     if (data) {
@@ -60,7 +70,7 @@ const SoloPicks = () => {
       // });
       GetData(curDate).then((res) => {
         if (!res) {
-          setPicks([])
+          setPicks([]);
           StoreData().then(() => {
             //   console.log("storing my data now");
             OddsMaker(data).then((res) => {
@@ -77,6 +87,18 @@ const SoloPicks = () => {
         }
       });
     }
+
+    GetLocalPicks().then((GLPRes) => {
+      if (!GLPRes) {
+        picksList = [];
+        console.log("data and length", data, data.length);
+        for (let i = 0; i < data.length; i++) {
+          picksList.push("");
+        }
+        console.log("setting picks in [data] to", picksList);
+        setPicks(picksList);
+      }
+    });
   }, [data]);
 
   // useEffect(() => {
