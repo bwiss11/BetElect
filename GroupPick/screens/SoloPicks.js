@@ -1,4 +1,11 @@
-import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+} from "react-native";
 import { useEffect, useState } from "react";
 import {
   GetGames,
@@ -80,7 +87,27 @@ const SoloPicks = () => {
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
-          <Text style={styles.text}>{curDate}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{
+                uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/1920px-Major_League_Baseball_logo.svg.png",
+              }}
+            ></Image>
+            <Text style={styles.text}>
+              {new Date().toLocaleDateString("en-us", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+              })}
+            </Text>
+          </View>
           {data.map((game, index) => (
             <Game
               key={index}
@@ -145,8 +172,16 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
+    fontWeight: "bold",
     marginTop: 30,
     marginBottom: 20,
     fontSize: 20,
+  },
+  image: {
+    height: 25,
+    width: 47,
+    margin: 5,
+    marginRight: 20,
+    marginTop: 15,
   },
 });
