@@ -444,6 +444,26 @@ const GetLocalGames = async () => {
   }
 };
 
+const GetLiveData = async (MLBGamePk) => {
+  return fetch(
+    "https://statsapi.mlb.com/api/v1.1/game/" + MLBGamePk + "/feed/live"
+  )
+    .then((res) => {
+      data = res.json();
+      return data;
+    })
+    .then((data) => {
+      // console.log("data in GLD is ", data);
+      return {
+        awayTeamRuns: data.liveData.linescore.teams.away.runs,
+        homeTeamRuns: data.liveData.linescore.teams.home.runs,
+        inning: data.liveData.linescore.currentInningOrdinal,
+        inningHalf: data.liveData.linescore.inningHalf,
+        status: data.gameData.status.abstractGameState,
+      };
+    });
+};
+
 export {
   GetGames,
   GetOdds,
@@ -457,4 +477,5 @@ export {
   UpdateLocalPicks,
   GetLocalPicks,
   GetLocalGames,
+  GetLiveData,
 };

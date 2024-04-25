@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, ActivityIndicatorBase } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 
 const ProfilePage = () => {
+  console.log("hi");
   return (
     <View style={styles.container}>
       <View style={styles.userInfoSection}>

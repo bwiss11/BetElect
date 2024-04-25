@@ -80,11 +80,9 @@ const SoloPicks = () => {
     GetLocalPicks().then((GLPRes) => {
       if (!GLPRes) {
         picksList = [];
-        console.log("data and length", data, data.length);
         for (let i = 0; i < data.length; i++) {
           picksList.push("");
         }
-        console.log("setting picks in [data] to", picksList);
         setPicks(picksList);
       }
     });
