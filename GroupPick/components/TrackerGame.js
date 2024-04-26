@@ -6,13 +6,15 @@ import { TrackerHomeTeam } from "./TrackerHomeTeam";
 import { TrackerGameStatus } from "./TrackerGameStatus";
 import { GetTeamData, GetLiveData, GetLocalPicks } from "../backend/functions";
 import { useEffect, useState } from "react";
+import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
-  //   console.log("trackergame props:", props);
+  console.log("trackergame props:", props);
   const [logo, setLogo] = useState("");
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
   const [pick, setPick] = useState("");
+  const [teamData, setTeamData] = useState("");
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
@@ -22,18 +24,69 @@ const TrackerGame = (props) => {
   }, []);
 
   useEffect(() => {
-    GetLocalPicks().then((res) => {
-      console.log("response of GLP is", res);
-      if (res && props.passedIndex < res.length) {
-        setPick(res[props.passedIndex]);
-      } else {
-        setPick["no Pick"];
-      }
+    if (teamData) {
+      GetLocalPicks().then((res) => {
+        if (res && props.passedIndex < res.length) {
+          // setPick(res[props.passedIndex]);
+          // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
+          pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
+          if (Number(pickOdds) > 0) {
+            pickOdds = "+" + pickOdds;
+          }
+          let thisPick;
+          if (res[props.passedIndex].slice(0, 4) == "away") {
+            if (res[props.passedIndex].slice(4, 10) == "Spread") {
+              if (Number(props.awaySpread) > 0) {
+                thisPick =
+                  teamIDMap[String(props.awayTeamID)][2] +
+                  " +" +
+                  props.awaySpread;
+              } else {
+                thisPick =
+                  teamIDMap[String(props.awayTeamID)][2] +
+                  " " +
+                  props.awaySpread;
+              }
+            } else {
+              thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
+            }
+          } else if (res[props.passedIndex].slice(0, 4) == "home") {
+            if (res[props.passedIndex].slice(4, 10) == "Spread") {
+              if (Number(props.homeSpread) > 0) {
+                thisPick =
+                  teamIDMap[String(props.homeTeamID)][2] +
+                  " +" +
+                  props.homeSpread;
+              } else {
+                thisPick =
+                  teamIDMap[String(props.homeTeamID)][2] +
+                  " " +
+                  props.homeSpread;
+              }
+            } else {
+              thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
+            }
+          } else if (res[props.passedIndex].slice(0, 4) == "over") {
+            thisPick = "over " + props.total;
+          } else if (res[props.passedIndex].slice(0, 5) == "under") {
+            thisPick = "under " + props.total;
+          }
+          setPick(thisPick + " " + pickOdds);
+        } else {
+          setPick["no Pick"];
+        }
+      });
+    }
+  }, [teamData]);
+
+  useEffect(() => {
+    GetTeamData(props.awayTeamID).then((res) => {
+      console.log("res is", res);
+      setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
     });
   }, []);
 
   useEffect(() => {
-    console.log("live data", liveData);
     if (liveData.status == "Final") {
       setStatus("Final");
     } else if (liveData.status == "Preview") {
@@ -46,6 +99,7 @@ const TrackerGame = (props) => {
 
   let myTime = new Date(props.time);
   if (liveData && status && pick) {
+    console.log("props in TG", props);
     // console.log("live data is", liveData);
     return (
       <View style={styles.container}>
@@ -106,6 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    padding: 10,
   },
   pickHolder: {
     borderBottomWidth: 2,

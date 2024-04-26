@@ -93,6 +93,7 @@ const SoloPicks = () => {
   // }, [odds]);
 
   if (data && odds && oddsBool) {
+    console.log("log of odds", odds);
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>

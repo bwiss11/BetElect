@@ -17,6 +17,7 @@ import {
   OddsMaker,
   GetLocalPicks,
   GetLocalGames,
+  GetLocalOdds,
   GetLiveData,
   GetTeamData,
 } from "../backend/functions";
@@ -54,11 +55,15 @@ const Tracker = () => {
     // });
 
     // clearAll();
+    GetLocalOdds().then((res) => {
+      setOdds(res);
+      console.log("odds set to", res);
+    });
   }, []);
 
   useEffect(() => {
     if (data) {
-      // console.log("data is", data);
+      console.log("data is", data);
       // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
       //   console.log("are the odds set", res);
       // });
@@ -92,7 +97,6 @@ const Tracker = () => {
         setPicks(picksList);
       }
     });
-    console.log("Data is ", data);
   }, [data]);
 
   // useEffect(() => {
@@ -127,6 +131,9 @@ const Tracker = () => {
           <View style={styles.gameHolder}>
             {data.map((game, index) => (
               <TrackerGame
+                {...odds}
+                awayTeam={game.teams.away.team.clubName}
+                homeTeam={game.teams.home.team.clubName}
                 passedIndex={index}
                 style={styles.game}
                 key={index}

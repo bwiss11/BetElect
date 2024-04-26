@@ -391,6 +391,7 @@ const OddsMaker = async (data) => {
   //   console.log(object[1]);
 
   if (object != {}) {
+    await AsyncStorage.setItem("odds", JSON.stringify(object));
     return object;
   } else {
     return null;
@@ -425,6 +426,18 @@ const UpdateLocalPicks = async (index, pick, picksCopy) => {
 const GetLocalPicks = async () => {
   // Records user picks to local storage
   ans = await AsyncStorage.getItem("picks").then((res) => {
+    if (res) {
+      return JSON.parse(res);
+    } else {
+      return null;
+    }
+  });
+  return ans;
+};
+
+const GetLocalOdds = async () => {
+  // Records user picks to local storage
+  ans = await AsyncStorage.getItem("odds").then((res) => {
     if (res) {
       return JSON.parse(res);
     } else {
@@ -479,5 +492,6 @@ export {
   UpdateLocalPicks,
   GetLocalPicks,
   GetLocalGames,
+  GetLocalOdds,
   GetLiveData,
 };
