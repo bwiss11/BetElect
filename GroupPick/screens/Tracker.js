@@ -127,6 +127,7 @@ const Tracker = () => {
           <View style={styles.gameHolder}>
             {data.map((game, index) => (
               <TrackerGame
+                passedIndex={index}
                 style={styles.game}
                 key={index}
                 time={game.gameDate}
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "green",
+    backgroundColor: "black",
     alignItems: "center",
   },
   text: {

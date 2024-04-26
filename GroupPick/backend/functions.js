@@ -460,6 +460,8 @@ const GetLiveData = async (MLBGamePk) => {
         inning: data.liveData.linescore.currentInningOrdinal,
         inningHalf: data.liveData.linescore.inningHalf,
         status: data.gameData.status.abstractGameState,
+        startTime:
+          data.gameData.datetime.time + " " + data.gameData.datetime.ampm,
       };
     });
 };

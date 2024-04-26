@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 
-const TrackerTeam = (props) => {
+const TrackerHomeTeam = (props) => {
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
   const [logo, setLogo] = useState("");
@@ -69,11 +69,10 @@ const TrackerTeam = (props) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: imageLink }}></Image>
-      <Text style={styles.text}>{teamData[1]}</Text>
       <View style={styles.scoreHolder}>
         <Text style={[styles.text]}>{props.runs}</Text>
       </View>
+      <Image style={styles.image} source={{ uri: imageLink }}></Image>
     </View>
   );
 };
@@ -82,22 +81,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    minWidth: "50%",
     borderColor: "black",
-    justifyContent: "left",
   },
   image: {
-    height: 30,
-    width: 30,
+    height: 40,
+    width: 40,
     margin: 5,
+    marginLeft: 15,
   },
   text: {
     fontWeight: "bold",
-    fontSize: 16,
-  },
-  scoreHolder: {
-    marginLeft: "auto",
+    fontSize: 28,
   },
 });
 
-export { TrackerTeam };
+export { TrackerHomeTeam };
