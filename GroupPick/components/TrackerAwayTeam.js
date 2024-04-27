@@ -69,6 +69,7 @@ const TrackerAwayTeam = (props) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.batHolder}></View>
       <Image style={styles.image} source={{ uri: imageLink }}></Image>
       <View style={styles.scoreHolder}>
         <Text style={[styles.text]}>{props.runs}</Text>
@@ -92,6 +93,9 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
     fontSize: 28,
+  },
+  batHolder: {
+    minWidth: 5,
   },
 });
 

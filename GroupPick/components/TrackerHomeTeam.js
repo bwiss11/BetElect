@@ -9,6 +9,7 @@ import {
 } from "../backend/functions";
 import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 const TrackerHomeTeam = (props) => {
   const [pitcherStats, setPitcherStats] = useState("");
@@ -88,10 +89,15 @@ const styles = StyleSheet.create({
     width: 40,
     margin: 5,
     marginLeft: 15,
+    marginRight: 10,
   },
   text: {
     fontWeight: "bold",
     fontSize: 28,
+  },
+  batHolder: {
+    alignItems: "center",
+    minWidth: 5,
   },
 });
 

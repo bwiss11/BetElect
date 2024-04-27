@@ -67,13 +67,15 @@ const TrackerGame = (props) => {
               thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
             }
           } else if (res[props.passedIndex].slice(0, 4) == "over") {
-            thisPick = "over " + props.total;
+            thisPick = "Over " + props.total;
           } else if (res[props.passedIndex].slice(0, 5) == "under") {
-            thisPick = "under " + props.total;
+            thisPick = "Under " + props.total;
           }
-          setPick(thisPick + " " + pickOdds);
+          if (thisPick && pickOdds) {
+            setPick(thisPick + " " + pickOdds);
+          }
         } else {
-          setPick["no Pick"];
+          setPick[""];
         }
       });
     }
@@ -81,7 +83,6 @@ const TrackerGame = (props) => {
 
   useEffect(() => {
     GetTeamData(props.awayTeamID).then((res) => {
-      console.log("res is", res);
       setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
     });
   }, []);
@@ -99,7 +100,7 @@ const TrackerGame = (props) => {
 
   let myTime = new Date(props.time);
   if (liveData && status && pick) {
-    console.log("props in TG", props);
+    console.log("pick filled out is", pick);
     // console.log("live data is", liveData);
     return (
       <View style={styles.container}>
