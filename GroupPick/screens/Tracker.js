@@ -22,6 +22,26 @@ import {
   GetTeamData,
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  limit,
+  Firestore,
+  Timestamp,
+} from "firebase/firestore";
+
+import { app, db } from "../backend/firestore";
+
+// import { getData } from "../backend/database";
+
+// console.log("logging");
+// getData();
 
 const Tracker = () => {
   const [name, setName] = useState("defaultName");
@@ -59,6 +79,17 @@ const Tracker = () => {
       setOdds(res);
       console.log("odds set to", res);
     });
+
+    const q = query(
+      collection(db, "users"),
+      where("email", "==", "test@test.com")
+    );
+    getDocs(q).then((res) => {
+      console.log("result of getDocs is", res.docs[0].data());
+    });
+    // db.collection("groups")
+    //   .get()
+    //   .then((result) => console.log(result.docs));
   }, []);
 
   useEffect(() => {

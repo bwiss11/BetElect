@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
-  console.log("trackergame props:", props);
+  //   console.log("trackergame props:", props);
   const [logo, setLogo] = useState("");
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
