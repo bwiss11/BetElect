@@ -22,21 +22,8 @@ import {
   GetTeamData,
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  addDoc,
-  getDocs,
-  collection,
-  query,
-  where,
-  limit,
-  Firestore,
-  Timestamp,
-} from "firebase/firestore";
 
-import { app, db } from "../backend/firestore";
+// import { app, db, logFirestorePicks } from "../backend/firestore";
 
 // import { getData } from "../backend/database";
 
@@ -80,13 +67,18 @@ const Tracker = () => {
       console.log("odds set to", res);
     });
 
-    const q = query(
-      collection(db, "users"),
-      where("email", "==", "test@test.com")
-    );
-    getDocs(q).then((res) => {
-      console.log("result of getDocs is", res.docs[0].data());
-    });
+    // const q = query(collection(db, "groups"), where("groupId", "==", "123456"));
+    // getDocs(q).then((res) => {
+    //   console.log("result of getDocs is", res.docs[0].data());
+    // });
+
+    // console.log("should be running lFP");
+    // logFirestorePicks("20240502", ["hi", "lye", "why"], "123456").then(
+    //   (res) => {
+    //     console.log("res of lFP:", res);
+    //   }
+    // );
+
     // db.collection("groups")
     //   .get()
     //   .then((result) => console.log(result.docs));

@@ -1,5 +1,6 @@
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logFirestorePicks, getFirestorePicks } from "./firestore";
 
 function GetGames() {
   const curDate = GetFormattedDate();
@@ -410,13 +411,16 @@ const GetFormattedDate = () => {
 const UpdateLocalPicks = async (index, pick, picksCopy) => {
   try {
     // Records user picks to local storage
-    const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
-    if (!jsonValue) {
+    const firestorePicks = await getFirestorePicks("20240501", "123456");
+    // const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
+    if (!firestorePicks) {
       picksCopy[index] = pick;
-      await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
+      // await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
+      await logFirestorePicks("20240501", picksCopy, "123456");
     } else {
-      jsonValue[index] = pick;
-      await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
+      firestorePicks[index] = pick;
+      // await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
+      await logFirestorePicks("20240501", firestorePicks, "123456");
     }
   } catch (e) {
     // error reading value
@@ -432,7 +436,8 @@ const GetLocalPicks = async () => {
       return null;
     }
   });
-  return ans;
+  fireStoreAns = await getFirestorePicks("20240501", "123456");
+  return fireStoreAns;
 };
 
 const GetLocalOdds = async () => {

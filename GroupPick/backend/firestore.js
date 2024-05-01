@@ -1,7 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
+import { ScreenStackHeaderConfig } from "react-native-screens";
+import { getLocaleDirection } from "react-native-web/dist/cjs/modules/useLocale";
+// import { getFirestore, doc, setDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,7 +27,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // function GetGames2() {
 //   const curDate = GetFormattedDate();
@@ -39,11 +46,34 @@ const analytics = getAnalytics(app);
 // }
 
 const db = getFirestore(app);
+
+async function logFirestorePicks(date, picks, groupId) {
+  const res = await updateDoc(
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"),
+    {
+      picks: { [date]: picks },
+    },
+    { merge: true }
+  );
+  return res;
+}
+
+async function getFirestorePicks(date, groupId) {
+  const docSnap = await getDoc(doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"));
+  if (docSnap.exists()) {
+    console.log("document data:", docSnap.data().picks[date]);
+    return docSnap.data().picks[date];
+  } else {
+    console.log("no such document");
+    return [];
+  }
+}
+
 // firebase.initializeApp(configuration);
 
 // const db = firebase.firestore();
 
-export { app, db };
+export { app, db, logFirestorePicks, getFirestorePicks };
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
