@@ -101,7 +101,6 @@ const TrackerGame = (props) => {
     } else if (liveData.status == "Preview") {
       setStatus(liveData.startTime);
     } else {
-      console.log(liveData.inningHalf, liveData.inning);
       setStatus(liveData.inningHalf + " " + liveData.inning);
     }
   }, [liveData]);
@@ -110,8 +109,6 @@ const TrackerGame = (props) => {
     if (pickType && liveData) {
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
-      console.log("pick type is", pickType[0]);
-      console.log("home away", homeScore, awayScore);
       if (pickType[0] == "homeML") {
         if (homeScore > awayScore) {
           setPickStatus("winning");
@@ -165,7 +162,6 @@ const TrackerGame = (props) => {
   }, [pickType, liveData]);
 
   const pickStatusStyle = () => {
-    console.log("pick status is", pickStatus);
     if (pickStatus == "winning") {
       return {
         backgroundColor: "rgba(20, 186, 65, 0.25)",
@@ -200,7 +196,6 @@ const TrackerGame = (props) => {
 
   let myTime = new Date(props.time);
   if (liveData && status && pick) {
-    console.log("pick status", pickStatus);
     // console.log("live data is", liveData);
     return (
       <View style={styles.container}>

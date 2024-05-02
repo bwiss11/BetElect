@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "black",
     alignItems: "center",
+    paddingBottom: 100,
   },
   text: {
     color: "white",
