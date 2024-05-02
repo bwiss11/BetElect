@@ -15,6 +15,8 @@ const TrackerGame = (props) => {
   const [status, setStatus] = useState("");
   const [pick, setPick] = useState("");
   const [teamData, setTeamData] = useState("");
+  const [pickType, setPickType] = useState("");
+  const [pickStatus, setPickStatus] = useState("");
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
@@ -34,6 +36,12 @@ const TrackerGame = (props) => {
             pickOdds = "+" + pickOdds;
           }
           let thisPick;
+          setPickType([
+            res[props.passedIndex],
+            props.awaySpread,
+            props.homeSpread,
+            props.total,
+          ]);
           if (res[props.passedIndex].slice(0, 4) == "away") {
             if (res[props.passedIndex].slice(4, 10) == "Spread") {
               if (Number(props.awaySpread) > 0) {
@@ -98,13 +106,105 @@ const TrackerGame = (props) => {
     }
   }, [liveData]);
 
+  useEffect(() => {
+    if (pickType && liveData) {
+      awayScore = liveData.awayTeamRuns;
+      homeScore = liveData.homeTeamRuns;
+      console.log("pick type is", pickType[0]);
+      console.log("home away", homeScore, awayScore);
+      if (pickType[0] == "homeML") {
+        if (homeScore > awayScore) {
+          setPickStatus("winning");
+        } else if (homeScore < awayScore) {
+          setPickStatus("losing");
+        } else {
+          setPickStatus("tied");
+        }
+      } else if (pickType[0] == "awayML") {
+        if (homeScore > awayScore) {
+          setPickStatus("losing");
+        } else if (homeScore < awayScore) {
+          setPickStatus("winning");
+        } else {
+          setPickStatus("tied");
+        }
+      } else if (pickType[0] == "homeSpread") {
+        if (homeScore + pickType[2] > awayScore) {
+          setPickStatus("winning");
+        } else if (homeScore + pickType[2] < awayScore) {
+          setPickStatus("losing");
+        } else {
+          setPickStatus("tied");
+        }
+      } else if (pickType[0] == "awaySpread") {
+        if (awayScore + pickType[1] > homeScore) {
+          setPickStatus("winning");
+        } else if (awayScore + pickType[1] < homeScore) {
+          setPickStatus("losing");
+        } else {
+          setPickStatus("tied");
+        }
+      } else if (pickType[0] == "over") {
+        if (awayScore + homeScore > pickType[3]) {
+          setPickStatus("winning");
+        } else if (awayScore + homeScore < pickType[3]) {
+          setPickStatus("losing");
+        } else {
+          setPickStatus("tied");
+        }
+      } else if (pickType[0] == "under") {
+        if (awayScore + homeScore < pickType[3]) {
+          setPickStatus("winning");
+        } else if (awayScore + homeScore > pickType[3]) {
+          setPickStatus("losing");
+        } else {
+          setPickStatus("tied");
+        }
+      }
+    }
+  }, [pickType, liveData]);
+
+  const pickStatusStyle = () => {
+    console.log("pick status is", pickStatus);
+    if (pickStatus == "winning") {
+      return {
+        backgroundColor: "rgba(20, 186, 65, 0.25)",
+        flex: 1,
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderBottomWidth: 2,
+        borderColor: "black",
+      };
+    } else if (pickStatus == "losing") {
+      return {
+        backgroundColor: "rgba(235, 31, 45, 0.25)",
+        flex: 1,
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderBottomWidth: 2,
+        borderColor: "black",
+      };
+    } else {
+      return {
+        flex: 1,
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderBottomWidth: 2,
+        borderColor: "black",
+      };
+    }
+  };
+
   let myTime = new Date(props.time);
   if (liveData && status && pick) {
-    console.log("pick filled out is", pick);
+    console.log("pick status", pickStatus);
     // console.log("live data is", liveData);
     return (
       <View style={styles.container}>
-        <View style={styles.pickHolder}>
+        <View style={pickStatusStyle()}>
           <Text style={styles.text}>{pick}</Text>
         </View>
         <View style={styles.teamsContainer}>
@@ -177,6 +277,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  tied: {
+    backgroundColor: "white",
+  },
+  winning: {
+    backgroundColor: "green",
+  },
+  losing: { backgroundColor: "red" },
 });
 
 export { TrackerGame };

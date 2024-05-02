@@ -53,6 +53,7 @@ const Tracker = () => {
             }
           }
         });
+
         setPicks(GLPRes);
       } else {
       }
@@ -64,7 +65,6 @@ const Tracker = () => {
     // clearAll();
     GetLocalOdds().then((res) => {
       setOdds(res);
-      console.log("odds set to", res);
     });
 
     // const q = query(collection(db, "groups"), where("groupId", "==", "123456"));
@@ -86,7 +86,6 @@ const Tracker = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("data is", data);
       // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
       //   console.log("are the odds set", res);
       // });

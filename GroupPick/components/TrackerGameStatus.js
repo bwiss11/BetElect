@@ -7,12 +7,6 @@ import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
-  console.log(
-    "TRACKER GAME STATUS:",
-    props.status,
-    props.status.slice(0, 3),
-    props.status.slice(0, 3) == "Top"
-  );
   if (props.status.slice(0, 3) == "Top") {
     return (
       <View style={styles.container}>

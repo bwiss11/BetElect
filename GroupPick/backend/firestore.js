@@ -61,7 +61,6 @@ async function logFirestorePicks(date, picks, groupId) {
 async function getFirestorePicks(date, groupId) {
   const docSnap = await getDoc(doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"));
   if (docSnap.exists()) {
-    console.log("document data:", docSnap.data().picks[date]);
     return docSnap.data().picks[date];
   } else {
     console.log("no such document");

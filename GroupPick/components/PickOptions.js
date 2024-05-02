@@ -33,20 +33,29 @@ const PickOptions = (props) => {
 
   // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
-  picksCopy = props.picks;
-  // console.log("picks copy", picksCopy);
+  picksCopy = GetLocalPicks();
   useEffect(() => {
-    // console.log("user pick is ", userPick);
     if (userPick) {
       UpdateLocalPicks(props.index, userPick, picksCopy);
     }
   }, [userPick]);
 
   useEffect(() => {
-    // console.log("pick should be getting set as ", picksCopy[props.index]);
-    if (picksCopy[props.index]) {
-      setUserPick(picksCopy[props.index]);
-    }
+    // console.log(
+    //   "pick should be getting set as ",
+    //   picksCopy[props.index],
+    //   picksCopy
+    // );
+    GetLocalPicks().then((res) => {
+      if (res[props.index]) {
+        console.log("setting from get local picks");
+        setUserPick(res[props.index]);
+      }
+    });
+    // if (picksCopy[props.index]) {
+    //   console.log("setting user pick to:", picksCopy[props.index]);
+    //   setUserPick(picksCopy[props.index]);
+    // }
   }, []);
 
   // console.log("in pick options");
