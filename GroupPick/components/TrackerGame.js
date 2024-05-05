@@ -106,7 +106,12 @@ const TrackerGame = (props) => {
   }, [liveData]);
 
   useEffect(() => {
-    if (pickType && liveData) {
+    if (
+      pickType &&
+      liveData &&
+      status &&
+      status.slice(status.length - 1, status.length) != "M"
+    ) {
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
       if (pickType[0] == "homeML") {
@@ -162,6 +167,7 @@ const TrackerGame = (props) => {
   }, [pickType, liveData]);
 
   const pickStatusStyle = () => {
+    console.log("status", status);
     if (pickStatus == "winning") {
       return {
         backgroundColor: "rgba(20, 186, 65, 0.25)",
@@ -213,6 +219,7 @@ const TrackerGame = (props) => {
             losses={props.awayTeamLosses}
             starter={props.awayStarter}
             starterID={props.awayStarterPlayerID}
+            status={status}
           />
           <View style={styles.gameStatus}>
             <TrackerGameStatus status={status}></TrackerGameStatus>
@@ -226,6 +233,7 @@ const TrackerGame = (props) => {
             losses={props.homeTeamLosses}
             starter={props.homeStarter}
             starterID={props.homeStarterPlayerID}
+            status={status}
           />
         </View>
       </View>

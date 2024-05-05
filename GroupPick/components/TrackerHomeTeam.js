@@ -68,10 +68,15 @@ const TrackerHomeTeam = (props) => {
     }
   }
 
+  console.log("status in home team: ", props.status);
+
   return (
     <View style={styles.container}>
       <View style={styles.scoreHolder}>
-        <Text style={[styles.text]}>{props.runs}</Text>
+        <Text style={[styles.text]}>
+          {props.status.slice(props.status.length - 1, props.status.length) !=
+            "M" && props.runs}
+        </Text>
       </View>
       <Image style={styles.image} source={{ uri: imageLink }}></Image>
     </View>
