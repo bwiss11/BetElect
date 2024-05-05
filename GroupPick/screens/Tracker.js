@@ -44,11 +44,11 @@ const Tracker = () => {
       setData(res);
     });
 
-    GetLocalPicks().then((GLPRes) => {
+    GetLocalPicks(curDate, "123456").then((GLPRes) => {
       if (GLPRes) {
         GetLocalGames().then((GLGRes) => {
           if (GLPRes.length < GLGRes.length) {
-            for (i = GLPRes.length; i < GLGRes.length; i++) {
+            for (let i = GLPRes.length; i < GLGRes.length; i++) {
               GLPRes.push("");
             }
           }
@@ -110,7 +110,7 @@ const Tracker = () => {
       });
     }
 
-    GetLocalPicks().then((GLPRes) => {
+    GetLocalPicks(curDate, "123456").then((GLPRes) => {
       if (!GLPRes) {
         picksList = [];
         for (let i = 0; i < data.length; i++) {

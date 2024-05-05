@@ -68,8 +68,6 @@ const TrackerHomeTeam = (props) => {
     }
   }
 
-  console.log("status in home team: ", props.status);
-
   return (
     <View style={styles.container}>
       <View style={styles.scoreHolder}>

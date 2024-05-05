@@ -18,6 +18,8 @@ const TrackerGame = (props) => {
   const [pickType, setPickType] = useState("");
   const [pickStatus, setPickStatus] = useState("");
 
+  const curDate = new Date(Date.now()).toISOString().split("T")[0];
+
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
       //   console.log("loggin live data", res);
@@ -27,7 +29,7 @@ const TrackerGame = (props) => {
 
   useEffect(() => {
     if (teamData) {
-      GetLocalPicks().then((res) => {
+      GetLocalPicks(curDate, "123456").then((res) => {
         if (res && props.passedIndex < res.length) {
           // setPick(res[props.passedIndex]);
           // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
@@ -167,7 +169,7 @@ const TrackerGame = (props) => {
   }, [pickType, liveData]);
 
   const pickStatusStyle = () => {
-    console.log("status", status);
+    // console.log("status", status);
     if (pickStatus == "winning") {
       return {
         backgroundColor: "rgba(20, 186, 65, 0.25)",

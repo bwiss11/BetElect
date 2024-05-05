@@ -34,8 +34,8 @@ const SoloPicks = () => {
       setData(res);
     });
 
-    GetLocalPicks().then((GLPRes) => {
-      console.log("GLP response:", GLPRes);
+    GetLocalPicks(curDate, "123456").then((GLPRes) => {
+      // console.log("GLP response:", GLPRes);
       if (GLPRes) {
         GetLocalGames().then((GLGRes) => {
           if (GLPRes.length < GLGRes.length) {
@@ -44,7 +44,7 @@ const SoloPicks = () => {
             }
           }
         });
-        console.log("setting picks to", GLPRes);
+        // console.log("setting picks to", GLPRes);
         setPicks(GLPRes);
       } else {
       }
@@ -79,9 +79,9 @@ const SoloPicks = () => {
       });
     }
 
-    GetLocalPicks().then((GLPRes) => {
+    GetLocalPicks(curDate, "123456").then((GLPRes) => {
       if (!GLPRes) {
-        console.log("no response setting picks to []");
+        // console.log("no response setting picks to []");
         picksList = [];
         for (let i = 0; i < data.length; i++) {
           picksList.push("");
@@ -92,11 +92,11 @@ const SoloPicks = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log("picks are", picks);
+    // console.log("picks are", picks);
   }, [picks]);
 
   if (data && odds && oddsBool) {
-    console.log("log of odds", odds, picks);
+    // console.log("log of odds", odds, picks);
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>

@@ -48,20 +48,33 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function logFirestorePicks(date, picks, groupId) {
+  // console.log("logging Firestore picks date and picks", date, picks);
   const res = await updateDoc(
-    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"),
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
     {
-      picks: { [date]: picks },
+      [date]: picks,
     },
     { merge: true }
   );
+  // const res = await updateDoc(
+  //   doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"),
+  //   // {
+  //   //   picks: { [date]: picks },
+  //   // },
+  //   {
+  //     picks[date] : picks,
+  //   },
+  //   { merge: true }
+  // );
   return res;
 }
 
 async function getFirestorePicks(date, groupId) {
-  const docSnap = await getDoc(doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"));
+  const docSnap = await getDoc(
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj")
+  );
   if (docSnap.exists()) {
-    return docSnap.data().picks[date];
+    return docSnap.data()[date];
   } else {
     console.log("no such document");
     return [];

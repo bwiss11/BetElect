@@ -12,6 +12,7 @@ import { UpdateLocalPicks, GetLocalPicks } from "../backend/functions";
 // const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
 
 const PickOptions = (props) => {
+  const curDate = new Date(Date.now()).toISOString().split("T")[0];
   // console.log("pickoption props", props);
   // let homeSpread;
   // if (props.homeML && props.homeML[0] == "-" && props.awayML[0] == "+") {
@@ -33,10 +34,10 @@ const PickOptions = (props) => {
 
   // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
-  picksCopy = GetLocalPicks();
+  picksCopy = GetLocalPicks(curDate, "123456");
   useEffect(() => {
     if (userPick) {
-      UpdateLocalPicks(props.index, userPick, picksCopy);
+      UpdateLocalPicks(props.index, userPick, picksCopy, curDate, "123456");
     }
   }, [userPick]);
 
@@ -46,9 +47,8 @@ const PickOptions = (props) => {
     //   picksCopy[props.index],
     //   picksCopy
     // );
-    GetLocalPicks().then((res) => {
+    GetLocalPicks(curDate, "123456").then((res) => {
       if (res[props.index]) {
-        console.log("setting from get local picks");
         setUserPick(res[props.index]);
       }
     });

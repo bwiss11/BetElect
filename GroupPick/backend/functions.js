@@ -408,26 +408,32 @@ const GetFormattedDate = () => {
   return iso;
 };
 
-const UpdateLocalPicks = async (index, pick, picksCopy) => {
+const UpdateLocalPicks = async (index, pick, picksCopy, date, groupId) => {
   try {
     // Records user picks to local storage
-    const firestorePicks = await getFirestorePicks("20240501", "123456");
+    const firestorePicks = await getFirestorePicks(date, "123456");
     // const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
     if (!firestorePicks) {
-      picksCopy[index] = pick;
+      // picksCopy[index] = pick;
       // await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
-      await logFirestorePicks("20240501", picksCopy, "123456");
+      await logFirestorePicks(date, [], "123456");
     } else {
       firestorePicks[index] = pick;
+      for (let i = 0; i < firestorePicks.length; i++) {
+        if (!firestorePicks[i]) {
+          firestorePicks[i] = "";
+        }
+      }
       // await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
-      await logFirestorePicks("20240501", firestorePicks, "123456");
+      await logFirestorePicks(date, firestorePicks, "123456");
     }
   } catch (e) {
+    console.log(e);
     // error reading value
   }
 };
 
-const GetLocalPicks = async () => {
+const GetLocalPicks = async (date, groupId) => {
   // Records user picks to local storage
   ans = await AsyncStorage.getItem("picks").then((res) => {
     if (res) {
@@ -436,8 +442,14 @@ const GetLocalPicks = async () => {
       return null;
     }
   });
-  fireStoreAns = await getFirestorePicks("20240501", "123456");
-  return fireStoreAns;
+  fireStoreAns = await getFirestorePicks(date, "123456");
+  if (fireStoreAns) {
+    return fireStoreAns;
+  } else {
+    return null;
+  }
+  // console.log("returning from GetLocalPicks", fireStoreAns);
+  // return fireStoreAns;
 };
 
 const GetLocalOdds = async () => {
