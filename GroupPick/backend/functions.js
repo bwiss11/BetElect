@@ -419,7 +419,6 @@ const UpdateLocalPicks = async (
   try {
     // Records user picks to local storage
     const firestorePicks = await getFirestorePicks(date, "123456");
-    console.log("length of array should be", numberOfGames);
     // const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
     if (!firestorePicks) {
       // picksCopy[index] = pick;
