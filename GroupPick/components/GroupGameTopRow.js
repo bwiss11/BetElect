@@ -20,7 +20,7 @@ const GroupGameTopRow = (props) => {
         </Text>
       </View>
       <View style={styles.avatarsHolder}>
-        <View style={styles.groupAvatars}>
+        <View style={[styles.groupAvatars, styles.groupAvatarPickIn]}>
           <Avatar.Image
             source={{
               uri: "https://as2.ftcdn.net/v2/jpg/00/75/13/25/1000_F_75132523_xkLZqbPQkUvVzWSftTf3nAGBjBFkcKuP.jpg",
@@ -81,5 +81,9 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginTop: 5,
     marginBottom: 5,
+    opacity: 0.5,
+  },
+  groupAvatarPickIn: {
+    opacity: 1,
   },
 });

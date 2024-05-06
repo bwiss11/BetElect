@@ -408,15 +408,28 @@ const GetFormattedDate = () => {
   return iso;
 };
 
-const UpdateLocalPicks = async (index, pick, picksCopy, date, groupId) => {
+const UpdateLocalPicks = async (
+  index,
+  pick,
+  picksCopy,
+  date,
+  groupId,
+  numberOfGames
+) => {
   try {
     // Records user picks to local storage
     const firestorePicks = await getFirestorePicks(date, "123456");
+    console.log("length of array should be", numberOfGames);
     // const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
     if (!firestorePicks) {
       // picksCopy[index] = pick;
       // await AsyncStorage.setItem("picks", JSON.stringify(picksCopy));
-      await logFirestorePicks(date, [], "123456");
+      let picksArray = [];
+      for (let i = 0; i < numberOfGames; i++) {
+        picksArray.push("");
+      }
+      picksArray[index] = pick;
+      await logFirestorePicks(date, picksArray, "123456");
     } else {
       firestorePicks[index] = pick;
       for (let i = 0; i < firestorePicks.length; i++) {
@@ -425,6 +438,7 @@ const UpdateLocalPicks = async (index, pick, picksCopy, date, groupId) => {
         }
       }
       // await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
+      console.log("updated firestore picks are", firestorePicks);
       await logFirestorePicks(date, firestorePicks, "123456");
     }
   } catch (e) {

@@ -163,6 +163,7 @@ const SoloPicks = () => {
               total={odds[index].total}
               over={odds[index].overOdds}
               under={odds[index].underOdds}
+              numberOfGames={data.length}
             />
           ))}
         </View>

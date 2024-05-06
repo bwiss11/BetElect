@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { PickOptions } from "./PickOptions";
-import { Team } from "./Team";
+import { GroupsTeam } from "./GroupsTeam";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import GroupGameTopRow from "./GroupGameTopRow";
 
@@ -11,9 +11,8 @@ const GroupPicksGame = (props) => {
   return (
     <View style={styles.container}>
       <GroupGameTopRow time={props.time} />
-
       <View style={styles.teamsContainer}>
-        <Team
+        <GroupsTeam
           teamType="away"
           teamID={props.awayTeamID}
           team={props.awayTeam}
@@ -22,7 +21,7 @@ const GroupPicksGame = (props) => {
           starter={props.awayStarter}
           starterID={props.awayStarterPlayerID}
         />
-        <Team
+        <GroupsTeam
           teamType="home"
           teamID={props.homeTeamID}
           team={props.homeTeam}
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 10,
     overflow: "hide",
+    backgroundColor: "black",
   },
   time: {
     padding: 5,

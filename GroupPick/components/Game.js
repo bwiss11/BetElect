@@ -48,6 +48,7 @@ const Game = (props) => {
         total={props.total}
         over={props.over}
         under={props.under}
+        numberOfGames={props.numberOfGames}
       />
     </View>
   );
