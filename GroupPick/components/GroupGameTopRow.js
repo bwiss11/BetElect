@@ -6,10 +6,40 @@ import {
   Pressable,
   TouchableWithoutFeedback,
 } from "react-native";
+import { getGroup, getUserInfo } from "../backend/firestore";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
+import GroupGameAvatar from "./GroupGameAvatar";
 
 const GroupGameTopRow = (props) => {
+  // const [members, setMembers] = useState("");
+
   let myTime = new Date(props.time);
+
+  console.log("members are", props.members);
+
+  // useEffect(() => {
+  //   let group = getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
+  //     setMembers(res);
+  //     console.log("members set to", res);
+  //   });
+  // }, []);
+  return (
+    <View style={styles.topRow}>
+      <View style={styles.timeHolder}>
+        <Text style={styles.time}>
+          {myTime.toLocaleTimeString([], {
+            timeStyle: "short",
+          })}
+        </Text>
+      </View>
+      <View style={styles.avatarsHolder}>
+        {props.members.map((member, index) => (
+          <GroupGameAvatar key={index} userId={member} />
+        ))}
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.topRow}>
       <View style={styles.timeHolder}>
@@ -85,5 +115,8 @@ const styles = StyleSheet.create({
   },
   groupAvatarPickIn: {
     opacity: 1,
+  },
+  text: {
+    color: "white",
   },
 });

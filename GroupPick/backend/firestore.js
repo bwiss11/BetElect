@@ -81,11 +81,32 @@ async function getFirestorePicks(date, groupId) {
   }
 }
 
+async function getGroup(groupId) {
+  const docSnap = await getDoc(doc(db, "groups", groupId));
+  if (docSnap.exists()) {
+    return docSnap.data().members;
+  } else {
+    console.log("no such document");
+    return [];
+  }
+}
+
+async function getUserInfo(userId) {
+  const docSnap = await getDoc(doc(db, "users", userId));
+  if (docSnap.exists()) {
+    console.log("userInfo is ", docSnap.data());
+    return docSnap.data();
+  } else {
+    console.log("no such document");
+    return [];
+  }
+}
+
 // firebase.initializeApp(configuration);
 
 // const db = firebase.firestore();
 
-export { app, db, logFirestorePicks, getFirestorePicks };
+export { app, db, logFirestorePicks, getFirestorePicks, getGroup, getUserInfo };
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";

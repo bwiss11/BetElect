@@ -1,38 +1,51 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { PickOptions } from "./PickOptions";
 import { GroupsTeam } from "./GroupsTeam";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import GroupGameTopRow from "./GroupGameTopRow";
+import { getGroup } from "../backend/firestore";
 
 const GroupPicksGame = (props) => {
   // console.log("game props", props);
+
+  const [members, setMembers] = useState("");
+
   let myTime = new Date(props.time);
-  return (
-    <View style={styles.container}>
-      <GroupGameTopRow time={props.time} />
-      <View style={styles.teamsContainer}>
-        <GroupsTeam
-          teamType="away"
-          teamID={props.awayTeamID}
-          team={props.awayTeam}
-          wins={props.awayTeamWins}
-          losses={props.awayTeamLosses}
-          starter={props.awayStarter}
-          starterID={props.awayStarterPlayerID}
-        />
-        <GroupsTeam
-          teamType="home"
-          teamID={props.homeTeamID}
-          team={props.homeTeam}
-          wins={props.homeTeamWins}
-          losses={props.homeTeamLosses}
-          starter={props.homeStarter}
-          starterID={props.homeStarterPlayerID}
-        />
+
+  useEffect(() => {
+    let group = getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
+      setMembers(res);
+    });
+  }, []);
+
+  if (members) {
+    return (
+      <View style={styles.container}>
+        <GroupGameTopRow time={props.time} members={members} />
+        <View style={styles.teamsContainer}>
+          <GroupsTeam
+            teamType="away"
+            teamID={props.awayTeamID}
+            team={props.awayTeam}
+            wins={props.awayTeamWins}
+            losses={props.awayTeamLosses}
+            starter={props.awayStarter}
+            starterID={props.awayStarterPlayerID}
+          />
+          <GroupsTeam
+            teamType="home"
+            teamID={props.homeTeamID}
+            team={props.homeTeam}
+            wins={props.homeTeamWins}
+            losses={props.homeTeamLosses}
+            starter={props.homeStarter}
+            starterID={props.homeStarterPlayerID}
+          />
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({

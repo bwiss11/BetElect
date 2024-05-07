@@ -18,6 +18,8 @@ import {
   GetLocalPicks,
   GetLocalGames,
 } from "../backend/functions";
+
+import { getGroup, getUserInfo } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 
 const GroupPicks = () => {
@@ -49,7 +51,6 @@ const GroupPicks = () => {
       } else {
       }
     });
-
     // clearAll();
   }, []);
 
