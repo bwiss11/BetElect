@@ -7,7 +7,7 @@ import GroupGameTopRow from "./GroupGameTopRow";
 import { getGroup } from "../backend/firestore";
 
 const GroupPicksGame = (props) => {
-  // console.log("game props", props);
+  // console.log("gpg props", props);
 
   const [members, setMembers] = useState("");
 
@@ -22,7 +22,11 @@ const GroupPicksGame = (props) => {
   if (members) {
     return (
       <View style={styles.container}>
-        <GroupGameTopRow time={props.time} members={members} />
+        <GroupGameTopRow
+          time={props.time}
+          members={members}
+          index={props.index}
+        />
         <View style={styles.teamsContainer}>
           <GroupsTeam
             teamType="away"

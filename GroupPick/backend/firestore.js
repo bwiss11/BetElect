@@ -47,10 +47,19 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-async function logFirestorePicks(date, picks, groupId) {
+async function logFirestorePicks(date, picks, groupId, userId) {
   // console.log("logging Firestore picks date and picks", date, picks);
+  // log to Group
   const res = await updateDoc(
     doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
+    {
+      [date]: picks,
+    },
+    { merge: true }
+  );
+  // log to individual
+  await updateDoc(
+    doc(db, "users", "L2tcqkRGYEEHb20DVbv5", "picks", "JU9K63mDllpPQbDt1Gx9"),
     {
       [date]: picks,
     },
@@ -81,6 +90,18 @@ async function getFirestorePicks(date, groupId) {
   }
 }
 
+async function getUserFirestorePicks(date, userId) {
+  const docSnap = await getDoc(
+    doc(db, "users", userId, "picks", "JU9K63mDllpPQbDt1Gx9")
+  );
+  if (docSnap.exists()) {
+    return docSnap.data()[date];
+  } else {
+    console.log("no such document");
+    return [];
+  }
+}
+
 async function getGroup(groupId) {
   const docSnap = await getDoc(doc(db, "groups", groupId));
   if (docSnap.exists()) {
@@ -94,7 +115,6 @@ async function getGroup(groupId) {
 async function getUserInfo(userId) {
   const docSnap = await getDoc(doc(db, "users", userId));
   if (docSnap.exists()) {
-    console.log("userInfo is ", docSnap.data());
     return docSnap.data();
   } else {
     console.log("no such document");
@@ -106,7 +126,15 @@ async function getUserInfo(userId) {
 
 // const db = firebase.firestore();
 
-export { app, db, logFirestorePicks, getFirestorePicks, getGroup, getUserInfo };
+export {
+  app,
+  db,
+  logFirestorePicks,
+  getFirestorePicks,
+  getGroup,
+  getUserInfo,
+  getUserFirestorePicks,
+};
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";

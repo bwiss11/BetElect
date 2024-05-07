@@ -12,10 +12,9 @@ import GroupGameAvatar from "./GroupGameAvatar";
 
 const GroupGameTopRow = (props) => {
   // const [members, setMembers] = useState("");
+  // console.log("ggtr props", props);
 
   let myTime = new Date(props.time);
-
-  console.log("members are", props.members);
 
   // useEffect(() => {
   //   let group = getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
@@ -34,7 +33,12 @@ const GroupGameTopRow = (props) => {
       </View>
       <View style={styles.avatarsHolder}>
         {props.members.map((member, index) => (
-          <GroupGameAvatar key={index} userId={member} />
+          <GroupGameAvatar
+            key={index}
+            userId={member}
+            gameId={props.key}
+            index={props.index}
+          />
         ))}
       </View>
     </View>
