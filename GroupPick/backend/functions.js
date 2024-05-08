@@ -278,7 +278,6 @@ const OddsMaker = async (data) => {
 
   object = {};
   if (data) {
-    console.log("odds are", fullOdds);
     for (let i = 0; i < data.length; i++) {
       //   console.log("data", data[i]);
       object[i] = {
@@ -373,7 +372,6 @@ const OddsMaker = async (data) => {
                   fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
               }
             }
-            console.log("some odds", awayMLOdds, homeMLOdds, total);
             object[i].awayMLOdds = awayMLOdds;
             object[i].homeMLOdds = homeMLOdds;
             object[i].awaySpread = awaySpread;
@@ -383,7 +381,6 @@ const OddsMaker = async (data) => {
             object[i].total = total;
             object[i].overOdds = overOdds;
             object[i].underOdds = underOdds;
-            console.log("object is", object);
           }
         }
       }
@@ -438,7 +435,6 @@ const UpdateLocalPicks = async (
         }
       }
       // await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
-      console.log("updated firestore picks are", firestorePicks);
       await logFirestorePicks(date, firestorePicks, "123456");
     }
   } catch (e) {
@@ -448,7 +444,6 @@ const UpdateLocalPicks = async (
 };
 
 const GetLocalPicks = async (date, groupId) => {
-  console.log("getting picks from", date);
   // Records user picks to local storage
   ans = await AsyncStorage.getItem("picks").then((res) => {
     if (res) {
