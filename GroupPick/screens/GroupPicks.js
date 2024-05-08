@@ -29,7 +29,8 @@ const GroupPicks = () => {
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
 
-  const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  const curDate = GetFormattedDate();
 
   useEffect(() => {
     GetGames().then((res) => {

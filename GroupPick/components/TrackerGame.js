@@ -4,7 +4,7 @@ import { PickOptions } from "./PickOptions";
 import { TrackerAwayTeam } from "./TrackerAwayTeam";
 import { TrackerHomeTeam } from "./TrackerHomeTeam";
 import { TrackerGameStatus } from "./TrackerGameStatus";
-import { GetTeamData, GetLiveData, GetLocalPicks } from "../backend/functions";
+import { GetTeamData, GetLiveData, GetLocalPicks, GetFormattedDate } from "../backend/functions";
 import { useEffect, useState } from "react";
 import teamIDMap from "../teamIDMap.json";
 
@@ -18,7 +18,8 @@ const TrackerGame = (props) => {
   const [pickType, setPickType] = useState("");
   const [pickStatus, setPickStatus] = useState("");
 
-  const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  const curDate = GetFormattedDate();
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {

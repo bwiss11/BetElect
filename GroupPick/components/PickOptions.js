@@ -8,11 +8,14 @@ import {
 } from "react-native";
 
 import { UpdateLocalPicks, GetLocalPicks } from "../backend/functions";
+import { GetFormattedDate } from "../backend/functions";
 
 // const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
 
 const PickOptions = (props) => {
-  const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  const curDate = GetFormattedDate();
+
   // console.log("pickoption props", props);
   // let homeSpread;
   // if (props.homeML && props.homeML[0] == "-" && props.awayML[0] == "+") {

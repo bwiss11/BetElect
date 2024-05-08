@@ -447,6 +447,7 @@ const UpdateLocalPicks = async (
 };
 
 const GetLocalPicks = async (date, groupId) => {
+  console.log("getting picks from", date);
   // Records user picks to local storage
   ans = await AsyncStorage.getItem("picks").then((res) => {
     if (res) {
