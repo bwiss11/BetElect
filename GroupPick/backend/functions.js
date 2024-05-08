@@ -278,6 +278,7 @@ const OddsMaker = async (data) => {
 
   object = {};
   if (data) {
+    console.log("odds are", fullOdds);
     for (let i = 0; i < data.length; i++) {
       //   console.log("data", data[i]);
       object[i] = {
@@ -307,11 +308,10 @@ const OddsMaker = async (data) => {
           let total;
           let overOdds;
           let underOdds;
-
           if (
             fullOdds[j].away_team == awayTeam &&
-            fullOdds[j].home_team == homeTeam &&
-            gameDate == fullOdds[j].commence_time
+            fullOdds[j].home_team == homeTeam
+            // gameDate == fullOdds[j].commence_time
           ) {
             for (let k = 0; k < fullOdds[j].bookmakers[0].markets.length; k++) {
               marketName = fullOdds[j].bookmakers[0].markets[k].key;
@@ -373,7 +373,7 @@ const OddsMaker = async (data) => {
                   fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
               }
             }
-
+            console.log("some odds", awayMLOdds, homeMLOdds, total);
             object[i].awayMLOdds = awayMLOdds;
             object[i].homeMLOdds = homeMLOdds;
             object[i].awaySpread = awaySpread;
@@ -383,6 +383,7 @@ const OddsMaker = async (data) => {
             object[i].total = total;
             object[i].overOdds = overOdds;
             object[i].underOdds = underOdds;
+            console.log("object is", object);
           }
         }
       }
