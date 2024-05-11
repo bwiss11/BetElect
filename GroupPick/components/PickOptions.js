@@ -7,8 +7,12 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import { UpdateLocalPicks, GetLocalPicks } from "../backend/functions";
-import { GetFormattedDate } from "../backend/functions";
+import {
+  UpdateLocalPicks,
+  GetLocalPicks,
+  GetFormattedDate,
+} from "../backend/functions";
+import { getUserFirestorePicks } from "../backend/firestore";
 
 // const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
 
@@ -18,7 +22,8 @@ const PickOptions = (props) => {
 
   // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
-  picksCopy = GetLocalPicks(curDate, "123456");
+  // picksCopy = GetLocalPicks(curDate, "123456");
+  picksCopy = getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5");
   useEffect(() => {
     if (userPick) {
       UpdateLocalPicks(
@@ -38,11 +43,19 @@ const PickOptions = (props) => {
     //   picksCopy[props.index],
     //   picksCopy
     // );
-    GetLocalPicks(curDate, "123456").then((res) => {
-      if (res && res[props.index]) {
-        setUserPick(res[props.index]);
+    // GetLocalPicks(curDate, "123456").then((res) => {
+    //   if (res && res[props.index]) {
+    //     setUserPick(res[props.index]);
+    //   }
+    // });
+
+    picksCopy = getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then(
+      (res) => {
+        if (res && res[props.index]) {
+          setUserPick(res[props.index]);
+        }
       }
-    });
+    );
     // if (picksCopy[props.index]) {
     //   console.log("setting user pick to:", picksCopy[props.index]);
     //   setUserPick(picksCopy[props.index]);

@@ -20,6 +20,8 @@ import {
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
+import { getUserFirestorePicks } from "../backend/firestore";
+
 const SoloPicks = () => {
   const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
@@ -35,20 +37,25 @@ const SoloPicks = () => {
       setData(res);
     });
 
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      // console.log("GLP response:", GLPRes);
-      if (GLPRes) {
-        GetLocalGames().then((GLGRes) => {
-          if (GLPRes.length < GLGRes.length) {
-            for (i = GLPRes.length; i < GLGRes.length; i++) {
-              GLPRes.push("");
-            }
-          }
-        });
-        // console.log("setting picks to", GLPRes);
-        setPicks(GLPRes);
-      } else {
-      }
+    // GetLocalPicks(curDate, "123456").then((GLPRes) => {
+    //   // console.log("GLP response:", GLPRes);
+    //   if (GLPRes) {
+    //     GetLocalGames().then((GLGRes) => {
+    //       if (GLPRes.length < GLGRes.length) {
+    //         for (i = GLPRes.length; i < GLGRes.length; i++) {
+    //           GLPRes.push("");
+    //         }
+    //       }
+    //     });
+    //     // console.log("setting picks to", GLPRes);
+    //     setPicks(GLPRes);
+    //   } else {
+    //   }
+    // });
+
+    getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
+      console.log("setting picks1 to", res);
+      setPicks(res);
     });
 
     // clearAll();
@@ -80,15 +87,20 @@ const SoloPicks = () => {
       });
     }
 
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      if (!GLPRes) {
-        // console.log("no response setting picks to []");
-        picksList = [];
-        for (let i = 0; i < data.length; i++) {
-          picksList.push("");
-        }
-        setPicks(picksList);
-      }
+    // GetLocalPicks(curDate, "123456").then((GLPRes) => {
+    //   if (!GLPRes) {
+    //     // console.log("no response setting picks to []");
+    //     picksList = [];
+    //     for (let i = 0; i < data.length; i++) {
+    //       picksList.push("");
+    //     }
+    //     setPicks(picksList);
+    //   }
+    // });
+
+    getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
+      console.log("setting picks2 to", res);
+      setPicks(res);
     });
   }, [data]);
 

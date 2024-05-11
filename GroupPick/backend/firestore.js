@@ -48,6 +48,12 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
+const userToPicksId = {
+  L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
+  MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
+  rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
+};
+
 async function logFirestorePicks(date, picks, groupId, userId, pickId) {
   // console.log("logging Firestore picks date and picks", date, picks);
   // log to Group
@@ -59,9 +65,11 @@ async function logFirestorePicks(date, picks, groupId, userId, pickId) {
   //   { merge: true }
   // );
   // log to individual
+
   console.log("logging user picks");
+  // PLACEHOLDER: Pick up here: dynamically log userId and picks document ID using map from other parts of code
   const res = await updateDoc(
-    doc(db, "users", "rDjcAkiv1vq2pIzzPNoZ", "picks", "0PlJUzddfM5kKnAgis0k"),
+    doc(db, "users", userId, "picks", userToPicksId[userId]),
     {
       [date]: picks,
     },
@@ -84,7 +92,9 @@ async function getFirestorePicks(date, groupId) {
 }
 
 async function getUserFirestorePicks(date, userId, picksId) {
-  const docSnap = await getDoc(doc(db, "users", userId, "picks", picksId));
+  const docSnap = await getDoc(
+    doc(db, "users", userId, "picks", userToPicksId[userId])
+  );
   if (docSnap.exists()) {
     return docSnap.data()[date];
   } else {
