@@ -35,21 +35,23 @@ const Game = (props) => {
           starterID={props.homeStarterPlayerID}
         />
       </View>
-      <PickOptions
-        index={props.index}
-        picks={props.picks}
-        setPicks={props.setPicks}
-        homeML={props.homeML}
-        awayML={props.awayML}
-        homeSpread={props.homeSpread}
-        awaySpread={props.awaySpread}
-        homeSpreadOdds={props.homeSpreadOdds}
-        awaySpreadOdds={props.awaySpreadOdds}
-        total={props.total}
-        over={props.over}
-        under={props.under}
-        numberOfGames={props.numberOfGames}
-      />
+      <View style={styles.pickOptionsContainer}>
+        <PickOptions
+          index={props.index}
+          picks={props.picks}
+          setPicks={props.setPicks}
+          homeML={props.homeML}
+          awayML={props.awayML}
+          homeSpread={props.homeSpread}
+          awaySpread={props.awaySpread}
+          homeSpreadOdds={props.homeSpreadOdds}
+          awaySpreadOdds={props.awaySpreadOdds}
+          total={props.total}
+          over={props.over}
+          under={props.under}
+          numberOfGames={props.numberOfGames}
+        />
+      </View>
     </View>
   );
 };
@@ -64,7 +66,13 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 3,
     borderRadius: 10,
+    backgroundColor: "white",
     overflow: "hide",
+  },
+  pickOptionsContainer: {
+    width: "100%",
+    backgroundColor: "black",
+    height: "30%",
   },
   time: {
     padding: 5,

@@ -131,7 +131,6 @@ const Team = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
     minWidth: "50%",
     alignItems: "center",
     borderColor: "black",

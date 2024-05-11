@@ -16,25 +16,6 @@ const PickOptions = (props) => {
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
 
-  // console.log("pickoption props", props);
-  // let homeSpread;
-  // if (props.homeML && props.homeML[0] == "-" && props.awayML[0] == "+") {
-  //   homeSpread = "-1.5";
-  //   awaySpread = "+1.5";
-  // } else if (
-  //   props.homeML &&
-  //   props.homeML[0] == "-" &&
-  //   props.awayML[0] == "-" &&
-  //   Number(props.homeML.slice(1, props.homeML.length)) >
-  //     Number(props.awayML.slice(1, props.awayML.length))
-  // ) {
-  //   homeSpread = "-1.5";
-  //   awaySpread = "+1.5";
-  // } else {
-  //   homeSpread = "+1.5";
-  //   awaySpread = "-1.5";
-  // }
-
   // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
   picksCopy = GetLocalPicks(curDate, "123456");
@@ -71,7 +52,7 @@ const PickOptions = (props) => {
   // console.log("in pick options");
 
   return (
-    <>
+    <View style={styles.outerContainer}>
       <View style={styles.container}>
         <Pressable
           onPress={() => {
@@ -192,7 +173,7 @@ const PickOptions = (props) => {
           </Text>
         </Pressable>
       </View>
-      <View style={styles.container}>
+      <View style={styles.optOutContainer}>
         <Pressable
           onPress={() => setUserPick("optOut")}
           style={
@@ -206,17 +187,29 @@ const PickOptions = (props) => {
           </Text>
         </Pressable>
       </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    width: "100%",
+    minHeight: 70,
+  },
   container: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     flex: 1,
-    flexWrap: "wrap",
+    // flexWrap: "wrap",
+  },
+  buttons: {
+    justifyContent: "center",
+  },
+  optOutContainer: {
+    width: "100%",
+    flexDirection: "row",
+    flex: 1,
   },
   button25FarLeft: {
     width: "16.666666%",
@@ -227,6 +220,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25FarLeftSelected: {
     width: "16.666666%",
@@ -237,6 +231,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25MiddleLeft: {
     width: "16.666666%",
@@ -247,6 +242,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25MiddleLeftSelected: {
     width: "16.666666%",
@@ -257,6 +253,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25LeftRight: {
     width: "16.666666%",
@@ -267,6 +264,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25LeftRightSelected: {
     width: "16.666666%",
@@ -277,6 +275,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25RightLeft: {
     width: "16.666666%",
@@ -287,6 +286,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25RightLeftSelected: {
     width: "16.666666%",
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25MiddleRight: {
     width: "16.666666%",
@@ -307,6 +308,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25MiddleRightSelected: {
     width: "16.666666%",
@@ -317,6 +319,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25FarRight: {
     width: "16.666666%",
@@ -327,6 +330,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button25FarRightSelected: {
     width: "16.666666%",
@@ -337,6 +341,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button50Left: {
     width: "50%",
@@ -348,6 +353,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button50LeftSelected: {
     width: "50%",
@@ -360,6 +366,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button50Right: {
     width: "50%",
@@ -371,6 +378,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button50RightSelected: {
     width: "50%",
@@ -383,6 +391,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingBottom: 5,
+    justifyContent: "center",
   },
   button100: {
     width: "100%",
@@ -394,6 +403,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
+    justifyContent: "center",
   },
   button100Selected: {
     width: "100%",
@@ -406,6 +416,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
+    justifyContent: "center",
   },
   text: { fontSize: 12 },
   textSelected: {
