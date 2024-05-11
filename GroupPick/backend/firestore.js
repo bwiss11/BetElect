@@ -6,6 +6,7 @@ import {
   setDoc,
   updateDoc,
   getDoc,
+  query,
 } from "firebase/firestore";
 import { ScreenStackHeaderConfig } from "react-native-screens";
 import { getLocaleDirection } from "react-native-web/dist/cjs/modules/useLocale";
@@ -47,34 +48,26 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-async function logFirestorePicks(date, picks, groupId, userId) {
+async function logFirestorePicks(date, picks, groupId, userId, pickId) {
   // console.log("logging Firestore picks date and picks", date, picks);
   // log to Group
-  const res = await updateDoc(
-    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
-    {
-      [date]: picks,
-    },
-    { merge: true }
-  );
-  // log to individual
-  await updateDoc(
-    doc(db, "users", "L2tcqkRGYEEHb20DVbv5", "picks", "JU9K63mDllpPQbDt1Gx9"),
-    {
-      [date]: picks,
-    },
-    { merge: true }
-  );
   // const res = await updateDoc(
-  //   doc(db, "groups", "8CRNyZRpMI69ogcSQkt3"),
-  //   // {
-  //   //   picks: { [date]: picks },
-  //   // },
+  //   doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
   //   {
-  //     picks[date] : picks,
+  //     [date]: picks,
   //   },
   //   { merge: true }
   // );
+  // log to individual
+  console.log("logging user picks");
+  const res = await updateDoc(
+    doc(db, "users", "rDjcAkiv1vq2pIzzPNoZ", "picks", "0PlJUzddfM5kKnAgis0k"),
+    {
+      [date]: picks,
+    },
+    { merge: true }
+  );
+
   return res;
 }
 
@@ -90,10 +83,8 @@ async function getFirestorePicks(date, groupId) {
   }
 }
 
-async function getUserFirestorePicks(date, userId) {
-  const docSnap = await getDoc(
-    doc(db, "users", userId, "picks", "JU9K63mDllpPQbDt1Gx9")
-  );
+async function getUserFirestorePicks(date, userId, picksId) {
+  const docSnap = await getDoc(doc(db, "users", userId, "picks", picksId));
   if (docSnap.exists()) {
     return docSnap.data()[date];
   } else {
@@ -122,6 +113,72 @@ async function getUserInfo(userId) {
   }
 }
 
+async function checkPickAgreement(date, groupId) {
+  pickMap = {};
+  groupPicks = [];
+  console.log("checking pick agreement");
+
+  for (let i = 0; i < 20; i++) {
+    pickMap[i] = {
+      awayML: 0,
+      awaySpread: 0,
+      homeML: 0,
+      homeSpread: 0,
+      over: 0,
+      under: 0,
+      optOut: 0,
+    };
+  }
+
+  userToPicksId = {
+    L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
+    MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
+    rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
+  };
+
+  const docSnap = await getDoc(doc(db, "groups", groupId));
+  // console.log("members are", docSnap.data().members);
+  const members = docSnap.data().members;
+  for (let i = 0; i < members.length; i++) {
+    userPicks = await getUserFirestorePicks(
+      date,
+      members[i],
+      userToPicksId[members[i]]
+    );
+    for (let i = 0; i < userPicks.length; i++) {
+      // console.log("hi");
+      // pickMap[i] = 1;
+      // console.log("pick is", userPicks[i]);
+      // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
+      pickMap[i][userPicks[i]] = pickMap[i][userPicks[i]] + 1;
+    }
+  }
+
+  for (let i = 0; i < userPicks.length; i++) {
+    let gamePicks = pickMap[i];
+    let curMax = 0;
+    let chosenPick = "";
+    for (let pick in gamePicks) {
+      // PLACEHOLDER FOR number of picks needed for agreement
+      if (gamePicks[pick] > curMax && gamePicks[pick] > 1) {
+        curMax = gamePicks[pick];
+        chosenPick = pick;
+      }
+    }
+    groupPicks.push(chosenPick);
+  }
+  console.log("returning group picks from checkPickAgreement:", groupPicks);
+  // PLACEHOLDER: GroupID hardcoded
+  const res = await updateDoc(
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
+    {
+      [date]: groupPicks,
+    },
+    { merge: true }
+  );
+  return groupPicks;
+}
+
 // firebase.initializeApp(configuration);
 
 // const db = firebase.firestore();
@@ -134,6 +191,7 @@ export {
   getGroup,
   getUserInfo,
   getUserFirestorePicks,
+  checkPickAgreement,
 };
 
 // Import the functions you need from the SDKs you need

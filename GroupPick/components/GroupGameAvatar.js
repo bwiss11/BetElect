@@ -22,7 +22,20 @@ const GroupGameAvatar = (props) => {
       setPicUrl(res.picUrl);
     });
 
-    getUserFirestorePicks(curDate, props.userId).then((res) => {
+    // PLACEHOLDER
+    userToPicksId = {
+      L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
+      MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
+      rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
+    };
+    //
+
+    getUserFirestorePicks(
+      curDate,
+      props.userId,
+      userToPicksId[props.userId]
+    ).then((res) => {
+      // console.log(props.userId, "retrieved picks in GGA are", res);
       if (res[props.index] && res[props.index]) {
         setPick(res[props.index]);
       }

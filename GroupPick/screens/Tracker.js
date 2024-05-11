@@ -22,6 +22,7 @@ import {
   GetTeamData,
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
+import { checkPickAgreement } from "../backend/firestore";
 
 // import { app, db, logFirestorePicks } from "../backend/firestore";
 
@@ -54,10 +55,16 @@ const Tracker = () => {
             }
           }
         });
-
+        console.log("setting picks from GLP to:", GLPRes);
         setPicks(GLPRes);
       } else {
       }
+    });
+
+    // PLACEHOLDER: Hardcoded groupID
+    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3").then((res) => {
+      console.log("group picks retrieved from checkpickagreement:", res);
+      setPicks(res);
     });
     // GetLiveData(744864).then((res) => {
     //   console.log("liveData received: ", res);
@@ -117,6 +124,7 @@ const Tracker = () => {
         for (let i = 0; i < data.length; i++) {
           picksList.push("");
         }
+        console.log("setting picks from Get Local Picks to:", picksList);
         setPicks(picksList);
       }
     });

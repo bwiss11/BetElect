@@ -19,7 +19,11 @@ import {
   GetLocalGames,
 } from "../backend/functions";
 
-import { getGroup, getUserInfo } from "../backend/firestore";
+import {
+  getGroup,
+  getUserInfo,
+  checkPickAgreement,
+} from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 
 const GroupPicks = () => {
@@ -36,6 +40,8 @@ const GroupPicks = () => {
     GetGames().then((res) => {
       setData(res);
     });
+
+    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3");
 
     GetLocalPicks(curDate, "123456").then((GLPRes) => {
       // console.log("GLP response:", GLPRes);
