@@ -26,9 +26,11 @@ const GroupGameTopRow = (props) => {
     <View style={styles.topRow}>
       <View style={styles.timeHolder}>
         <Text style={styles.time}>
-          {myTime.toLocaleTimeString([], {
-            timeStyle: "short",
-          })}
+          {props.status == "Postponed"
+            ? "Postponed"
+            : myTime.toLocaleTimeString([], {
+                timeStyle: "short",
+              })}
         </Text>
       </View>
       <View style={styles.avatarsHolder}>

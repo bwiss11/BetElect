@@ -85,6 +85,7 @@ const SoloPicks = () => {
           // console.log("retrieved:", res);
         }
       });
+      console.log("data is", data);
     }
 
     // GetLocalPicks(curDate, "123456").then((GLPRes) => {
@@ -138,6 +139,7 @@ const SoloPicks = () => {
             <Game
               key={index}
               time={game.gameDate}
+              status={game.status.detailedState}
               awayTeamID={game.teams.away.team.id}
               awayStarter={
                 game.teams.away.probablePitcher

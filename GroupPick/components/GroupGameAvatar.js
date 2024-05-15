@@ -36,7 +36,7 @@ const GroupGameAvatar = (props) => {
       userToPicksId[props.userId]
     ).then((res) => {
       // console.log(props.userId, "retrieved picks in GGA are", res);
-      if (res[props.index] && res[props.index]) {
+      if (res && res[props.index] && res[props.index]) {
         setPick(res[props.index]);
       }
     });

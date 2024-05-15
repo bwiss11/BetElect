@@ -4,15 +4,17 @@ import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  // console.log("game props", props);
+  console.log("game props", props);
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
       <View style={styles.timeHolder}>
         <Text style={styles.time}>
-          {myTime.toLocaleTimeString([], {
-            timeStyle: "short",
-          })}
+          {props.status == "Postponed"
+            ? "Postponed"
+            : myTime.toLocaleTimeString([], {
+                timeStyle: "short",
+              })}
         </Text>
       </View>
       <View style={styles.teamsContainer}>
@@ -38,6 +40,7 @@ const Game = (props) => {
       <View style={styles.pickOptionsContainer}>
         <PickOptions
           index={props.index}
+          status={props.status}
           picks={props.picks}
           setPicks={props.setPicks}
           homeML={props.homeML}
@@ -71,8 +74,8 @@ const styles = StyleSheet.create({
   },
   pickOptionsContainer: {
     width: "100%",
-    backgroundColor: "black",
-    height: "30%",
+    // backgroundColor: "black",
+    // height: "30%",
   },
   time: {
     padding: 5,

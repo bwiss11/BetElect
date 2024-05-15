@@ -105,6 +105,7 @@ const GroupPicks = () => {
 
   if (data && odds && oddsBool) {
     // console.log("log of odds", odds, picks);
+    console.log("data is", data);
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
@@ -131,6 +132,7 @@ const GroupPicks = () => {
           </View>
           {data.map((game, index) => (
             <GroupPicksGame
+              status={game.status.detailedState}
               key={index}
               time={game.gameDate}
               awayTeamID={game.teams.away.team.id}

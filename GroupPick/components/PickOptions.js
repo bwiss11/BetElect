@@ -63,147 +63,195 @@ const PickOptions = (props) => {
   }, []);
 
   // console.log("in pick options");
+  if (props.status != "Postponed") {
+    return (
+      <View style={styles.outerContainer}>
+        <View style={styles.container}>
+          <Pressable
+            onPress={() => {
+              setUserPick("awaySpread");
+            }}
+            style={
+              userPick == "awaySpread"
+                ? styles.button25FarLeftSelected
+                : styles.button25FarLeft
+            }
+          >
+            <Text
+              style={
+                userPick == "awaySpread" ? styles.textSelected : styles.text
+              }
+            >
+              {Number(props.awaySpread) > 0
+                ? "+" + props.awaySpread
+                : props.awaySpread}
+            </Text>
+            <Text
+              style={
+                userPick == "awaySpread" ? styles.textSelected : styles.text
+              }
+            >
+              {Number(props.awaySpreadOdds) > 0
+                ? "+" + props.awaySpreadOdds
+                : props.awaySpreadOdds}
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setUserPick("awayML")}
+            style={
+              userPick == "awayML"
+                ? styles.button25MiddleLeftSelected
+                : styles.button25MiddleLeft
+            }
+          >
+            <Text
+              style={userPick == "awayML" ? styles.textSelected : styles.text}
+            >
+              ML
+            </Text>
+            <Text
+              style={userPick == "awayML" ? styles.textSelected : styles.text}
+            >
+              {Number(props.awayML) > 0 ? "+" + props.awayML : props.awayML}
+            </Text>
+          </Pressable>
 
-  return (
-    <View style={styles.outerContainer}>
-      <View style={styles.container}>
-        <Pressable
-          onPress={() => {
-            setUserPick("awaySpread");
-          }}
-          style={
-            userPick == "awaySpread"
-              ? styles.button25FarLeftSelected
-              : styles.button25FarLeft
-          }
-        >
-          <Text
-            style={userPick == "awaySpread" ? styles.textSelected : styles.text}
+          <Pressable
+            onPress={() => setUserPick("under")}
+            style={
+              userPick == "under"
+                ? styles.button25LeftRightSelected
+                : styles.button25LeftRight
+            }
           >
-            {Number(props.awaySpread) > 0
-              ? "+" + props.awaySpread
-              : props.awaySpread}
-          </Text>
-          <Text
-            style={userPick == "awaySpread" ? styles.textSelected : styles.text}
+            <Text
+              style={userPick == "under" ? styles.textSelected : styles.text}
+            >
+              u{props.total}
+            </Text>
+            <Text
+              style={userPick == "under" ? styles.textSelected : styles.text}
+            >
+              {Number(props.under) > 0 ? "+" + props.under : props.under}
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setUserPick("over")}
+            style={
+              userPick == "over"
+                ? styles.button25RightLeftSelected
+                : styles.button25RightLeft
+            }
           >
-            {Number(props.awaySpreadOdds) > 0
-              ? "+" + props.awaySpreadOdds
-              : props.awaySpreadOdds}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setUserPick("awayML")}
-          style={
-            userPick == "awayML"
-              ? styles.button25MiddleLeftSelected
-              : styles.button25MiddleLeft
-          }
-        >
-          <Text
-            style={userPick == "awayML" ? styles.textSelected : styles.text}
-          >
-            ML
-          </Text>
-          <Text
-            style={userPick == "awayML" ? styles.textSelected : styles.text}
-          >
-            {Number(props.awayML) > 0 ? "+" + props.awayML : props.awayML}
-          </Text>
-        </Pressable>
+            <Text
+              style={userPick == "over" ? styles.textSelected : styles.text}
+            >
+              o{props.total}
+            </Text>
+            <Text
+              style={userPick == "over" ? styles.textSelected : styles.text}
+            >
+              {Number(props.over) > 0 ? "+" + props.over : props.over}
+            </Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => setUserPick("under")}
-          style={
-            userPick == "under"
-              ? styles.button25LeftRightSelected
-              : styles.button25LeftRight
-          }
-        >
-          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
-            u{props.total}
-          </Text>
-          <Text style={userPick == "under" ? styles.textSelected : styles.text}>
-            {Number(props.under) > 0 ? "+" + props.under : props.under}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setUserPick("over")}
-          style={
-            userPick == "over"
-              ? styles.button25RightLeftSelected
-              : styles.button25RightLeft
-          }
-        >
-          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
-            o{props.total}
-          </Text>
-          <Text style={userPick == "over" ? styles.textSelected : styles.text}>
-            {Number(props.over) > 0 ? "+" + props.over : props.over}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => setUserPick("homeML")}
-          style={
-            userPick == "homeML"
-              ? styles.button25MiddleRightSelected
-              : styles.button25MiddleRight
-          }
-        >
-          <Text
-            style={userPick == "homeML" ? styles.textSelected : styles.text}
+          <Pressable
+            onPress={() => setUserPick("homeML")}
+            style={
+              userPick == "homeML"
+                ? styles.button25MiddleRightSelected
+                : styles.button25MiddleRight
+            }
           >
-            ML
-          </Text>
-          <Text
-            style={userPick == "homeML" ? styles.textSelected : styles.text}
+            <Text
+              style={userPick == "homeML" ? styles.textSelected : styles.text}
+            >
+              ML
+            </Text>
+            <Text
+              style={userPick == "homeML" ? styles.textSelected : styles.text}
+            >
+              {Number(props.homeML) > 0 ? "+" + props.homeML : props.homeML}
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setUserPick("homeSpread")}
+            style={
+              userPick == "homeSpread"
+                ? styles.button25FarRightSelected
+                : styles.button25FarRight
+            }
           >
-            {Number(props.homeML) > 0 ? "+" + props.homeML : props.homeML}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setUserPick("homeSpread")}
-          style={
-            userPick == "homeSpread"
-              ? styles.button25FarRightSelected
-              : styles.button25FarRight
-          }
-        >
-          <Text
-            style={userPick == "homeSpread" ? styles.textSelected : styles.text}
+            <Text
+              style={
+                userPick == "homeSpread" ? styles.textSelected : styles.text
+              }
+            >
+              {Number(props.homeSpread) > 0
+                ? "+" + props.homeSpread
+                : props.homeSpread}
+            </Text>
+            <Text
+              style={
+                userPick == "homeSpread" ? styles.textSelected : styles.text
+              }
+            >
+              {Number(props.homeSpreadOdds) > 0
+                ? "+" + props.homeSpreadOdds
+                : props.homeSpreadOdds}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={styles.optOutContainer}>
+          <Pressable
+            onPress={() => setUserPick("optOut")}
+            style={
+              userPick == "optOut" ? styles.button100Selected : styles.button100
+            }
           >
-            {Number(props.homeSpread) > 0
-              ? "+" + props.homeSpread
-              : props.homeSpread}
-          </Text>
-          <Text
-            style={userPick == "homeSpread" ? styles.textSelected : styles.text}
-          >
-            {Number(props.homeSpreadOdds) > 0
-              ? "+" + props.homeSpreadOdds
-              : props.homeSpreadOdds}
-          </Text>
-        </Pressable>
+            <Text
+              style={userPick == "optOut" ? styles.textSelected : styles.text}
+            >
+              Opt Out
+            </Text>
+          </Pressable>
+        </View>
       </View>
-      <View style={styles.optOutContainer}>
-        <Pressable
-          onPress={() => setUserPick("optOut")}
-          style={
-            userPick == "optOut" ? styles.button100Selected : styles.button100
-          }
-        >
-          <Text
-            style={userPick == "optOut" ? styles.textSelected : styles.text}
-          >
-            Opt Out
-          </Text>
-        </Pressable>
+    );
+  } else {
+    return (
+      <View style={styles.outerContainer}>
+        <View style={styles.container}>
+          <Pressable style={styles.button25FarLeft}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+          <Pressable style={styles.button25MiddleLeft}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+
+          <Pressable style={styles.button25LeftRight}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+          <Pressable style={styles.button25RightLeft}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+
+          <Pressable style={styles.button25MiddleRight}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+          <Pressable style={styles.button25FarRight}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+        </View>
+        <View style={styles.optOutContainer}>
+          <Pressable style={styles.button100}>
+            <Text style={styles.text}>-</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
-
 const styles = StyleSheet.create({
   outerContainer: {
     width: "100%",
