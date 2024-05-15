@@ -107,76 +107,84 @@ const GroupPicks = () => {
     // console.log("log of odds", odds, picks);
     console.log("data is", data);
     return (
-      <ScrollView style={styles.outermostContainer}>
-        <View style={styles.container}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              style={styles.image}
-              source={{
-                uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/1920px-Major_League_Baseball_logo.svg.png",
+      <>
+        <ScrollView style={styles.outermostContainer} stickyHeaderIndices={[]}>
+          <View style={styles.container}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            ></Image>
-            <Text style={styles.text}>
-              {new Date().toLocaleDateString("en-us", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-              })}
-            </Text>
+            >
+              <Image
+                style={styles.image}
+                source={{
+                  uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/1920px-Major_League_Baseball_logo.svg.png",
+                }}
+              ></Image>
+              <Text style={styles.text}>
+                {new Date().toLocaleDateString("en-us", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </Text>
+            </View>
+
+            {data.map((game, index) => (
+              <GroupPicksGame
+                status={game.status.detailedState}
+                key={index}
+                time={game.gameDate}
+                awayTeamID={game.teams.away.team.id}
+                awayStarter={
+                  game.teams.away.probablePitcher
+                    ? game.teams.away.probablePitcher.fullName
+                    : "TBD"
+                }
+                awayStarterPlayerID={
+                  game.teams.away.probablePitcher
+                    ? game.teams.away.probablePitcher.id
+                    : ""
+                }
+                awayTeamWins={game.teams.away.leagueRecord.wins}
+                awayTeamLosses={game.teams.away.leagueRecord.losses}
+                homeTeamID={game.teams.home.team.id}
+                homeStarter={
+                  game.teams.home.probablePitcher
+                    ? game.teams.home.probablePitcher.fullName
+                    : "TBD"
+                }
+                homeStarterPlayerID={
+                  game.teams.home.probablePitcher
+                    ? game.teams.home.probablePitcher.id
+                    : ""
+                }
+                index={index}
+                picks={picks}
+                setPicks={setPicks}
+                homeTeamWins={game.teams.home.leagueRecord.wins}
+                homeTeamLosses={game.teams.home.leagueRecord.losses}
+                homeML={odds[index].homeMLOdds}
+                awayML={odds[index].awayMLOdds}
+                awaySpread={odds[index].awaySpread}
+                homeSpread={odds[index].homeSpread}
+                homeSpreadOdds={odds[index].homeSpreadOdds}
+                awaySpreadOdds={odds[index].awaySpreadOdds}
+                total={odds[index].total}
+                over={odds[index].overOdds}
+                under={odds[index].underOdds}
+              />
+            ))}
           </View>
-          {data.map((game, index) => (
-            <GroupPicksGame
-              status={game.status.detailedState}
-              key={index}
-              time={game.gameDate}
-              awayTeamID={game.teams.away.team.id}
-              awayStarter={
-                game.teams.away.probablePitcher
-                  ? game.teams.away.probablePitcher.fullName
-                  : "TBD"
-              }
-              awayStarterPlayerID={
-                game.teams.away.probablePitcher
-                  ? game.teams.away.probablePitcher.id
-                  : ""
-              }
-              awayTeamWins={game.teams.away.leagueRecord.wins}
-              awayTeamLosses={game.teams.away.leagueRecord.losses}
-              homeTeamID={game.teams.home.team.id}
-              homeStarter={
-                game.teams.home.probablePitcher
-                  ? game.teams.home.probablePitcher.fullName
-                  : "TBD"
-              }
-              homeStarterPlayerID={
-                game.teams.home.probablePitcher
-                  ? game.teams.home.probablePitcher.id
-                  : ""
-              }
-              index={index}
-              picks={picks}
-              setPicks={setPicks}
-              homeTeamWins={game.teams.home.leagueRecord.wins}
-              homeTeamLosses={game.teams.home.leagueRecord.losses}
-              homeML={odds[index].homeMLOdds}
-              awayML={odds[index].awayMLOdds}
-              awaySpread={odds[index].awaySpread}
-              homeSpread={odds[index].homeSpread}
-              homeSpreadOdds={odds[index].homeSpreadOdds}
-              awaySpreadOdds={odds[index].awaySpreadOdds}
-              total={odds[index].total}
-              over={odds[index].overOdds}
-              under={odds[index].underOdds}
-            />
-          ))}
+        </ScrollView>
+        <View style={styles.runButtonContainer}>
+          <Pressable style={styles.runButton}>
+            <Text style={styles.runButtonText}>Check Picks</Text>
+          </Pressable>
         </View>
-      </ScrollView>
+      </>
     );
   }
 };
@@ -206,5 +214,30 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginTop: 15,
+  },
+  runButtonContainer: {
+    display: "flex",
+    width: "100%",
+    backgroundColor: "black",
+    alignItems: "center",
+  },
+  runButton: {
+    margin: 10,
+    display: "flex",
+    color: "white",
+    position: "sticky",
+    width: "10%",
+    minWidth: 200,
+    borderRadius: 3,
+    borderColor: "white",
+    backgroundColor: "rgb(60, 90, 190)",
+    borderWidth: 1,
+    alignItems: "center",
+    // padding: 20,
+    justifyContent: "center",
+    padding: 10,
+  },
+  runButtonText: {
+    color: "white",
   },
 });
