@@ -5,6 +5,7 @@ import { GroupsTeam } from "./GroupsTeam";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import GroupGameTopRow from "./GroupGameTopRow";
 import { getGroup } from "../backend/firestore";
+import { GroupGamePick } from "./GroupGamePick";
 
 const GroupPicksGame = (props) => {
   console.log("gpg props", props);
@@ -48,6 +49,9 @@ const GroupPicksGame = (props) => {
             starterID={props.homeStarterPlayerID}
           />
         </View>
+        {/* <View style={styles.pickHolder}> */}
+        <GroupGamePick></GroupGamePick>
+        {/* </View> */}
       </View>
     );
   }
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxWidth: 900,
-    backgroundColor: "white",
     alignItems: "center",
     margin: 10,
     borderColor: "black",
@@ -104,6 +107,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 10,
     marginRight: 10,
+  },
+  pickHolder: {
+    width: 10,
+    minWidth: "100%",
+    backgroundColor: "red",
   },
 });
 

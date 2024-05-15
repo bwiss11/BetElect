@@ -50,24 +50,22 @@ const GroupsTeam = (props) => {
       return {
         borderTopWidth: 2,
         borderRightWidth: 1,
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         width: "50%",
         minWidth: 150,
         alignItems: "center",
         backgroundColor: "white",
-        borderBottomLeftRadius: 10,
       };
     } else {
       return {
         borderTopWidth: 2,
         borderLeftWidth: 1,
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         width: "50%",
         minWidth: 150,
         alignItems: "center",
         backgroundColor: "white",
         borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
       };
     }
   }
