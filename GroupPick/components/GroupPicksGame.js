@@ -50,7 +50,7 @@ const GroupPicksGame = (props) => {
           />
         </View>
         {/* <View style={styles.pickHolder}> */}
-        <GroupGamePick></GroupGamePick>
+        <GroupGamePick {...props}></GroupGamePick>
         {/* </View> */}
       </View>
     );

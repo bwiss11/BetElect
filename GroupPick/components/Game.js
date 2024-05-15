@@ -4,7 +4,7 @@ import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  console.log("game props", props);
+  // console.log("game props", props);
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>

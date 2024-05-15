@@ -6,14 +6,32 @@ import {
   Pressable,
   TouchableWithoutFeedback,
 } from "react-native";
+import { TranslatePick } from "../backend/functions";
 
-const GroupGamePick = () => {
+const GroupGamePick = (props) => {
+  console.log("GROUP GAME PICK PROPS ARE", props);
+  const [groupPick, setGroupPick] = useState("-");
   return (
     <View style={styles.container}>
-      <Pressable style={styles.checkButton}>
+      <Pressable
+        style={styles.checkButton}
+        onPress={() => {
+          if (props.groupPick) {
+            let translatedPick = TranslatePick(
+              props.groupPick,
+              props.awayTeamID,
+              props.awaySpread,
+              props.homeTeamID,
+              props.homeSpread,
+              props.total
+            );
+            setGroupPick(translatedPick);
+          }
+        }}
+      >
         <Text style={styles.checkButtonText}>Check</Text>
       </Pressable>
-      <Text style={styles.text}>Incomplete Picks</Text>
+      <Text style={styles.text}>{groupPick}</Text>
     </View>
   );
 };

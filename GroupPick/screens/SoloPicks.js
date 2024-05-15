@@ -54,7 +54,6 @@ const SoloPicks = () => {
     // });
 
     getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
-      console.log("setting picks1 to", res);
       setPicks(res);
     });
 
@@ -100,7 +99,6 @@ const SoloPicks = () => {
     // });
 
     getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
-      console.log("setting picks2 to", res);
       setPicks(res);
     });
   }, [data]);
@@ -138,6 +136,7 @@ const SoloPicks = () => {
           {data.map((game, index) => (
             <Game
               key={index}
+
               time={game.gameDate}
               status={game.status.detailedState}
               awayTeamID={game.teams.away.team.id}

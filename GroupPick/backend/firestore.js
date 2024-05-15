@@ -66,7 +66,6 @@ async function logFirestorePicks(date, picks, groupId, userId, pickId) {
   // );
   // log to individual
 
-  console.log("logging user picks");
   // PLACEHOLDER: Pick up here: dynamically log userId and picks document ID using map from other parts of code
   const res = await updateDoc(
     doc(db, "users", userId, "picks", userToPicksId[userId]),
@@ -75,6 +74,35 @@ async function logFirestorePicks(date, picks, groupId, userId, pickId) {
     },
     { merge: true }
   );
+
+  // PLACEHOLDER that logs the same picks for the whole group as the logged-in user's pick
+  const res1 = await updateDoc(
+    doc(
+      db,
+      "users",
+      "MJ53DXM7CXOzljAnlN5N",
+      "picks",
+      userToPicksId["MJ53DXM7CXOzljAnlN5N"]
+    ),
+    {
+      [date]: picks,
+    },
+    { merge: true }
+  );
+  const res2 = await updateDoc(
+    doc(
+      db,
+      "users",
+      "rDjcAkiv1vq2pIzzPNoZ",
+      "picks",
+      userToPicksId["rDjcAkiv1vq2pIzzPNoZ"]
+    ),
+    {
+      [date]: picks,
+    },
+    { merge: true }
+  );
+  // PLACEHOLDER
 
   return res;
 }
@@ -140,7 +168,7 @@ async function checkPickAgreement(date, groupId) {
     };
   }
 
-  userToPicksId = {
+  const userToPicksId = {
     L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
     MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
     rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",

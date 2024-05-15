@@ -23,7 +23,7 @@ const GroupGameAvatar = (props) => {
     });
 
     // PLACEHOLDER
-    userToPicksId = {
+    const userToPicksId = {
       L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
       MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
       rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",

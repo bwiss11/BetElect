@@ -32,6 +32,7 @@ const GroupPicks = () => {
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
+  const [groupPicks, setGroupPicks] = useState("");
 
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
@@ -41,7 +42,9 @@ const GroupPicks = () => {
       setData(res);
     });
 
-    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3");
+    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3").then((res) => {
+      setGroupPicks(res);
+    });
 
     GetLocalPicks(curDate, "123456").then((GLPRes) => {
       // console.log("GLP response:", GLPRes);
@@ -97,11 +100,19 @@ const GroupPicks = () => {
         setPicks(picksList);
       }
     });
+
+    if (!groupPicks) {
+      let groupPicksBlank = [];
+      for (let i = 0; i < data.length; i++) {
+        groupPicksBlank.unshift("");
+      }
+      setGroupPicks(groupPicksBlank);
+    }
   }, [data]);
 
   useEffect(() => {
-    // console.log("picks are", picks);
-  }, [picks]);
+    console.log("group picks state is:", groupPicks);
+  }, [groupPicks]);
 
   if (data && odds && oddsBool) {
     // console.log("log of odds", odds, picks);
@@ -163,6 +174,7 @@ const GroupPicks = () => {
                 }
                 index={index}
                 picks={picks}
+                groupPick={groupPicks[index]}
                 setPicks={setPicks}
                 homeTeamWins={game.teams.home.leagueRecord.wins}
                 homeTeamLosses={game.teams.home.leagueRecord.losses}

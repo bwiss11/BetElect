@@ -5,6 +5,7 @@ import {
   getFirestorePicks,
   getUserFirestorePicks,
 } from "./firestore";
+import teamIDMap from "../teamIDMap.json";
 
 function GetGames() {
   const curDate = GetFormattedDate();
@@ -524,6 +525,48 @@ const GetLiveData = async (MLBGamePk) => {
     });
 };
 
+const TranslatePick = (
+  pick,
+  awayTeamID,
+  awaySpread,
+  homeTeamID,
+  homeSpread,
+  total
+) => {
+  if (!pick) {
+    return null;
+  } else if (pick == "optOut") {
+    return "No Pick";
+  }
+  let thisPick;
+  if (pick.slice(0, 4) == "away") {
+    if (pick.slice(4, 10) == "Spread") {
+      if (Number(awaySpread) > 0) {
+        thisPick = teamIDMap[awayTeamID][2] + " +" + awaySpread;
+      } else {
+        thisPick = teamIDMap[awayTeamID][2] + " " + awaySpread;
+      }
+    } else {
+      thisPick = teamIDMap[awayTeamID][2] + " ML";
+    }
+  } else if (pick.slice(0, 4) == "home") {
+    if (pick.slice(4, 10) == "Spread") {
+      if (Number(homeSpread) > 0) {
+        thisPick = teamIDMap[homeTeamID][2] + " +" + homeSpread;
+      } else {
+        thisPick = teamIDMap[homeTeamID][2] + " " + homeSpread;
+      }
+    } else {
+      thisPick = teamIDMap[homeTeamID][2] + " ML";
+    }
+  } else if (pick.slice(0, 4) == "over") {
+    thisPick = "Over " + total;
+  } else if (pick.slice(0, 5) == "under") {
+    thisPick = "Under " + total;
+  }
+  return thisPick;
+};
+
 export {
   GetGames,
   GetOdds,
@@ -539,4 +582,5 @@ export {
   GetLocalGames,
   GetLocalOdds,
   GetLiveData,
+  TranslatePick,
 };
