@@ -46,7 +46,9 @@ const GroupGamePick = (props) => {
       >
         <Text style={styles.checkButtonText}>Check</Text>
       </Pressable>
-      <Text style={styles.text}>{groupPick}</Text>
+      <View style={styles.pickHolder}>
+        <Text style={styles.text}>{groupPick}</Text>
+      </View>
     </View>
   );
 };
@@ -73,6 +75,12 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 10,
     color: "white",
+    justifyContent: "center",
+  },
+  pickHolder: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   checkButton: {
     height: "100%",
