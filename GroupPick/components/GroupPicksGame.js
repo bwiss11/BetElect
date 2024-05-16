@@ -8,7 +8,7 @@ import { getGroup } from "../backend/firestore";
 import { GroupGamePick } from "./GroupGamePick";
 
 const GroupPicksGame = (props) => {
-  console.log("gpg props", props);
+  // console.log("gpg props", props);
 
   const [members, setMembers] = useState("");
 

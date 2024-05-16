@@ -529,40 +529,64 @@ const TranslatePick = (
   pick,
   awayTeamID,
   awaySpread,
+  awaySpreadOdds,
+  awayML,
   homeTeamID,
   homeSpread,
-  total
+  homeSpreadOdds,
+  homeML,
+  total,
+  over,
+  under
 ) => {
+  let thisPick = ["", ""];
+
   if (!pick) {
-    return null;
+    return thisPick;
   } else if (pick == "optOut") {
-    return "No Pick";
+    thisPick[0] = "No Pick";
+    return thisPick;
   }
-  let thisPick;
+  // Setting odds for the pick
+  if (pick == "homeML") {
+    thisPick[1] = homeML;
+  } else if (pick == "awayML") {
+    thisPick[1] = awayML;
+  } else if (pick == "homeSpread") {
+    thisPick[1] = homeSpreadOdds;
+  } else if (pick == "awaySpread") {
+    thisPick[1] = awaySpreadOdds;
+  } else if (pick == "over") {
+    thisPick[1] = over;
+  } else if (pick == "under") {
+    thisPick[1] = under;
+  }
+
+  // Translating pick to be team and spread specific
   if (pick.slice(0, 4) == "away") {
     if (pick.slice(4, 10) == "Spread") {
       if (Number(awaySpread) > 0) {
-        thisPick = teamIDMap[awayTeamID][2] + " +" + awaySpread;
+        thisPick[0] = teamIDMap[awayTeamID][2] + " +" + awaySpread;
       } else {
-        thisPick = teamIDMap[awayTeamID][2] + " " + awaySpread;
+        thisPick[0] = teamIDMap[awayTeamID][2] + " " + awaySpread;
       }
     } else {
-      thisPick = teamIDMap[awayTeamID][2] + " ML";
+      thisPick[0] = teamIDMap[awayTeamID][2] + " ML";
     }
   } else if (pick.slice(0, 4) == "home") {
     if (pick.slice(4, 10) == "Spread") {
       if (Number(homeSpread) > 0) {
-        thisPick = teamIDMap[homeTeamID][2] + " +" + homeSpread;
+        thisPick[0] = teamIDMap[homeTeamID][2] + " +" + homeSpread;
       } else {
-        thisPick = teamIDMap[homeTeamID][2] + " " + homeSpread;
+        thisPick[0] = teamIDMap[homeTeamID][2] + " " + homeSpread;
       }
     } else {
-      thisPick = teamIDMap[homeTeamID][2] + " ML";
+      thisPick[0] = teamIDMap[homeTeamID][2] + " ML";
     }
   } else if (pick.slice(0, 4) == "over") {
-    thisPick = "Over " + total;
+    thisPick[0] = "Over " + total;
   } else if (pick.slice(0, 5) == "under") {
-    thisPick = "Under " + total;
+    thisPick[0] = "Under " + total;
   }
   return thisPick;
 };

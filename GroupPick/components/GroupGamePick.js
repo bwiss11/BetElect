@@ -9,7 +9,7 @@ import {
 import { TranslatePick } from "../backend/functions";
 
 const GroupGamePick = (props) => {
-  console.log("GROUP GAME PICK PROPS ARE", props);
+  //   console.log("GROUP GAME PICK PROPS ARE", props);
   const [groupPick, setGroupPick] = useState("-");
   return (
     <View style={styles.container}>
@@ -21,11 +21,26 @@ const GroupGamePick = (props) => {
               props.groupPick,
               props.awayTeamID,
               props.awaySpread,
+              props.awaySpreadOdds,
+              props.awayML,
               props.homeTeamID,
               props.homeSpread,
-              props.total
+              props.homeSpreadOdds,
+              props.homeML,
+              props.total,
+              props.over,
+              props.under
             );
-            setGroupPick(translatedPick);
+            console.log("translatedPick is", translatedPick);
+            if (translatedPick[0] == "No Pick") {
+              setGroupPick(translatedPick);
+            } else {
+              let oddsConverted = translatedPick[1];
+              if (Number(oddsConverted) > 0) {
+                oddsConverted = "+" + oddsConverted;
+              }
+              setGroupPick(translatedPick[0] + " " + oddsConverted);
+            }
           }
         }}
       >
