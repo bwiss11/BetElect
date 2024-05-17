@@ -23,6 +23,8 @@ import {
   getGroup,
   getUserInfo,
   checkPickAgreement,
+  logGroupFirestoreTranslatedPicks,
+  getTranslatedFirestorePicks,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 
@@ -32,6 +34,7 @@ const GroupPicks = () => {
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
+  const [translatedPicks, setTranslatedPicks] = useState("");
   const [groupPicks, setGroupPicks] = useState("");
 
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
@@ -61,6 +64,7 @@ const GroupPicks = () => {
       } else {
       }
     });
+
     // clearAll();
   }, []);
 
@@ -86,6 +90,20 @@ const GroupPicks = () => {
           });
           setOddsBool(true);
           // console.log("retrieved:", res);
+        }
+      });
+
+      getTranslatedFirestorePicks(curDate).then((res) => {
+        console.log("setting translated picks to: (in GroupPicks.jsx)");
+        if (res) {
+          console.log("got result");
+          setTranslatedPicks(res);
+        } else {
+          let blankTranslatedPicks = [];
+          for (let i = 0; i < data.length; i++) {
+            blankTranslatedPicks.unshift("");
+          }
+          setTranslatedPicks(blankTranslatedPicks);
         }
       });
     }
@@ -114,7 +132,7 @@ const GroupPicks = () => {
     console.log("group picks state is:", groupPicks);
   }, [groupPicks]);
 
-  if (data && odds && oddsBool) {
+  if (data && odds && oddsBool && translatedPicks) {
     // console.log("log of odds", odds, picks);
     console.log("data is", data);
     return (
@@ -174,6 +192,7 @@ const GroupPicks = () => {
                 }
                 index={index}
                 picks={picks}
+                translatedPicks={translatedPicks}
                 groupPick={groupPicks[index]}
                 setPicks={setPicks}
                 homeTeamWins={game.teams.home.leagueRecord.wins}

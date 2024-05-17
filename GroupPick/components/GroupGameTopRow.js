@@ -40,7 +40,6 @@ const GroupGameTopRow = (props) => {
   useEffect(() => {
     let pickCount = 0;
     for (i = 0; i < props.members.length; i++) {
-      console.log("i is", i);
       getUserFirestorePicks(
         curDate,
         props.members[i],

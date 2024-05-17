@@ -6,10 +6,19 @@ import {
   Pressable,
   TouchableWithoutFeedback,
 } from "react-native";
-import { TranslatePick } from "../backend/functions";
+import { TranslatePick, GetFormattedDate } from "../backend/functions";
+import { logGroupFirestoreTranslatedPicks } from "../backend/firestore";
+import { PickOptions } from "./PickOptions";
 
+const curDate = GetFormattedDate();
 const GroupGamePick = (props) => {
-  //   console.log("GROUP GAME PICK PROPS ARE", props);
+  console.log("GROUP GAME PICK PROPS ARE", props);
+  useEffect(() => {
+    if (props.translatedPicks && props.translatedPicks[props.index]) {
+      setGroupPick(props.translatedPicks[props.index]);
+    }
+  }, []);
+
   const [groupPick, setGroupPick] = useState("-");
   return (
     <View style={styles.container}>
@@ -31,7 +40,6 @@ const GroupGamePick = (props) => {
               props.over,
               props.under
             );
-            console.log("translatedPick is", translatedPick);
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
             } else {
@@ -40,6 +48,10 @@ const GroupGamePick = (props) => {
                 oddsConverted = "+" + oddsConverted;
               }
               setGroupPick(translatedPick[0] + " " + oddsConverted);
+              let translatedPicks = props.translatedPicks;
+              translatedPicks[props.index] =
+                translatedPick[0] + " " + oddsConverted;
+              logGroupFirestoreTranslatedPicks(curDate, translatedPicks);
             }
           }
         }}
