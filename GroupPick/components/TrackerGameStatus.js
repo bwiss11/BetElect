@@ -8,14 +8,17 @@ import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
   console.log("tracker game status", props);
-  if (props.status.slice(0, 3) == "Top") {
+  if (props.gameStatus != "Preview" && props.status.slice(0, 3) == "Top") {
     return (
       <View style={styles.container}>
         <AntDesign name="caretup" size={18} color="black" paddingTop={5} />
         <Text style={styles.text}>{props.status.split(" ")[1]}</Text>
       </View>
     );
-  } else if (props.status.slice(0, 3) == "Bot") {
+  } else if (
+    props.gameStatus != "Preview" &&
+    props.status.slice(0, 3) == "Bot"
+  ) {
     return (
       <View style={styles.container}>
         <AntDesign name="caretdown" size={18} color="black" paddingBottom={4} />
