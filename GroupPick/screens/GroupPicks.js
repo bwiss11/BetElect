@@ -20,7 +20,6 @@ import {
 } from "../backend/functions";
 
 import {
-  getGroup,
   getUserInfo,
   checkPickAgreement,
   logGroupFirestoreTranslatedPicks,

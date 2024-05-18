@@ -160,7 +160,7 @@ async function getUserFirestorePicks(date, userId, picksId) {
 async function getGroup(groupId) {
   const docSnap = await getDoc(doc(db, "groups", groupId));
   if (docSnap.exists()) {
-    return docSnap.data().members;
+    return docSnap.data();
   } else {
     console.log("no such document");
     return [];

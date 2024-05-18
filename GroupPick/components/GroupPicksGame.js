@@ -15,8 +15,8 @@ const GroupPicksGame = (props) => {
   let myTime = new Date(props.time);
 
   useEffect(() => {
-    let group = getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
-      setMembers(res);
+    getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
+      setMembers(res.members);
     });
   }, []);
 

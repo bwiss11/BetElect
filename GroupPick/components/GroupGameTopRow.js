@@ -31,13 +31,6 @@ const GroupGameTopRow = (props) => {
 
   let myTime = new Date(props.time);
 
-  // useEffect(() => {
-  //   let group = getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
-  //     setMembers(res);
-  //     console.log("members set to", res);
-  //   });
-  // }, []);
-
   useEffect(() => {
     let pickCount = 0;
     for (i = 0; i < props.members.length; i++) {

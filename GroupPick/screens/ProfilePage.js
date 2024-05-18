@@ -1,85 +1,91 @@
 import { useEffect, useState } from "react";
 import { Text, StyleSheet, View, ActivityIndicatorBase } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
+import { getGroup, getUserInfo } from "../backend/firestore";
+import MyGroupAvatar from "../components/MyGroupAvatar";
 
 const ProfilePage = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.userInfoSection}>
-        <View style={{ flexDirection: "row", marginTop: 50 }}>
-          <Avatar.Image
-            source={{
-              uri: "https://as2.ftcdn.net/v2/jpg/00/75/13/25/1000_F_75132523_xkLZqbPQkUvVzWSftTf3nAGBjBFkcKuP.jpg",
-            }}
-            size={100}
-          />
-          <View style={{ marginLeft: 20 }}>
-            <Title style={[styles.title, styles.text, { marginTop: 15 }]}>
-              FirstName LastName
-            </Title>
-            <Caption style={[styles.caption, styles.text]}>@username</Caption>
-          </View>
-        </View>
-        <View style={styles.groupContainer}>
-          <View
-            style={{
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Title style={[styles.text]}>My Group</Title>
+  const [group, setGroup] = useState("");
+  const [userInfo, setUserInfo] = useState("");
+
+  useEffect(() => {
+    // PLACEHOLDER groupID is hardcoded
+    getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
+      setGroup(res);
+    });
+    // PLACEHOLDER userID is hardcoded
+    getUserInfo("L2tcqkRGYEEHb20DVbv5").then((res) => {
+      setUserInfo(res);
+    });
+  }, []);
+
+  if (group && userInfo) {
+    console.log("gruoop is", group);
+    let imageSource = userInfo.picUrl;
+    return (
+      <View style={styles.container}>
+        <View style={styles.userInfoSection}>
+          <View style={{ flexDirection: "row", marginTop: 50 }}>
+            <Avatar.Image
+              source={{
+                uri: imageSource,
+              }}
+              size={100}
+            />
+            <View style={{ marginLeft: 20 }}>
+              <Title style={[styles.title, styles.text, { marginTop: 15 }]}>
+                {userInfo.firstName} {userInfo.lastName}
+              </Title>
+              <Caption style={[styles.caption, styles.text]}>
+                @{userInfo.username}
+              </Caption>
             </View>
+          </View>
+          <View style={styles.groupContainer}>
             <View
               style={{
-                flexDirection: "row",
-                marginTop: 20,
+                alignItems: "center",
               }}
             >
-              <View style={styles.groupAvatars}>
-                <Avatar.Image
-                  source={{
-                    uri: "https://as2.ftcdn.net/v2/jpg/00/75/13/25/1000_F_75132523_xkLZqbPQkUvVzWSftTf3nAGBjBFkcKuP.jpg",
-                  }}
-                  size={70}
-                />
-                <Text style={styles.text}>FirstName</Text>
+              <View>
+                <Title style={[styles.text]}>My Group</Title>
               </View>
-              <View style={styles.groupAvatars}>
-                <Avatar.Image
-                  source={{
-                    uri: "https://i.fbcd.co/products/resized/resized-750-500/l010e-6-e08-mainpreview-1543b1db1c818443c5135ba0c3dd8f3cdb03ffd96d1177c659d823cdb2d7477d.webp",
-                  }}
-                  size={70}
-                />
-                <Text style={styles.text}>Name1</Text>
-              </View>
-              <View style={styles.groupAvatars}>
-                <Avatar.Image
-                  source={{
-                    uri: "https://cdn.vectorstock.com/i/1000x1000/01/77/woman-face-portrait-generic-app-profile-picture-vector-42000177.webp",
-                  }}
-                  size={70}
-                />
-                <Text style={[styles.text]}>Name2</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 20,
+                }}
+              >
+                {group.members.map((member, index) => (
+                  <View style={styles.groupAvatars} key={index}>
+                    <MyGroupAvatar userId={member} />
+                  </View>
+                ))}
               </View>
             </View>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}>
-              Bankroll: $1000
-            </Text>
-            <Text style={[styles.text, { marginTop: 10 }]}>Unit Size: $10</Text>
-            <Text style={[styles.text, { marginTop: 10 }]}>
-              Tier 1 Agreement: 1 Unit
-            </Text>
-            <Text style={[styles.text, { marginTop: 10 }]}>
-              Tier 2 Agreement: 1.5 Units
-            </Text>
+            <View style={{ alignItems: "center" }}>
+              <Text
+                style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
+              >
+                Bankroll: ${group.bankroll}
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Unit Size: ${group.bankroll / 100}
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Tier 1 Agreement: {group.tier1Agreement} Votes (
+                {group.tier1BetSize} Units)
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Tier 2 Agreement: {group.tier2Agreement} Votes (
+                {group.tier2BetSize} Units)
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 export default ProfilePage;
@@ -146,5 +152,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 20,
     marginRight: 20,
+  },
+  text: {
+    color: "white",
   },
 });
