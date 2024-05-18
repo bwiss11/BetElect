@@ -22,23 +22,19 @@ import {
   GetTeamData,
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
-import { checkPickAgreement } from "../backend/firestore";
-
-// import { app, db, logFirestorePicks } from "../backend/firestore";
-
-// import { getData } from "../backend/database";
-
-// console.log("logging");
-// getData();
+import {
+  checkPickAgreement,
+  getFirestorePicks,
+  getTranslatedFirestorePicks,
+} from "../backend/firestore";
 
 const Tracker = () => {
-  const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
-  const [picks, setPicks] = useState([]);
+  const [picks, setPicks] = useState("");
+  const [translatedPicks, setTranslatedPicks] = useState("");
 
-  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
 
   useEffect(() => {
@@ -46,63 +42,27 @@ const Tracker = () => {
       setData(res);
     });
 
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      if (GLPRes) {
-        GetLocalGames().then((GLGRes) => {
-          if (GLPRes.length < GLGRes.length) {
-            for (let i = GLPRes.length; i < GLGRes.length; i++) {
-              GLPRes.push("");
-            }
-          }
-        });
-        console.log("setting picks from GLP to:", GLPRes);
-        setPicks(GLPRes);
-      } else {
-      }
-    });
-
-    // PLACEHOLDER: Hardcoded groupID
-    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3").then((res) => {
-      console.log("group picks retrieved from checkpickagreement:", res);
+    getFirestorePicks(curDate).then((res) => {
       setPicks(res);
     });
-    // GetLiveData(744864).then((res) => {
-    //   console.log("liveData received: ", res);
-    // });
+
+    // PLACEHOLDER - need to eventually pass in groupID
+    getTranslatedFirestorePicks(curDate).then((res) => {
+      setTranslatedPicks(res);
+    });
 
     // clearAll();
     GetLocalOdds().then((res) => {
       setOdds(res);
     });
-
-    // const q = query(collection(db, "groups"), where("groupId", "==", "123456"));
-    // getDocs(q).then((res) => {
-    //   console.log("result of getDocs is", res.docs[0].data());
-    // });
-
-    // console.log("should be running lFP");
-    // logFirestorePicks("20240502", ["hi", "lye", "why"], "123456").then(
-    //   (res) => {
-    //     console.log("res of lFP:", res);
-    //   }
-    // );
-
-    // db.collection("groups")
-    //   .get()
-    //   .then((result) => console.log(result.docs));
   }, []);
 
   useEffect(() => {
     if (data) {
-      // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
-      //   console.log("are the odds set", res);
-      // });
-
       GetData(curDate).then((res) => {
         if (!res) {
-          setPicks([]);
+          setTranslatedPicks([]);
           StoreData().then(() => {
-            //   console.log("storing my data now");
             OddsMaker(data).then((res) => {
               setOdds(res);
             });
@@ -113,28 +73,12 @@ const Tracker = () => {
             setOdds(res);
           });
           setOddsBool(true);
-          // console.log("retrieved:", res);
         }
       });
     }
-
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      if (!GLPRes) {
-        picksList = [];
-        for (let i = 0; i < data.length; i++) {
-          picksList.push("");
-        }
-        console.log("setting picks from Get Local Picks to:", picksList);
-        setPicks(picksList);
-      }
-    });
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log("odds are", odds);
-  // }, [odds]);
-
-  if (data && odds && oddsBool) {
+  if (data && odds && oddsBool && translatedPicks && picks) {
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
@@ -196,7 +140,8 @@ const Tracker = () => {
                 }
                 index={index}
                 picks={picks}
-                setPicks={setPicks}
+                translatedPicks={translatedPicks}
+                setTranslatedPicks={setTranslatedPicks}
                 homeTeamWins={game.teams.home.leagueRecord.wins}
                 homeTeamLosses={game.teams.home.leagueRecord.losses}
                 homeML={odds[index].homeMLOdds}

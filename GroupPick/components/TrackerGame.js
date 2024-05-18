@@ -4,16 +4,21 @@ import { PickOptions } from "./PickOptions";
 import { TrackerAwayTeam } from "./TrackerAwayTeam";
 import { TrackerHomeTeam } from "./TrackerHomeTeam";
 import { TrackerGameStatus } from "./TrackerGameStatus";
-import { GetTeamData, GetLiveData, GetLocalPicks, GetFormattedDate } from "../backend/functions";
+import {
+  GetTeamData,
+  GetLiveData,
+  GetLocalPicks,
+  GetFormattedDate,
+} from "../backend/functions";
 import { useEffect, useState } from "react";
 import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
-  //   console.log("trackergame props:", props);
+  console.log("trackergame props:", props);
   const [logo, setLogo] = useState("");
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
-  const [pick, setPick] = useState("");
+  const [translatedPick, setTranslatedPick] = useState("");
   const [teamData, setTeamData] = useState("");
   const [pickType, setPickType] = useState("");
   const [pickStatus, setPickStatus] = useState("");
@@ -26,69 +31,84 @@ const TrackerGame = (props) => {
       //   console.log("loggin live data", res);
       setLiveData(res);
     });
+    // console.log("setting pikc to", props.translatedPicks[props.index]);
+    setTranslatedPick(props.translatedPicks[props.index]);
+    // console.log("setting picktype to", props.picks[props.index]);
+    setPickType([
+      props.picks[props.index],
+      props.awaySpread,
+      props.homeSpread,
+      props.total,
+    ]);
+    // console.log(
+    //   "picks is:",
+    //   props.picks,
+    //   props.index,
+    //   props.picks[props.index]
+    // );
   }, []);
 
   useEffect(() => {
     if (teamData) {
-      GetLocalPicks(curDate, "123456").then((res) => {
-        if (res && props.passedIndex < res.length) {
-          // setPick(res[props.passedIndex]);
-          // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
-          pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
-          if (Number(pickOdds) > 0) {
-            pickOdds = "+" + pickOdds;
-          }
-          let thisPick;
-          setPickType([
-            res[props.passedIndex],
-            props.awaySpread,
-            props.homeSpread,
-            props.total,
-          ]);
-          if (res[props.passedIndex].slice(0, 4) == "away") {
-            if (res[props.passedIndex].slice(4, 10) == "Spread") {
-              if (Number(props.awaySpread) > 0) {
-                thisPick =
-                  teamIDMap[String(props.awayTeamID)][2] +
-                  " +" +
-                  props.awaySpread;
-              } else {
-                thisPick =
-                  teamIDMap[String(props.awayTeamID)][2] +
-                  " " +
-                  props.awaySpread;
-              }
-            } else {
-              thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
-            }
-          } else if (res[props.passedIndex].slice(0, 4) == "home") {
-            if (res[props.passedIndex].slice(4, 10) == "Spread") {
-              if (Number(props.homeSpread) > 0) {
-                thisPick =
-                  teamIDMap[String(props.homeTeamID)][2] +
-                  " +" +
-                  props.homeSpread;
-              } else {
-                thisPick =
-                  teamIDMap[String(props.homeTeamID)][2] +
-                  " " +
-                  props.homeSpread;
-              }
-            } else {
-              thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
-            }
-          } else if (res[props.passedIndex].slice(0, 4) == "over") {
-            thisPick = "Over " + props.total;
-          } else if (res[props.passedIndex].slice(0, 5) == "under") {
-            thisPick = "Under " + props.total;
-          }
-          if (thisPick && pickOdds) {
-            setPick(thisPick + " " + pickOdds);
-          }
-        } else {
-          setPick[""];
-        }
-      });
+      // GetLocalPicks(curDate, "123456").then((res) => {
+      //   if (res && props.passedIndex < res.length) {
+      //     // setPick(res[props.passedIndex]);
+      //     // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
+      //     pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
+      //     if (Number(pickOdds) > 0) {
+      //       pickOdds = "+" + pickOdds;
+      //     }
+      //     let thisPick;
+      //     setPickType([
+      //       res[props.passedIndex],
+      //       props.awaySpread,
+      //       props.homeSpread,
+      //       props.total,
+      //     ]);
+      //     if (res[props.passedIndex].slice(0, 4) == "away") {
+      //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
+      //         if (Number(props.awaySpread) > 0) {
+      //           thisPick =
+      //             teamIDMap[String(props.awayTeamID)][2] +
+      //             " +" +
+      //             props.awaySpread;
+      //         } else {
+      //           thisPick =
+      //             teamIDMap[String(props.awayTeamID)][2] +
+      //             " " +
+      //             props.awaySpread;
+      //         }
+      //       } else {
+      //         thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
+      //       }
+      //     } else if (res[props.passedIndex].slice(0, 4) == "home") {
+      //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
+      //         if (Number(props.homeSpread) > 0) {
+      //           thisPick =
+      //             teamIDMap[String(props.homeTeamID)][2] +
+      //             " +" +
+      //             props.homeSpread;
+      //         } else {
+      //           thisPick =
+      //             teamIDMap[String(props.homeTeamID)][2] +
+      //             " " +
+      //             props.homeSpread;
+      //         }
+      //       } else {
+      //         thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
+      //       }
+      //     } else if (res[props.passedIndex].slice(0, 4) == "over") {
+      //       thisPick = "Over " + props.total;
+      //     } else if (res[props.passedIndex].slice(0, 5) == "under") {
+      //       thisPick = "Under " + props.total;
+      //     }
+      //     if (thisPick && pickOdds) {
+      //       setPick(thisPick + " " + pickOdds);
+      //     }
+      //   } else {
+      //     setPick[""];
+      //   }
+      // });
     }
   }, [teamData]);
 
@@ -115,6 +135,7 @@ const TrackerGame = (props) => {
       status &&
       status.slice(status.length - 1, status.length) != "M"
     ) {
+      console.log("pick type", pickType, status);
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
       if (pickType[0] == "homeML") {
@@ -204,12 +225,12 @@ const TrackerGame = (props) => {
   };
 
   let myTime = new Date(props.time);
-  if (liveData && status && pick) {
+  if (liveData && status && translatedPick) {
     // console.log("live data is", liveData);
     return (
       <View style={styles.container}>
         <View style={pickStatusStyle()}>
-          <Text style={styles.text}>{pick}</Text>
+          <Text style={styles.text}>{translatedPick}</Text>
         </View>
         <View style={styles.teamsContainer}>
           <TrackerAwayTeam

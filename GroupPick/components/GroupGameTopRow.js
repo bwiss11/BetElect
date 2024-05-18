@@ -81,7 +81,7 @@ const GroupGameTopRow = (props) => {
       </View>
       <View style={styles.check}>
         {picksIn == 3 ? (
-          <Ionicons name="checkbox-outline" size={20} color="rgb(80,200,120)" />
+          <Ionicons name="checkbox-outline" size={18} color="rgb(80,200,120)" />
         ) : (
           <View></View>
         )}
@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
   check: {
     color: "white",
     justifyContent: "center",
-    paddingTop: 10,
+    paddingTop: 6,
   },
 });

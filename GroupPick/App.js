@@ -76,6 +76,7 @@ export default function App() {
           name="Group"
           component={GroupPicks}
           options={{
+            unmountOnBlur: true,
             tabBarIcon: ({ focused }) => {
               return (
                 <View
