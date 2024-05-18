@@ -53,70 +53,6 @@ const TrackerGame = (props) => {
     console.log("liveData is", liveData);
   }, [liveData]);
 
-  // useEffect(() => {
-  //   if (teamData) {
-  //     // GetLocalPicks(curDate, "123456").then((res) => {
-  //     //   if (res && props.passedIndex < res.length) {
-  //     //     // setPick(res[props.passedIndex]);
-  //     //     // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
-  //     //     pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
-  //     //     if (Number(pickOdds) > 0) {
-  //     //       pickOdds = "+" + pickOdds;
-  //     //     }
-  //     //     let thisPick;
-  //     //     setPickType([
-  //     //       res[props.passedIndex],
-  //     //       props.awaySpread,
-  //     //       props.homeSpread,
-  //     //       props.total,
-  //     //     ]);
-  //     //     if (res[props.passedIndex].slice(0, 4) == "away") {
-  //     //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
-  //     //         if (Number(props.awaySpread) > 0) {
-  //     //           thisPick =
-  //     //             teamIDMap[String(props.awayTeamID)][2] +
-  //     //             " +" +
-  //     //             props.awaySpread;
-  //     //         } else {
-  //     //           thisPick =
-  //     //             teamIDMap[String(props.awayTeamID)][2] +
-  //     //             " " +
-  //     //             props.awaySpread;
-  //     //         }
-  //     //       } else {
-  //     //         thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
-  //     //       }
-  //     //     } else if (res[props.passedIndex].slice(0, 4) == "home") {
-  //     //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
-  //     //         if (Number(props.homeSpread) > 0) {
-  //     //           thisPick =
-  //     //             teamIDMap[String(props.homeTeamID)][2] +
-  //     //             " +" +
-  //     //             props.homeSpread;
-  //     //         } else {
-  //     //           thisPick =
-  //     //             teamIDMap[String(props.homeTeamID)][2] +
-  //     //             " " +
-  //     //             props.homeSpread;
-  //     //         }
-  //     //       } else {
-  //     //         thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
-  //     //       }
-  //     //     } else if (res[props.passedIndex].slice(0, 4) == "over") {
-  //     //       thisPick = "Over " + props.total;
-  //     //     } else if (res[props.passedIndex].slice(0, 5) == "under") {
-  //     //       thisPick = "Under " + props.total;
-  //     //     }
-  //     //     if (thisPick && pickOdds) {
-  //     //       setPick(thisPick + " " + pickOdds);
-  //     //     }
-  //     //   } else {
-  //     //     setPick[""];
-  //     //   }
-  //     // });
-  //   }
-  // }, [teamData]);
-
   useEffect(() => {
     GetTeamData(props.awayTeamID).then((res) => {
       setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
@@ -263,10 +199,9 @@ const TrackerGame = (props) => {
       };
     } else if (pickStatus == "won") {
       return {
-        backgroundColor: "rgba(20, 186, 65, 0.8)",
+        backgroundColor: "rgb(2,75,48)",
         flex: 1,
         width: "100%",
-        color: "white",
         alignItems: "center",
         justifyContent: "center",
         borderBottomWidth: 2,
@@ -286,7 +221,7 @@ const TrackerGame = (props) => {
       };
     } else if (pickStatus == "lost") {
       return {
-        backgroundColor: "rgba(235, 31, 45, 0.8)",
+        backgroundColor: "rgb(114, 0, 0)",
         flex: 1,
         width: "100%",
         alignItems: "center",
@@ -314,12 +249,14 @@ const TrackerGame = (props) => {
     if (pickStatus == "won") {
       return {
         padding: 5,
+        color: "rgba(255,255,255,0.8)",
         fontWeight: "bold",
       };
     } else if (pickStatus == "lost") {
       return {
         padding: 5,
         fontWeight: "bold",
+        color: "rgba(255,255,255,0.8)",
       };
     } else {
       return {
@@ -333,15 +270,16 @@ const TrackerGame = (props) => {
       return {
         flex: 1,
         maxWidth: 900,
-        backgroundColor: "grey",
+        backgroundColor: "black",
         alignItems: "center",
         justifyContent: "center",
         alignContent: "center",
         margin: 10,
-        borderWidth: 3,
+        borderWidth: 1,
         borderRadius: 10,
-        overflow: "hide",
+        overflow: "hidden",
         minWidth: "70%",
+        borderColor: "rgba(255, 255, 255, 0.3)",
       };
     } else {
       return {
@@ -355,11 +293,33 @@ const TrackerGame = (props) => {
         borderColor: "black",
         borderWidth: 3,
         borderRadius: 10,
-        overflow: "hide",
+        overflow: "hidden",
         minWidth: "70%",
       };
     }
   };
+
+  function teamsContainerStyle() {
+    if (status == "Final") {
+      return {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "black",
+        padding: 10,
+      };
+    } else {
+      return {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white",
+        padding: 10,
+      };
+    }
+  }
 
   let myTime = new Date(props.time).toLocaleTimeString([], {
     timeStyle: "short",
@@ -370,7 +330,7 @@ const TrackerGame = (props) => {
         <View style={pickStatusStyle()}>
           <Text style={textStatusStyle()}>{translatedPick}</Text>
         </View>
-        <View style={styles.teamsContainer}>
+        <View style={teamsContainerStyle()}>
           <TrackerAwayTeam
             style={styles.awayTeam}
             teamType="away"
@@ -411,13 +371,7 @@ const styles = StyleSheet.create({
   text: {
     padding: 5,
   },
-  teamsContainer: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-  },
+
   pickHolder: {
     borderBottomWidth: 2,
     borderColor: "black",

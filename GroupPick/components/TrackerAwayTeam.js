@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 
 const TrackerAwayTeam = (props) => {
+  console.log("TAT props are:", props);
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
   const [logo, setLogo] = useState("");
@@ -44,24 +45,36 @@ const TrackerAwayTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
-  function dynamicStyle(teamType) {
-    if (teamType == "away") {
+  function dynamicImageStyle() {
+    if (props.status == "Final") {
       return {
-        borderTopWidth: 2,
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
-        width: "50%",
-        minWidth: 150,
-        alignItems: "center",
+        height: 40,
+        width: 40,
+        margin: 5,
+        marginRight: 10,
+        tintColor: "rgba(255, 255, 255, 0.75)",
       };
     } else {
       return {
-        borderTopWidth: 2,
-        borderLeftWidth: 1,
-        borderBottomWidth: 1,
-        width: "50%",
-        minWidth: 150,
-        alignItems: "center",
+        height: 40,
+        width: 40,
+        margin: 5,
+        marginRight: 10,
+      };
+    }
+  }
+
+  function textStyle() {
+    if (props.status == "Final") {
+      return {
+        fontWeight: "bold",
+        fontSize: 28,
+        color: "rgba(255,255,255,0.8)",
+      };
+    } else {
+      return {
+        fontWeight: "bold",
+        fontSize: 28,
       };
     }
   }
@@ -69,10 +82,12 @@ const TrackerAwayTeam = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.batHolder}></View>
-      <Image style={styles.image} source={{ uri: imageLink }}></Image>
+      <Image style={dynamicImageStyle()} source={{ uri: imageLink }}></Image>
       <View style={styles.scoreHolder}>
-        <Text style={[styles.text]}>
-          {props.status.slice(0, 1) == "B" || props.status.slice(0, 1) == "T"
+        <Text style={textStyle()}>
+          {props.status.slice(0, 1) == "B" ||
+          props.status.slice(0, 1) == "T" ||
+          props.status == "Final"
             ? props.runs
             : ""}
         </Text>
@@ -92,10 +107,7 @@ const styles = StyleSheet.create({
     width: 40,
     margin: 5,
     marginRight: 15,
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 28,
+    tintColor: "rgba(255, 255, 255, 0.75)",
   },
   batHolder: {
     minWidth: 5,

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 3,
     borderRadius: 10,
-    overflow: "hide",
+    overflow: "hidden",
     backgroundColor: "black",
   },
   time: {

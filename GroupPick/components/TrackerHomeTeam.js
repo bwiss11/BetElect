@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 import { FontAwesome6 } from "@expo/vector-icons";
+import DropShadow from "react-native-drop-shadow";
 
 const TrackerHomeTeam = (props) => {
   const [pitcherStats, setPitcherStats] = useState("");
@@ -46,24 +47,38 @@ const TrackerHomeTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
-  function dynamicStyle(teamType) {
-    if (teamType == "away") {
+  const stayColoredTeamIDs = new Set([110, 112, 114, 141, 158]);
+
+  function dynamicImageStyle() {
+    if (props.status == "Final" && !stayColoredTeamIDs.has(props.teamID)) {
       return {
-        borderTopWidth: 2,
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
-        width: "50%",
-        minWidth: 150,
-        alignItems: "center",
+        height: 40,
+        width: 40,
+        margin: 5,
+        marginLeft: 10,
+        tintColor: "rgba(255, 255, 255, 0.75)",
       };
     } else {
       return {
-        borderTopWidth: 2,
-        borderLeftWidth: 1,
-        borderBottomWidth: 1,
-        width: "50%",
-        minWidth: 150,
-        alignItems: "center",
+        height: 40,
+        width: 40,
+        margin: 5,
+        marginLeft: 10,
+      };
+    }
+  }
+
+  function textStyle() {
+    if (props.status == "Final") {
+      return {
+        fontWeight: "bold",
+        fontSize: 28,
+        color: "rgba(255,255,255,0.8)",
+      };
+    } else {
+      return {
+        fontWeight: "bold",
+        fontSize: 28,
       };
     }
   }
@@ -71,13 +86,16 @@ const TrackerHomeTeam = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.scoreHolder}>
-        <Text style={[styles.text]}>
-          {props.status.slice(0, 1) == "B" || props.status.slice(0, 1) == "T"
+        <Text style={textStyle()}>
+          {props.status.slice(0, 1) == "B" ||
+          props.status.slice(0, 1) == "T" ||
+          props.status == "Final"
             ? props.runs
             : ""}
         </Text>
       </View>
-      <Image style={styles.image} source={{ uri: imageLink }}></Image>
+
+      <Image style={dynamicImageStyle()} source={{ uri: imageLink }}></Image>
     </View>
   );
 };
@@ -94,10 +112,15 @@ const styles = StyleSheet.create({
     margin: 5,
     marginLeft: 15,
     marginRight: 10,
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 28,
+    // shadowColor: "white",
+    // shadowOffset: { width: 1, height: 2 },
+    // shadowOpacity: 1,
+    // shadowRadius: 1,
+    // borderColor: "red",
+    // borderWidth: 5,
+    tintColor: "rgba(255, 255, 255, 0.75)",
+    borderRadius: 3,
+    // elevation: 5, // Android
   },
   batHolder: {
     alignItems: "center",

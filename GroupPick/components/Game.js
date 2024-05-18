@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 10,
     backgroundColor: "white",
-    overflow: "hide",
+    overflow: "hidden",
   },
   pickOptionsContainer: {
     width: "100%",

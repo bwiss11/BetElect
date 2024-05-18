@@ -8,11 +8,26 @@ import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
   console.log("tracker game status", props);
+  function textStyle() {
+    if (props.gameState == "Final") {
+      console.log("returning blue background");
+      return {
+        color: "rgba(255,255,255, 0.8)",
+        fontSize: 16,
+        margin: 3,
+      };
+    } else {
+      return {
+        fontSize: 16,
+        margin: 3,
+      };
+    }
+  }
   if (props.gameStatus != "Preview" && props.status.slice(0, 3) == "Top") {
     return (
       <View style={styles.container}>
         <AntDesign name="caretup" size={18} color="black" paddingTop={5} />
-        <Text style={styles.text}>{props.status.split(" ")[1]}</Text>
+        <Text style={textStyle()}>{props.status.split(" ")[1]}</Text>
       </View>
     );
   } else if (
@@ -22,11 +37,15 @@ const TrackerGameStatus = (props) => {
     return (
       <View style={styles.container}>
         <AntDesign name="caretdown" size={18} color="black" paddingBottom={4} />
-        <Text style={styles.text}>{props.status.split(" ")[1]}</Text>
+        <Text style={textStyle()}>{props.status.split(" ")[1]}</Text>
       </View>
     );
   }
-  return <Text>{props.time}</Text>;
+  return (
+    <Text style={textStyle()}>
+      {props.status == "Final" ? props.status : props.time}
+    </Text>
+  );
 };
 
 export { TrackerGameStatus };
@@ -44,9 +63,5 @@ const styles = StyleSheet.create({
     width: 40,
     marginLeft: 15,
     paddingBottom: 10,
-  },
-  text: {
-    fontSize: 16,
-    margin: 3,
   },
 });
