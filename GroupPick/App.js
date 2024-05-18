@@ -113,6 +113,7 @@ export default function App() {
           name="Tracker"
           component={Tracker}
           options={{
+            unmountOnBlur: true,
             tabBarIcon: ({ focused }) => {
               return (
                 <View

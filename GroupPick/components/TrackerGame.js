@@ -28,7 +28,8 @@ const TrackerGame = (props) => {
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
-      //   console.log("loggin live data", res);
+      console.log(props.awayStarter);
+      // console.log("loggin live data", res);
       setLiveData(res);
     });
     // console.log("setting pikc to", props.translatedPicks[props.index]);
@@ -48,69 +49,69 @@ const TrackerGame = (props) => {
     // );
   }, []);
 
-  useEffect(() => {
-    if (teamData) {
-      // GetLocalPicks(curDate, "123456").then((res) => {
-      //   if (res && props.passedIndex < res.length) {
-      //     // setPick(res[props.passedIndex]);
-      //     // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
-      //     pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
-      //     if (Number(pickOdds) > 0) {
-      //       pickOdds = "+" + pickOdds;
-      //     }
-      //     let thisPick;
-      //     setPickType([
-      //       res[props.passedIndex],
-      //       props.awaySpread,
-      //       props.homeSpread,
-      //       props.total,
-      //     ]);
-      //     if (res[props.passedIndex].slice(0, 4) == "away") {
-      //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
-      //         if (Number(props.awaySpread) > 0) {
-      //           thisPick =
-      //             teamIDMap[String(props.awayTeamID)][2] +
-      //             " +" +
-      //             props.awaySpread;
-      //         } else {
-      //           thisPick =
-      //             teamIDMap[String(props.awayTeamID)][2] +
-      //             " " +
-      //             props.awaySpread;
-      //         }
-      //       } else {
-      //         thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
-      //       }
-      //     } else if (res[props.passedIndex].slice(0, 4) == "home") {
-      //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
-      //         if (Number(props.homeSpread) > 0) {
-      //           thisPick =
-      //             teamIDMap[String(props.homeTeamID)][2] +
-      //             " +" +
-      //             props.homeSpread;
-      //         } else {
-      //           thisPick =
-      //             teamIDMap[String(props.homeTeamID)][2] +
-      //             " " +
-      //             props.homeSpread;
-      //         }
-      //       } else {
-      //         thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
-      //       }
-      //     } else if (res[props.passedIndex].slice(0, 4) == "over") {
-      //       thisPick = "Over " + props.total;
-      //     } else if (res[props.passedIndex].slice(0, 5) == "under") {
-      //       thisPick = "Under " + props.total;
-      //     }
-      //     if (thisPick && pickOdds) {
-      //       setPick(thisPick + " " + pickOdds);
-      //     }
-      //   } else {
-      //     setPick[""];
-      //   }
-      // });
-    }
-  }, [teamData]);
+  // useEffect(() => {
+  //   if (teamData) {
+  //     // GetLocalPicks(curDate, "123456").then((res) => {
+  //     //   if (res && props.passedIndex < res.length) {
+  //     //     // setPick(res[props.passedIndex]);
+  //     //     // console.log("slice is ", String(res[props.passedIndex]).slice(0, 4));
+  //     //     pickOdds = props[props.passedIndex][res[props.passedIndex] + "Odds"];
+  //     //     if (Number(pickOdds) > 0) {
+  //     //       pickOdds = "+" + pickOdds;
+  //     //     }
+  //     //     let thisPick;
+  //     //     setPickType([
+  //     //       res[props.passedIndex],
+  //     //       props.awaySpread,
+  //     //       props.homeSpread,
+  //     //       props.total,
+  //     //     ]);
+  //     //     if (res[props.passedIndex].slice(0, 4) == "away") {
+  //     //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
+  //     //         if (Number(props.awaySpread) > 0) {
+  //     //           thisPick =
+  //     //             teamIDMap[String(props.awayTeamID)][2] +
+  //     //             " +" +
+  //     //             props.awaySpread;
+  //     //         } else {
+  //     //           thisPick =
+  //     //             teamIDMap[String(props.awayTeamID)][2] +
+  //     //             " " +
+  //     //             props.awaySpread;
+  //     //         }
+  //     //       } else {
+  //     //         thisPick = teamIDMap[String(props.awayTeamID)][2] + " ML";
+  //     //       }
+  //     //     } else if (res[props.passedIndex].slice(0, 4) == "home") {
+  //     //       if (res[props.passedIndex].slice(4, 10) == "Spread") {
+  //     //         if (Number(props.homeSpread) > 0) {
+  //     //           thisPick =
+  //     //             teamIDMap[String(props.homeTeamID)][2] +
+  //     //             " +" +
+  //     //             props.homeSpread;
+  //     //         } else {
+  //     //           thisPick =
+  //     //             teamIDMap[String(props.homeTeamID)][2] +
+  //     //             " " +
+  //     //             props.homeSpread;
+  //     //         }
+  //     //       } else {
+  //     //         thisPick = teamIDMap[String(props.homeTeamID)][2] + " ML";
+  //     //       }
+  //     //     } else if (res[props.passedIndex].slice(0, 4) == "over") {
+  //     //       thisPick = "Over " + props.total;
+  //     //     } else if (res[props.passedIndex].slice(0, 5) == "under") {
+  //     //       thisPick = "Under " + props.total;
+  //     //     }
+  //     //     if (thisPick && pickOdds) {
+  //     //       setPick(thisPick + " " + pickOdds);
+  //     //     }
+  //     //   } else {
+  //     //     setPick[""];
+  //     //   }
+  //     // });
+  //   }
+  // }, [teamData]);
 
   useEffect(() => {
     GetTeamData(props.awayTeamID).then((res) => {
@@ -353,7 +354,9 @@ const TrackerGame = (props) => {
     }
   };
 
-  let myTime = new Date(props.time);
+  let myTime = new Date(props.time).toLocaleTimeString([], {
+    timeStyle: "short",
+  });
   if (liveData && status && translatedPick) {
     return (
       <View style={containerStyle()}>
@@ -374,7 +377,10 @@ const TrackerGame = (props) => {
             status={status}
           />
           <View style={styles.gameStatus}>
-            <TrackerGameStatus status={status}></TrackerGameStatus>
+            <TrackerGameStatus
+              status={status}
+              time={myTime}
+            ></TrackerGameStatus>
           </View>
           <TrackerHomeTeam
             teamType="home"

@@ -14,7 +14,6 @@ const TrackerAwayTeam = (props) => {
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
   const [logo, setLogo] = useState("");
-  // console.log("Team props", props, props.starterID);
 
   useEffect(() => {
     if (props.starterID) {
@@ -72,7 +71,11 @@ const TrackerAwayTeam = (props) => {
       <View style={styles.batHolder}></View>
       <Image style={styles.image} source={{ uri: imageLink }}></Image>
       <View style={styles.scoreHolder}>
-        <Text style={[styles.text]}>{props.runs}</Text>
+        <Text style={[styles.text]}>
+          {props.status.slice(0, 1) == "B" || props.status.slice(0, 1) == "T"
+            ? props.runs
+            : ""}
+        </Text>
       </View>
     </View>
   );
