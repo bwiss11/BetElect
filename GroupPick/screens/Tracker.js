@@ -170,6 +170,12 @@ const Tracker = () => {
         </View>
       </ScrollView>
     );
+  } else {
+    return (
+      <View style={styles.placeholderContainer}>
+        <Text style={styles.text}>No Picks Today</Text>
+      </View>
+    );
   }
 };
 
@@ -183,6 +189,13 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     paddingBottom: 100,
+  },
+  placeholderContainer: {
+    flex: 1,
+    backgroundColor: "black",
+    color: "white",
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     color: "white",
