@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
+  // console.log("tGS props", props);
 
   function textStyle() {
-    if (props.gameState == "Final") {
-
+    if (props.gameState == "Final" || props.detailedState == "Postponed") {
       return {
         color: "rgba(255,255,255, 0.8)",
         fontSize: 16,
@@ -43,7 +43,11 @@ const TrackerGameStatus = (props) => {
   }
   return (
     <Text style={textStyle()}>
-      {props.status == "Final" ? props.status : props.time}
+      {props.status == "Final"
+        ? props.status
+        : props.detailedState == "Postponed"
+        ? "Postponed"
+        : props.time}
     </Text>
   );
 };

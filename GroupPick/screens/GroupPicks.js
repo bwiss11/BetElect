@@ -24,6 +24,8 @@ import {
   checkPickAgreement,
   logGroupFirestoreTranslatedPicks,
   getTranslatedFirestorePicks,
+  getFirestoreData,
+  logFirestoreData,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 
@@ -40,8 +42,16 @@ const GroupPicks = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    GetGames().then((res) => {
-      setData(res);
+    getFirestoreData(curDate).then((res) => {
+      console.log("got firestore data", res);
+      if (!res) {
+        GetGames().then((resGG) => {
+          logFirestoreData(curDate, resGG);
+          setData(resGG);
+        });
+      } else {
+        setData(res);
+      }
     });
 
     checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3").then((res) => {
@@ -93,9 +103,7 @@ const GroupPicks = () => {
       });
 
       getTranslatedFirestorePicks(curDate).then((res) => {
- 
         if (res) {
-
           setTranslatedPicks(res);
         } else {
           let blankTranslatedPicks = [];
@@ -127,9 +135,7 @@ const GroupPicks = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-
-  }, [groupPicks]);
+  useEffect(() => {}, [groupPicks]);
 
   if (data && odds && oddsBool && translatedPicks) {
     // console.log("log of odds", odds, picks);

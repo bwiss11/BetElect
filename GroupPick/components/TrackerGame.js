@@ -15,6 +15,9 @@ import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
   // console.log("trackergame props:", props);
+  if (props.detailedState == "Postponed") {
+    console.log("this game  in TrackerGame is postponed", props);
+  }
   const [logo, setLogo] = useState("");
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
@@ -28,7 +31,6 @@ const TrackerGame = (props) => {
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
-      // console.log("loggin live data", res);
       setLiveData(res);
     });
     // console.log("setting pikc to", props.translatedPicks[props.index]);
@@ -48,9 +50,7 @@ const TrackerGame = (props) => {
     // );
   }, []);
 
-  useEffect(() => {
-    // console.log("liveData is", liveData);
-  }, [liveData]);
+  useEffect(() => {}, [liveData]);
 
   useEffect(() => {
     GetTeamData(props.awayTeamID).then((res) => {
@@ -82,103 +82,112 @@ const TrackerGame = (props) => {
     ) {
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
+      console.log("logging", liveData.status, props.detailedState);
       // placeholder if statement here
-      if (liveData.status != "Preview") {
-        if (pickType[0] == "homeML") {
-          if (homeScore > awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
+      if (props.detailedState == "Postponed") {
+        setPickStatus("tied final");
+      } else {
+        if (liveData.status != "Preview") {
+          if (pickType[0] == "homeML") {
+            if (homeScore > awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
+            } else if (homeScore < awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
             } else {
-              setPickStatus("winning");
+              setPickStatus("tied");
             }
-          } else if (homeScore < awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
+          } else if (pickType[0] == "awayML") {
+            if (homeScore > awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
+            } else if (homeScore < awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
             } else {
-              setPickStatus("losing");
+              setPickStatus("tied");
             }
-          } else {
-            setPickStatus("tied");
-          }
-        } else if (pickType[0] == "awayML") {
-          if (homeScore > awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
+          } else if (pickType[0] == "homeSpread") {
+            if (homeScore + pickType[2] > awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
+            } else if (homeScore + pickType[2] < awayScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
             } else {
-              setPickStatus("losing");
+              setPickStatus("tied");
             }
-          } else if (homeScore < awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
+          } else if (pickType[0] == "awaySpread") {
+            if (awayScore + pickType[1] > homeScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
+            } else if (awayScore + pickType[1] < homeScore) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
             } else {
-              setPickStatus("winning");
+              setPickStatus("tied");
             }
-          } else {
-            setPickStatus("tied");
-          }
-        } else if (pickType[0] == "homeSpread") {
-          if (homeScore + pickType[2] > awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
+          } else if (pickType[0] == "over") {
+            if (awayScore + homeScore > pickType[3]) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
+            } else if (awayScore + homeScore < pickType[3]) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
             } else {
-              setPickStatus("winning");
+              setPickStatus("tied");
             }
-          } else if (homeScore + pickType[2] < awayScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
+          } else if (pickType[0] == "under") {
+            if (awayScore + homeScore < pickType[3]) {
+              if (liveData.status == "Final") {
+                setPickStatus("won");
+              } else {
+                setPickStatus("winning");
+              }
+            } else if (awayScore + homeScore > pickType[3]) {
+              if (liveData.status == "Final") {
+                setPickStatus("lost");
+              } else {
+                setPickStatus("losing");
+              }
             } else {
-              setPickStatus("losing");
+              if (liveData.status == "Final") {
+                setPickStatus("tied final");
+              } else {
+                setPickStatus("tied");
+              }
             }
-          } else {
-            setPickStatus("tied");
-          }
-        } else if (pickType[0] == "awaySpread") {
-          if (awayScore + pickType[1] > homeScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
-            } else {
-              setPickStatus("winning");
-            }
-          } else if (awayScore + pickType[1] < homeScore) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
-            } else {
-              setPickStatus("losing");
-            }
-          } else {
-            setPickStatus("tied");
-          }
-        } else if (pickType[0] == "over") {
-          if (awayScore + homeScore > pickType[3]) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
-            } else {
-              setPickStatus("winning");
-            }
-          } else if (awayScore + homeScore < pickType[3]) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
-            } else {
-              setPickStatus("losing");
-            }
-          } else {
-            setPickStatus("tied");
-          }
-        } else if (pickType[0] == "under") {
-          if (awayScore + homeScore < pickType[3]) {
-            if (liveData.status == "Final") {
-              setPickStatus("won");
-            } else {
-              setPickStatus("winning");
-            }
-          } else if (awayScore + homeScore > pickType[3]) {
-            if (liveData.status == "Final") {
-              setPickStatus("lost");
-            } else {
-              setPickStatus("losing");
-            }
-          } else {
-            setPickStatus("tied");
           }
         }
       }
@@ -203,8 +212,6 @@ const TrackerGame = (props) => {
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
-        borderBottomWidth: 2,
-        borderColor: "black",
         // borderTopLeftRadius: 5,
         // borderTopRightRadius: 5,
       };
@@ -227,10 +234,21 @@ const TrackerGame = (props) => {
         color: "white",
         fontWeight: "bold",
         justifyContent: "center",
-        borderBottomWidth: 2,
-        borderColor: "black",
+
         // borderTopLeftRadius: 5,
         // borderTopRightRadius: 5,
+      };
+    } else if (pickStatus == "tied final") {
+      return {
+        backgroundColor: "black",
+        flex: 1,
+        width: "100%",
+        alignItems: "center",
+        color: "white",
+        fontWeight: "bold",
+        justifyContent: "center",
+        borderBottomWidth: 1,
+        bottomBorderColor: "rgba(255, 255, 255, 0.3)",
       };
     } else {
       return {
@@ -245,17 +263,15 @@ const TrackerGame = (props) => {
   };
 
   const textStatusStyle = () => {
-    if (pickStatus == "won") {
+    if (
+      pickStatus == "won" ||
+      pickStatus == "lost" ||
+      pickStatus == "tied final"
+    ) {
       return {
         padding: 5,
         color: "rgba(255,255,255,0.8)",
         fontWeight: "bold",
-      };
-    } else if (pickStatus == "lost") {
-      return {
-        padding: 5,
-        fontWeight: "bold",
-        color: "rgba(255,255,255,0.8)",
       };
     } else {
       return {
@@ -265,7 +281,11 @@ const TrackerGame = (props) => {
   };
 
   const containerStyle = () => {
-    if (pickStatus == "won" || pickStatus == "lost") {
+    if (
+      pickStatus == "won" ||
+      pickStatus == "lost" ||
+      pickStatus == "tied final"
+    ) {
       return {
         flex: 1,
         maxWidth: 900,
@@ -290,7 +310,7 @@ const TrackerGame = (props) => {
         alignContent: "center",
         margin: 10,
         borderColor: "black",
-        borderWidth: 3,
+        borderWidth: 1,
         borderRadius: 10,
         overflow: "hidden",
         minWidth: "70%",
@@ -299,7 +319,7 @@ const TrackerGame = (props) => {
   };
 
   function teamsContainerStyle() {
-    if (status == "Final") {
+    if (status == "Final" || props.detailedState == "Postponed") {
       return {
         width: "100%",
         flexDirection: "row",
@@ -307,6 +327,8 @@ const TrackerGame = (props) => {
         justifyContent: "center",
         backgroundColor: "black",
         padding: 10,
+        borderTopWidth: 1,
+        borderColor: "rgba(255, 255, 255, 0.3)",
       };
     } else {
       return {
@@ -341,12 +363,14 @@ const TrackerGame = (props) => {
             starter={props.awayStarter}
             starterID={props.awayStarterPlayerID}
             status={status}
+            detailedState={props.detailedState}
           />
           <View style={styles.gameStatus}>
             <TrackerGameStatus
               status={status}
               time={myTime}
               gameState={liveData.status}
+              detailedState={props.detailedState}
             ></TrackerGameStatus>
           </View>
           <TrackerHomeTeam
@@ -359,6 +383,7 @@ const TrackerGame = (props) => {
             starter={props.homeStarter}
             starterID={props.homeStarterPlayerID}
             status={status}
+            detailedState={props.detailedState}
           />
         </View>
       </View>

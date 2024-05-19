@@ -124,6 +124,7 @@ const Tracker = () => {
                 key={index}
                 time={game.gameDate}
                 gameID={game.gamePk}
+                detailedState={game.status.detailedState}
                 awayTeamID={game.teams.away.team.id}
                 awayStarter={
                   game.teams.away.probablePitcher

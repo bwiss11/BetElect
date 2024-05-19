@@ -20,7 +20,11 @@ import {
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
-import { getUserFirestorePicks } from "../backend/firestore";
+import {
+  getUserFirestorePicks,
+  getFirestoreData,
+  logFirestoreData,
+} from "../backend/firestore";
 
 const SoloPicks = () => {
   const [name, setName] = useState("defaultName");
@@ -33,8 +37,16 @@ const SoloPicks = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    GetGames().then((res) => {
-      setData(res);
+    getFirestoreData(curDate).then((res) => {
+      console.log("got firestore data", res);
+      if (!res) {
+        GetGames().then((resGG) => {
+          logFirestoreData(curDate, resGG);
+          setData(resGG);
+        });
+      } else {
+        setData(res);
+      }
     });
 
     // GetLocalPicks(curDate, "123456").then((GLPRes) => {
