@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     borderRightColor: "white",
     borderColor: "white",
     borderWidth: 2,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+    overflow: "hidden",
   },
   text: {
     marginLeft: 10,
@@ -93,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   checkButton: {
     height: "100%",
@@ -103,6 +107,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(60, 90, 190)",
     borderRightColor: "white",
     borderRightWidth: 2,
+    borderBottomLeftRadius: 5,
+    overflow: "hide",
   },
   checkButtonText: {
     color: "white",

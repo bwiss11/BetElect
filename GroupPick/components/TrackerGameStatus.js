@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
-  console.log("tracker game status", props);
+
   function textStyle() {
     if (props.gameState == "Final") {
-      console.log("returning blue background");
+
       return {
         color: "rgba(255,255,255, 0.8)",
         fontSize: 16,

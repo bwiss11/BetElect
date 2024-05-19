@@ -7,7 +7,10 @@ import {
 } from "./firestore";
 import teamIDMap from "../teamIDMap.json";
 
+// PICK UP HERE: write separate function to get games from firestore so games don't get reordered
+// for things like postponements
 function GetGames() {
+  console.log("calling GetGames");
   const curDate = GetFormattedDate();
   return fetch(
     "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher&startDate=" +
@@ -20,6 +23,7 @@ function GetGames() {
       return data;
     })
     .then((data) => {
+      console.log("returning ", data.dates[0].games);
       return data.dates[0].games;
     });
 }

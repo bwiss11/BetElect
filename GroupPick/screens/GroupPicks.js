@@ -93,9 +93,9 @@ const GroupPicks = () => {
       });
 
       getTranslatedFirestorePicks(curDate).then((res) => {
-        console.log("setting translated picks to: (in GroupPicks.jsx)");
+ 
         if (res) {
-          console.log("got result");
+
           setTranslatedPicks(res);
         } else {
           let blankTranslatedPicks = [];
@@ -128,7 +128,7 @@ const GroupPicks = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log("group picks state is:", groupPicks);
+
   }, [groupPicks]);
 
   if (data && odds && oddsBool && translatedPicks) {

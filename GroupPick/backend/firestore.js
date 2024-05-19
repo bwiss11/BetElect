@@ -121,6 +121,32 @@ async function logGroupFirestoreTranslatedPicks(date, picks) {
   return res;
 }
 
+async function logFirestoreData(date, data) {
+  // PLACEHOLDER: group id and data document id hardcoded
+  const res = await updateDoc(
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "data", "rIJmnAHZMTNloCCt237A"),
+    {
+      [date]: data,
+    },
+    { merge: true }
+  );
+  // PLACEHOLDER
+
+  return res;
+}
+
+async function getFirestoreData(date, groupId) {
+  const docSnap = await getDoc(
+    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "data", "rIJmnAHZMTNloCCt237A")
+  );
+  if (docSnap.exists()) {
+    return docSnap.data()[date];
+  } else {
+    console.log("no such document");
+    return null;
+  }
+}
+
 async function getFirestorePicks(date, groupId) {
   const docSnap = await getDoc(
     doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj")
@@ -258,6 +284,8 @@ export {
   checkPickAgreement,
   logGroupFirestoreTranslatedPicks,
   getTranslatedFirestorePicks,
+  logFirestoreData,
+  getFirestoreData,
 };
 
 // Import the functions you need from the SDKs you need

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
-  console.log("trackergame props:", props);
+  // console.log("trackergame props:", props);
   const [logo, setLogo] = useState("");
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
@@ -28,7 +28,6 @@ const TrackerGame = (props) => {
 
   useEffect(() => {
     GetLiveData(props.gameID).then((res) => {
-      console.log(props.awayStarter);
       // console.log("loggin live data", res);
       setLiveData(res);
     });
@@ -50,7 +49,7 @@ const TrackerGame = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("liveData is", liveData);
+    // console.log("liveData is", liveData);
   }, [liveData]);
 
   useEffect(() => {
@@ -206,8 +205,8 @@ const TrackerGame = (props) => {
         justifyContent: "center",
         borderBottomWidth: 2,
         borderColor: "black",
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        // borderTopLeftRadius: 5,
+        // borderTopRightRadius: 5,
       };
     } else if (pickStatus == "losing") {
       return {
@@ -230,8 +229,8 @@ const TrackerGame = (props) => {
         justifyContent: "center",
         borderBottomWidth: 2,
         borderColor: "black",
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        // borderTopLeftRadius: 5,
+        // borderTopRightRadius: 5,
       };
     } else {
       return {

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 
 const TrackerAwayTeam = (props) => {
-  console.log("TAT props are:", props);
+  // console.log("TAT props are:", props);
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
   const [logo, setLogo] = useState("");
@@ -45,8 +45,10 @@ const TrackerAwayTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
+  const stayColoredTeamIDs = new Set([110, 112, 114, 141, 145, 158]);
+
   function dynamicImageStyle() {
-    if (props.status == "Final") {
+    if (props.status == "Final" && !stayColoredTeamIDs.has(props.teamID)) {
       return {
         height: 40,
         width: 40,

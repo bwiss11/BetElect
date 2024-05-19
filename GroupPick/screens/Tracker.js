@@ -26,6 +26,8 @@ import {
   checkPickAgreement,
   getFirestorePicks,
   getTranslatedFirestorePicks,
+  getFirestoreData,
+  logFirestoreData,
 } from "../backend/firestore";
 
 const Tracker = () => {
@@ -38,8 +40,16 @@ const Tracker = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    GetGames().then((res) => {
-      setData(res);
+    getFirestoreData(curDate).then((res) => {
+      console.log("got firestore data", res);
+      if (!res) {
+        GetGames().then((resGG) => {
+          logFirestoreData(curDate, resGG);
+          setData(resGG);
+        });
+      } else {
+        setData(res);
+      }
     });
 
     getFirestorePicks(curDate).then((res) => {
