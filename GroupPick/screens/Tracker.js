@@ -182,7 +182,7 @@ const Tracker = () => {
 export default Tracker;
 
 const styles = StyleSheet.create({
-  outermostContainer: { minWidth: "40%" },
+  outermostContainer: { minWidth: "40%", backgroundColor: "black" },
   container: {
     flex: 1,
     width: "100%",
