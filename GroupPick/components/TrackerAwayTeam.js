@@ -46,7 +46,7 @@ const TrackerAwayTeam = (props) => {
     ".png";
 
   const nonOutlineTeamIDs = new Set([
-    108, 109, 110, 112, 114, 117, 121, 141, 145, 146, 158,
+  110, 112, 114, 117, 141, 145, 158,
   ]);
 
   function dynamicImageStyle() {
@@ -55,16 +55,16 @@ const TrackerAwayTeam = (props) => {
         return {
           height: 40,
           width: 40,
-          margin: 5,
-          marginLeft: 10,
+          marginLeft: 5,
+          marginRight: 10,
           tintColor: "rgba(255, 255, 255, 0.3)",
         };
       } else {
         return {
           height: 40,
           width: 40,
-          margin: 5,
-          marginLeft: 10,
+          marginLeft: 5,
+          marginRight: 10,
           filter: "grayscale(100%)",
         };
       }
@@ -72,8 +72,8 @@ const TrackerAwayTeam = (props) => {
       return {
         height: 40,
         width: 40,
-        margin: 5,
-        marginLeft: 10,
+        marginLeft: 5,
+        marginRight: 10,
       };
     }
   }
