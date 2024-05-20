@@ -47,17 +47,17 @@ const TrackerHomeTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
-  const nonOutlineTeamIDs = new Set([110, 112, 114, 117, 141, 145, 158]);
+  const tooDarkTeamIDs = new Set([115, 134, 147]);
 
   function dynamicImageStyle() {
     if (props.status == "Final" || props.detailedState == "Postponed") {
-      if (!nonOutlineTeamIDs.has(props.teamID)) {
+      if (tooDarkTeamIDs.has(props.teamID)) {
         return {
           height: 40,
           width: 40,
           marginLeft: 10,
           marginRight: 5,
-          tintColor: "rgba(255, 255, 255, 0.3)",
+          tintColor: "rgba(255, 255, 255, 1)",
         };
       } else {
         return {
@@ -65,8 +65,6 @@ const TrackerHomeTeam = (props) => {
           width: 40,
           marginLeft: 10,
           marginRight: 5,
-          // tintColor: "grey",
-          filter: "grayscale(100%)",
         };
       }
     } else {
@@ -107,7 +105,9 @@ const TrackerHomeTeam = (props) => {
         </Text>
       </View>
 
-      <Image style={dynamicImageStyle()} source={{ uri: imageLink }}></Image>
+      {/* <Image style={dynamicImageStyle()} source={{ uri: imageLink }}></Image> */}
+
+      <Image source={{ uri: imageLink }} style={dynamicImageStyle()} />
     </View>
   );
 };
