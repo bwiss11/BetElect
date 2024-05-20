@@ -47,7 +47,7 @@ const TrackerHomeTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
-  const tooDarkTeamIDs = new Set([115, 134, 147]);
+  const tooDarkTeamIDs = new Set([115, 134, 135, 147]);
 
   function dynamicImageStyle() {
     if (props.status == "Final" || props.detailedState == "Postponed") {
