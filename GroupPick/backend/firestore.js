@@ -8,8 +8,11 @@ import {
   getDoc,
   query,
 } from "firebase/firestore";
+
 import { ScreenStackHeaderConfig } from "react-native-screens";
 import { getLocaleDirection } from "react-native-web/dist/cjs/modules/useLocale";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 // import { getFirestore, doc, setDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -28,6 +31,17 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+const auth = getAuth();
+const signUp = () => {
+  createUserWithEmailAndPassword(auth, "emaily@email.com", "passwordtest")
+    .then(() => {
+      console.log("user created!");
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
 
 // function GetGames2() {
 //   const curDate = GetFormattedDate();
@@ -286,6 +300,7 @@ export {
   getTranslatedFirestorePicks,
   logFirestoreData,
   getFirestoreData,
+  signUp,
 };
 
 // Import the functions you need from the SDKs you need
