@@ -47,7 +47,7 @@ const TrackerHomeTeam = (props) => {
     logoMap[props.teamID] +
     ".png";
 
-  const tooDarkTeamIDs = new Set([115, 134, 135, 147]);
+  const tooDarkTeamIDs = new Set([115, 135, 147]);
 
   function dynamicImageStyle() {
     if (props.status == "Final" || props.detailedState == "Postponed") {
@@ -58,6 +58,15 @@ const TrackerHomeTeam = (props) => {
           marginLeft: 10,
           marginRight: 5,
           tintColor: "rgba(255, 255, 255, 1)",
+        };
+      } else if (props.teamID == 134) {
+        // Pirates logo should be yellow
+        return {
+          height: 40,
+          width: 40,
+          marginLeft: 5,
+          marginRight: 10,
+          tintColor: "rgba(253, 184, 39, 1)",
         };
       } else {
         return {
