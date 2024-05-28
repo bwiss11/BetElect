@@ -421,14 +421,13 @@ const UpdateLocalPicks = async (
   picksCopy,
   date,
   groupId,
-  numberOfGames
+  numberOfGames,
+  userID,
+  picksDocID
 ) => {
   try {
     // Records user picks to local storage
-    const firestorePicks = await getUserFirestorePicks(
-      date,
-      "L2tcqkRGYEEHb20DVbv5"
-    );
+    const firestorePicks = await getUserFirestorePicks(date, userID);
     // const jsonValue = JSON.parse(await AsyncStorage.getItem("picks"));
     if (!firestorePicks) {
       // picksCopy[index] = pick;
@@ -438,13 +437,7 @@ const UpdateLocalPicks = async (
         picksArray.push("");
       }
       picksArray[index] = pick;
-      // PLACEHOLDER: userId hardcoded
-      await logFirestorePicks(
-        date,
-        picksArray,
-        "123456",
-        "L2tcqkRGYEEHb20DVbv5"
-      );
+      await logFirestorePicks(date, picksArray, userID, picksDocID);
     } else {
       firestorePicks[index] = pick;
       for (let i = 0; i < firestorePicks.length; i++) {
@@ -453,12 +446,7 @@ const UpdateLocalPicks = async (
         }
       }
       // await AsyncStorage.setItem("picks", JSON.stringify(jsonValue));
-      await logFirestorePicks(
-        date,
-        firestorePicks,
-        "123456",
-        "L2tcqkRGYEEHb20DVbv5"
-      );
+      await logFirestorePicks(date, firestorePicks, userID, picksDocID);
     }
   } catch (e) {
     console.log(e);

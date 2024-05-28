@@ -1,12 +1,16 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
+  collection,
   getFirestore,
   doc,
   setDoc,
   updateDoc,
   getDoc,
+  getDocs,
   query,
+  where,
+  limit,
 } from "firebase/firestore";
 
 import { ScreenStackHeaderConfig } from "react-native-screens";
@@ -68,8 +72,8 @@ const userToPicksId = {
   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
 };
 
-async function logFirestorePicks(date, picks, groupId, userId, pickId) {
-  // console.log("logging Firestore picks date and picks", date, picks);
+async function logFirestorePicks(date, picks, userId, pickId) {
+  console.log("logging Firestore picks userId and pickId", userId, pickId);
   // log to Group
   // const res = await updateDoc(
   //   doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
@@ -80,9 +84,8 @@ async function logFirestorePicks(date, picks, groupId, userId, pickId) {
   // );
   // log to individual
 
-  // PLACEHOLDER: Pick up here: dynamically log userId and picks document ID using map from other parts of code
   const res = await updateDoc(
-    doc(db, "users", userId, "picks", userToPicksId[userId]),
+    doc(db, "users", userId, "picks", pickId),
     {
       [date]: picks,
     },
@@ -217,6 +220,31 @@ async function getUserInfo(userId) {
   }
 }
 
+async function getUserDoc(firebaseID) {
+  usersRef = collection(db, "users");
+  const querySnapshot = await getDocs(
+    query(usersRef, where("firebaseID", "==", firebaseID, limit(1)))
+  );
+  let ans;
+  await querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    ans = [doc.id, doc.data()];
+  });
+
+  return ans;
+}
+
+async function getUserPicksDoc(userId) {
+  picksRef = collection(db, "users", userId, "picks");
+  const querySnapshot = await getDocs(query(picksRef, limit(1)));
+  let ans;
+  await querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    ans = [doc.id, doc.data()];
+  });
+  return ans;
+}
+
 async function checkPickAgreement(date, groupId) {
   pickMap = {};
   groupPicks = [];
@@ -301,6 +329,8 @@ export {
   logFirestoreData,
   getFirestoreData,
   signUp,
+  getUserDoc,
+  getUserPicksDoc,
 };
 
 // Import the functions you need from the SDKs you need

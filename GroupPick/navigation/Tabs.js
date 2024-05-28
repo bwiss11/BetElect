@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
+console.log("on tabs page");
 const screenOptions = {
   tabBarShowLabel: false,
   tabBarActiveTintColor: "rgb(150, 150, 255, 100)",
@@ -31,6 +32,7 @@ const screenOptions = {
   },
 };
 const Tabs = () => {
+  console.log("loading tabs!");
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen

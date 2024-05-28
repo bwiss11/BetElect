@@ -35,6 +35,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth();
+
 const AuthScreen = ({
   email,
   setEmail,
@@ -66,7 +68,7 @@ const AuthScreen = ({
       <View style={styles.buttonContainer}>
         <Button
           title={isLogin ? "Sign In" : "Sign Up"}
-          onPress={handleAuthentication}
+          onPress={() => handleAuthentication()}
           color="#3498db"
         />
       </View>
@@ -102,7 +104,21 @@ const Login = ({ navigation }) => {
   const [user, setUser] = useState(null); // Track user authentication state
   const [isLogin, setIsLogin] = useState(true);
   const auth = getAuth(app);
-  console.log("login screen");
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/auth.user
+  //     const uid = user.uid;
+  //     console.log("current user on Login page is", uid);
+  //     // ...
+  //     // handleAuthentication();
+  //     // navigation.navigate("Tabs");
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //   }
+  // });
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -112,8 +128,8 @@ const Login = ({ navigation }) => {
   }, [auth]);
 
   useEffect(() => {
-    // console.log("user is", user);
-  }, [user]);
+    // console.log("on reload user is", user);
+  }, []);
 
   const handleAuthentication = async () => {
     console.log("handling authentication isLogin?", isLogin);
@@ -127,8 +143,7 @@ const Login = ({ navigation }) => {
         if (isLogin) {
           // Sign in
           await signInWithEmailAndPassword(auth, email, password);
-          console.log("trying to sign in");
-          console.log("User signed in!");
+          console.log("User signed in, navigating to tabs");
           navigation.navigate("Tabs");
         } else {
           // Sign up
@@ -143,14 +158,16 @@ const Login = ({ navigation }) => {
     }
     console.log("returning with user as", user);
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {user ? (
         // Show user's email if user is authenticated
-        <AuthenticatedScreen
-          user={user}
-          handleAuthentication={handleAuthentication}
-        />
+        // <AuthenticatedScreen
+        //   user={user}
+        //   handleAuthentication={handleAuthentication}
+        // />
+        navigation.navigate("Tabs")
       ) : (
         // <AuthenticatedScreen
         //   user={user}

@@ -82,8 +82,7 @@ const TrackerGame = (props) => {
     ) {
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
-      console.log("logging", liveData.status, props.detailedState);
-      // placeholder if statement here
+
       if (props.detailedState == "Postponed") {
         setPickStatus("tied final");
       } else {

@@ -53,6 +53,8 @@ const Game = (props) => {
           over={props.over}
           under={props.under}
           numberOfGames={props.numberOfGames}
+          userID={props.userID}
+          picksDocID={props.picksDocID}
         />
       </View>
     </View>

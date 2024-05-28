@@ -24,7 +24,11 @@ import {
   getUserFirestorePicks,
   getFirestoreData,
   logFirestoreData,
+  getUserDoc,
+  getUserPicksDoc,
 } from "../backend/firestore";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const SoloPicks = () => {
   const [name, setName] = useState("defaultName");
@@ -32,9 +36,38 @@ const SoloPicks = () => {
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
+  const auth = getAuth();
+  const [picksDocID, setPicksDocID] = useState("");
+  const [userID, setUserID] = useState("");
 
+  onAuthStateChanged(auth, (user) => {
+    if (user && !picksDocID) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      getUserDoc(uid).then((res) => {
+        setUserID(res[0]);
+        getUserPicksDoc(res[0]).then((res) => {
+          setPicksDocID(res[0]);
+        });
+      });
+
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
+
+  useEffect(() => {
+    console.log("pickDoc ID is", picksDocID);
+  }, [picksDocID]);
+
+  useEffect(() => {
+    console.log("user ID is", userID);
+  }, [userID]);
 
   useEffect(() => {
     getFirestoreData(curDate).then((res) => {
@@ -48,22 +81,6 @@ const SoloPicks = () => {
         setData(res);
       }
     });
-
-    // GetLocalPicks(curDate, "123456").then((GLPRes) => {
-    //   // console.log("GLP response:", GLPRes);
-    //   if (GLPRes) {
-    //     GetLocalGames().then((GLGRes) => {
-    //       if (GLPRes.length < GLGRes.length) {
-    //         for (i = GLPRes.length; i < GLGRes.length; i++) {
-    //           GLPRes.push("");
-    //         }
-    //       }
-    //     });
-    //     // console.log("setting picks to", GLPRes);
-    //     setPicks(GLPRes);
-    //   } else {
-    //   }
-    // });
 
     getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
       setPicks(res);
@@ -118,7 +135,7 @@ const SoloPicks = () => {
     // console.log("picks are", picks);
   }, [picks]);
 
-  if (data && odds && oddsBool) {
+  if (data && odds && oddsBool && userID && picksDocID) {
     // console.log("log of odds", odds, picks);
     return (
       <ScrollView style={styles.outermostContainer}>
@@ -188,6 +205,8 @@ const SoloPicks = () => {
               over={odds[index].overOdds}
               under={odds[index].underOdds}
               numberOfGames={data.length}
+              userID={userID}
+              picksDocID={picksDocID}
             />
           ))}
         </View>
