@@ -66,11 +66,11 @@ const signUp = () => {
 
 const db = getFirestore(app);
 
-const userToPicksId = {
-  L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-  MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-  rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-};
+// const userToPicksId = {
+//   L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
+//   MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
+//   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
+// };
 
 async function logFirestorePicks(date, picks, userId, pickId) {
   // const res = await updateDoc(
@@ -224,8 +224,10 @@ async function getTranslatedFirestorePicks(
 }
 
 async function getUserFirestorePicks(date, userId, picksId) {
+  let userPicksDocId = await getUserPicksDoc(userId);
+  // console.log("userpicksdocid is", userPicksDocId);
   const docSnap = await getDoc(
-    doc(db, "users", userId, "picks", userToPicksId[userId])
+    doc(db, "users", userId, "picks", userPicksDocId[0])
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];
@@ -336,11 +338,11 @@ async function checkPickAgreement(date, groupId, groupPicksDocID) {
     };
   }
 
-  const userToPicksId = {
-    L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-    MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-    rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-  };
+  // const userToPicksId = {
+  //   L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
+  //   MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
+  //   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
+  // };
 
   const docSnap = await getDoc(doc(db, "groups", groupId));
   // console.log("members are", docSnap.data().members);
