@@ -132,10 +132,10 @@ async function logGroupFirestoreTranslatedPicks(
   return res;
 }
 
-async function logFirestoreData(date, data, groupId) {
+async function logFirestoreData(date, data, groupId, groupDataDocID) {
   // PLACEHOLDER: group id and data document id hardcoded
   const res = await updateDoc(
-    doc(db, "groups", groupId, "data", "rIJmnAHZMTNloCCt237A"),
+    doc(db, "groups", groupId, "data", groupDataDocID),
     {
       [date]: data,
     },

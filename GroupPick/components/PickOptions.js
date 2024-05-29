@@ -23,7 +23,7 @@ const PickOptions = (props) => {
   // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
   const [userPick, setUserPick] = useState("");
   // picksCopy = GetLocalPicks(curDate, "123456");
-  picksCopy = getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5");
+  picksCopy = getUserFirestorePicks(curDate, props.userID);
   useEffect(() => {
     if (userPick) {
       UpdateLocalPicks(
@@ -52,13 +52,11 @@ const PickOptions = (props) => {
     //   }
     // });
 
-    picksCopy = getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then(
-      (res) => {
-        if (res && res[props.index]) {
-          setUserPick(res[props.index]);
-        }
+    picksCopy = getUserFirestorePicks(curDate, props.userID).then((res) => {
+      if (res && res[props.index]) {
+        setUserPick(res[props.index]);
       }
-    );
+    });
     // if (picksCopy[props.index]) {
     //   console.log("setting user pick to:", picksCopy[props.index]);
     //   setUserPick(picksCopy[props.index]);

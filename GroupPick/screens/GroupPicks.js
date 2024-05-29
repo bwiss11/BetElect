@@ -88,17 +88,6 @@ const GroupPicks = () => {
         setTranslatedPicksDocID(res[0]);
       });
 
-      getFirestoreData(curDate, groupID).then((res) => {
-        if (!res) {
-          GetGames().then((resGG) => {
-            logFirestoreData(curDate, resGG, groupID);
-            setData(resGG);
-          });
-        } else {
-          setData(res);
-        }
-      });
-
       getGroupDataDoc(groupID).then((res) => {
         setGroupDataDocID(res[0]);
       });
@@ -146,6 +135,21 @@ const GroupPicks = () => {
       );
     }
   }, [translatedPicksDocID]);
+
+  useEffect(() => {
+    if (groupDataDocID) {
+      getFirestoreData(curDate, groupID).then((res) => {
+        if (!res) {
+          GetGames().then((resGG) => {
+            logFirestoreData(curDate, resGG, groupID, groupDataDocID);
+            setData(resGG);
+          });
+        } else {
+          setData(res);
+        }
+      });
+    }
+  }, [groupDataDocID]);
 
   useEffect(() => {
     if (data) {

@@ -23,12 +23,19 @@ import {
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
 import {
-  checkPickAgreement,
-  getFirestorePicks,
-  getTranslatedFirestorePicks,
+  getUserFirestorePicks,
   getFirestoreData,
   logFirestoreData,
+  getUserDoc,
+  getUserPicksDoc,
+  getGroupDataDoc,
+  getFirestorePicks,
+  getTranslatedFirestorePicks,
+  getGroupPicksDoc,
+  getTranslatedPicksDoc,
 } from "../backend/firestore";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Tracker = () => {
   const [data, setData] = useState("");
@@ -36,36 +43,95 @@ const Tracker = () => {
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
   const [translatedPicks, setTranslatedPicks] = useState("");
+  const auth = getAuth();
+  const [picksDocID, setPicksDocID] = useState("");
+  const [userID, setUserID] = useState("");
+  const [groupID, setGroupID] = useState("");
+  const [groupDataDocID, setGroupDataDocID] = useState("");
+  const [groupPicksDocID, setGroupPicksDocID] = useState("");
+  const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
 
   const curDate = GetFormattedDate();
 
-  useEffect(() => {
-    getFirestoreData(curDate).then((res) => {
-      console.log("got firestore data", res);
-      if (!res) {
-        GetGames().then((resGG) => {
-          logFirestoreData(curDate, resGG);
-          setData(resGG);
+  onAuthStateChanged(auth, (user) => {
+    if (user && !picksDocID) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      getUserDoc(uid).then((res) => {
+        setUserID(res[0]);
+        setGroupID(res[1].groupId);
+        getUserPicksDoc(res[0]).then((res) => {
+          setPicksDocID(res[0]);
         });
-      } else {
-        setData(res);
-      }
-    });
-    // PLACEHOLDER need to retrieve groupID first
-    getFirestorePicks(curDate, groupId).then((res) => {
-      setPicks(res);
-    });
+      });
 
-    // PLACEHOLDER - need to eventually pass in groupID
-    getTranslatedFirestorePicks(curDate).then((res) => {
-      setTranslatedPicks(res);
-    });
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 
-    // clearAll();
+  useEffect(() => {
     GetLocalOdds().then((res) => {
       setOdds(res);
     });
   }, []);
+
+  useEffect(() => {
+    if (groupID) {
+      getGroupPicksDoc(groupID).then((res) => {
+        setGroupPicksDocID(res[0]);
+      });
+      getTranslatedPicksDoc(groupID).then((res) => {
+        setTranslatedPicksDocID(res[0]);
+      });
+      getGroupDataDoc(groupID).then((res) => {
+        setGroupDataDocID(res[0]);
+      });
+
+      getFirestoreData(curDate, groupID).then((res) => {
+        console.log("got firestore data", res);
+        if (!res) {
+          GetGames().then((resGG) => {
+            logFirestoreData(curDate, resGG);
+            setData(resGG);
+          });
+        } else {
+          setData(res);
+        }
+      });
+    }
+  }, [groupID]);
+
+  useEffect(() => {
+    console.log("group id is and trying", groupID, groupPicksDocID);
+    if (groupPicksDocID) {
+      getFirestorePicks(curDate, groupID, groupPicksDocID).then((res) => {
+        console.log("setting picks to", res);
+        setPicks(res);
+      });
+    }
+  }, [groupPicksDocID]);
+
+  useEffect(() => {
+    if (translatedPicksDocID) {
+      getTranslatedFirestorePicks(curDate, groupID, translatedPicksDocID).then(
+        (res) => {
+          if (res) {
+            setTranslatedPicks(res);
+          } else {
+            let blankTranslatedPicks = [];
+            for (let i = 0; i < data.length; i++) {
+              blankTranslatedPicks.unshift("");
+            }
+            setTranslatedPicks(blankTranslatedPicks);
+          }
+        }
+      );
+    }
+  }, [translatedPicksDocID]);
 
   useEffect(() => {
     if (data) {
@@ -87,6 +153,14 @@ const Tracker = () => {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log("data", data);
+    console.log("odds", odds);
+    console.log("oddsBool", oddsBool);
+    console.log("translatedpicks", translatedPicks);
+    console.log("picks", picks);
+  }, [data, odds, oddsBool, translatedPicks, picks]);
 
   if (data && odds && oddsBool && translatedPicks && picks) {
     return (

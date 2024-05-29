@@ -74,32 +74,32 @@ const SoloPicks = () => {
   // }, [userID]);
 
   useEffect(() => {
-    getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
-      setPicks(res);
-    });
-
     // clearAll();
   }, []);
 
   useEffect(() => {
     if (groupID) {
+      getGroupDataDoc(groupID).then((res) => {
+        setGroupDataDocID(res[0]);
+      });
+    }
+  }, [groupID]);
+
+  useEffect(() => {
+    if (groupDataDocID) {
       getFirestoreData(curDate, groupID).then((res) => {
         console.log("got firestore data", res);
         if (!res) {
           GetGames().then((resGG) => {
-            logFirestoreData(curDate, resGG);
+            logFirestoreData(curDate, resGG, groupDataDocID);
             setData(resGG);
           });
         } else {
           setData(res);
         }
       });
-
-      getGroupDataDoc(groupID).then((res) => {
-        setGroupDataDocID(res[0]);
-      });
     }
-  }, [groupID]);
+  }, [groupDataDocID]);
 
   useEffect(() => {
     if (data) {
@@ -137,15 +137,15 @@ const SoloPicks = () => {
     //     setPicks(picksList);
     //   }
     // });
-
-    getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
-      setPicks(res);
-    });
   }, [data]);
 
   useEffect(() => {
-    // console.log("picks are", picks);
-  }, [picks]);
+    if (userID) {
+      getUserFirestorePicks(curDate, userID).then((res) => {
+        setPicks(res);
+      });
+    }
+  }, [userID]);
 
   if (data && odds && oddsBool && userID && picksDocID && groupID) {
     // console.log("log of odds", odds, picks);
