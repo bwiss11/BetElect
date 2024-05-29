@@ -32,7 +32,6 @@ const screenOptions = {
   },
 };
 const Tabs = () => {
-  console.log("loading tabs!");
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen

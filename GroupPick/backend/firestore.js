@@ -234,7 +234,6 @@ async function getUserDoc(firebaseID) {
 }
 
 async function getGroupPicksDoc(groupID) {
-  console.log("group ID in getGroupPicks", groupID);
   groupsRef = collection(db, "groups", groupID, "picks");
   const querySnapshot = await getDocs(
     query(groupsRef, where("type", "==", "groupPicks", limit(1)))
@@ -273,11 +272,21 @@ async function getUserPicksDoc(userId) {
   return ans;
 }
 
+async function getGroupDataDoc(groupId) {
+  picksRef = collection(db, "groups", groupId, "data");
+  const querySnapshot = await getDocs(query(picksRef, limit(1)));
+  let ans;
+  await querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    ans = [doc.id, doc.data()];
+  });
+  return ans;
+}
+
 async function checkPickAgreement(date, groupId, groupPicksDocID) {
   // console.log("Group id in CPA", groupId);
   pickMap = {};
   groupPicks = [];
-  console.log("checking pick agreement");
 
   for (let i = 0; i < 20; i++) {
     pickMap[i] = {
@@ -362,6 +371,7 @@ export {
   getUserPicksDoc,
   getGroupPicksDoc,
   getTranslatedPicksDoc,
+  getGroupDataDoc,
 };
 
 // Import the functions you need from the SDKs you need

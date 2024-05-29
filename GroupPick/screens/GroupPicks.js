@@ -30,6 +30,7 @@ import {
   getUserPicksDoc,
   getGroupPicksDoc,
   getTranslatedPicksDoc,
+  getGroupDataDoc,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -48,6 +49,7 @@ const GroupPicks = () => {
   const [groupID, setGroupID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
+  const [groupDataDocID, setGroupDataDocID] = useState("");
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
@@ -79,17 +81,14 @@ const GroupPicks = () => {
   useEffect(() => {
     if (groupID) {
       getGroupPicksDoc(groupID).then((res) => {
-        console.log("got group Picks doc", res);
         setGroupPicksDocID(res[0]);
       });
 
       getTranslatedPicksDoc(groupID).then((res) => {
-        console.log("got translated Picks doc", res);
         setTranslatedPicksDocID(res[0]);
       });
 
       getFirestoreData(curDate, groupID).then((res) => {
-        console.log("got firestore data", res);
         if (!res) {
           GetGames().then((resGG) => {
             logFirestoreData(curDate, resGG, groupID);
@@ -98,6 +97,10 @@ const GroupPicks = () => {
         } else {
           setData(res);
         }
+      });
+
+      getGroupDataDoc(groupID).then((res) => {
+        setGroupDataDocID(res[0]);
       });
     }
   }, [groupID]);

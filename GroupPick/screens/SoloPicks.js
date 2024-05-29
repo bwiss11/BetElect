@@ -26,6 +26,7 @@ import {
   logFirestoreData,
   getUserDoc,
   getUserPicksDoc,
+  getGroupDataDoc,
 } from "../backend/firestore";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -40,6 +41,7 @@ const SoloPicks = () => {
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [groupDataDocID, setGroupDataDocID] = useState("");
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
@@ -91,6 +93,10 @@ const SoloPicks = () => {
         } else {
           setData(res);
         }
+      });
+
+      getGroupDataDoc(groupID).then((res) => {
+        setGroupDataDocID(res[0]);
       });
     }
   }, [groupID]);
