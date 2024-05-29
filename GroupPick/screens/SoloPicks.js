@@ -37,11 +37,11 @@ const SoloPicks = () => {
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
   const [picks, setPicks] = useState("");
-  const auth = getAuth();
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
+  const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {

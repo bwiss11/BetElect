@@ -132,7 +132,6 @@ const Login = ({ navigation }) => {
   }, []);
 
   const handleAuthentication = async () => {
-    console.log("handling authentication isLogin?", isLogin);
     try {
       if (user) {
         // If user is already authenticated, log out
