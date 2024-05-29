@@ -423,7 +423,8 @@ const UpdateLocalPicks = async (
   groupId,
   numberOfGames,
   userID,
-  picksDocID
+  picksDocID,
+  groupID
 ) => {
   try {
     // Records user picks to local storage

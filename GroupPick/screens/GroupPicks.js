@@ -26,8 +26,11 @@ import {
   getTranslatedFirestorePicks,
   getFirestoreData,
   logFirestoreData,
+  getUserDoc,
+  getUserPicksDoc,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const GroupPicks = () => {
   const [name, setName] = useState("defaultName");
@@ -37,6 +40,31 @@ const GroupPicks = () => {
   const [picks, setPicks] = useState("");
   const [translatedPicks, setTranslatedPicks] = useState("");
   const [groupPicks, setGroupPicks] = useState("");
+  const auth = getAuth();
+  const [picksDocID, setPicksDocID] = useState("");
+  const [userID, setUserID] = useState("");
+  const [groupID, setGroupID] = useState("");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user && !picksDocID) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      getUserDoc(uid).then((res) => {
+        setUserID(res[0]);
+        console.log("group ID is", res[1].groupId);
+        setGroupID(res[1].groupId);
+        getUserPicksDoc(res[0]).then((res) => {
+          setPicksDocID(res[0]);
+        });
+      });
+
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
@@ -137,7 +165,7 @@ const GroupPicks = () => {
 
   useEffect(() => {}, [groupPicks]);
 
-  if (data && odds && oddsBool && translatedPicks) {
+  if (data && odds && oddsBool && translatedPicks && groupID) {
     // console.log("log of odds", odds, picks);
     console.log("data is", data);
     return (
@@ -211,6 +239,9 @@ const GroupPicks = () => {
                 total={odds[index].total}
                 over={odds[index].overOdds}
                 under={odds[index].underOdds}
+                userID={userID}
+                picksDocID={picksDocID}
+                groupID={groupID}
               />
             ))}
           </View>

@@ -39,6 +39,7 @@ const SoloPicks = () => {
   const auth = getAuth();
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
+  const [groupID, setGroupID] = useState("");
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
@@ -47,6 +48,8 @@ const SoloPicks = () => {
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
+        console.log("group ID is", res[1].groupId);
+        setGroupID(res[1].groupId);
         getUserPicksDoc(res[0]).then((res) => {
           setPicksDocID(res[0]);
         });
@@ -61,13 +64,13 @@ const SoloPicks = () => {
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
 
-  useEffect(() => {
-    console.log("pickDoc ID is", picksDocID);
-  }, [picksDocID]);
+  // useEffect(() => {
+  //   console.log("pickDoc ID is", picksDocID);
+  // }, [picksDocID]);
 
-  useEffect(() => {
-    console.log("user ID is", userID);
-  }, [userID]);
+  // useEffect(() => {
+  //   console.log("user ID is", userID);
+  // }, [userID]);
 
   useEffect(() => {
     getFirestoreData(curDate).then((res) => {
@@ -135,7 +138,7 @@ const SoloPicks = () => {
     // console.log("picks are", picks);
   }, [picks]);
 
-  if (data && odds && oddsBool && userID && picksDocID) {
+  if (data && odds && oddsBool && userID && picksDocID && groupID) {
     // console.log("log of odds", odds, picks);
     return (
       <ScrollView style={styles.outermostContainer}>
@@ -207,6 +210,7 @@ const SoloPicks = () => {
               numberOfGames={data.length}
               userID={userID}
               picksDocID={picksDocID}
+              groupID={groupID}
             />
           ))}
         </View>

@@ -12,7 +12,6 @@ import { PickOptions } from "./PickOptions";
 
 const curDate = GetFormattedDate();
 const GroupGamePick = (props) => {
-  console.log("GROUP GAME PICK PROPS ARE", props);
   useEffect(() => {
     if (props.translatedPicks && props.translatedPicks[props.index]) {
       setGroupPick(props.translatedPicks[props.index]);

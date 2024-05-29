@@ -55,6 +55,7 @@ const Game = (props) => {
           numberOfGames={props.numberOfGames}
           userID={props.userID}
           picksDocID={props.picksDocID}
+          groupID={props.groupID}
         />
       </View>
     </View>

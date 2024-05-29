@@ -17,7 +17,6 @@ import { getUserFirestorePicks } from "../backend/firestore";
 // const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
 
 const PickOptions = (props) => {
-  console.log("pick options userID", props.userID);
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
 
@@ -35,7 +34,8 @@ const PickOptions = (props) => {
         "123456",
         props.numberOfGames,
         props.userID,
-        props.picksDocID
+        props.picksDocID,
+        props.groupID
       );
     }
   }, [userPick]);
