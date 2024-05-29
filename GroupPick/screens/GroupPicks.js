@@ -28,6 +28,8 @@ import {
   logFirestoreData,
   getUserDoc,
   getUserPicksDoc,
+  getGroupPicksDoc,
+  getTranslatedPicksDoc,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -44,6 +46,8 @@ const GroupPicks = () => {
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [groupPicksDocID, setGroupPicksDocID] = useState("");
+  const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
@@ -69,53 +73,76 @@ const GroupPicks = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    getFirestoreData(curDate).then((res) => {
-      console.log("got firestore data", res);
-      if (!res) {
-        GetGames().then((resGG) => {
-          logFirestoreData(curDate, resGG);
-          setData(resGG);
-        });
-      } else {
-        setData(res);
-      }
-    });
-
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      // console.log("GLP response:", GLPRes);
-      if (GLPRes) {
-        GetLocalGames().then((GLGRes) => {
-          if (GLPRes.length < GLGRes.length) {
-            for (i = GLPRes.length; i < GLGRes.length; i++) {
-              GLPRes.push("");
-            }
-          }
-        });
-        // console.log("setting picks to", GLPRes);
-        setPicks(GLPRes);
-      } else {
-      }
-    });
-
     // clearAll();
   }, []);
 
   useEffect(() => {
-    checkPickAgreement(curDate, groupID).then((res) => {
-      setGroupPicks(res);
-    });
-    getTranslatedFirestorePicks(curDate, groupID).then((res) => {
-      if (res) {
-        setTranslatedPicks(res);
-      } else {
-        let blankTranslatedPicks = [];
-        for (let i = 0; i < data.length; i++) {
-          blankTranslatedPicks.unshift("");
+    if (groupID) {
+      getGroupPicksDoc(groupID).then((res) => {
+        console.log("got group Picks doc", res);
+        setGroupPicksDocID(res[0]);
+      });
+
+      getTranslatedPicksDoc(groupID).then((res) => {
+        console.log("got translated Picks doc", res);
+        setTranslatedPicksDocID(res[0]);
+      });
+
+      getFirestoreData(curDate, groupID).then((res) => {
+        console.log("got firestore data", res);
+        if (!res) {
+          GetGames().then((resGG) => {
+            logFirestoreData(curDate, resGG, groupID);
+            setData(resGG);
+          });
+        } else {
+          setData(res);
         }
-        setTranslatedPicks(blankTranslatedPicks);
-      }
-    });
+      });
+    }
   }, [groupID]);
+
+  useEffect(() => {
+    if (groupPicksDocID) {
+      checkPickAgreement(curDate, groupID, groupPicksDocID).then((res) => {
+        setGroupPicks(res);
+      });
+
+      GetLocalPicks(curDate, groupID, groupPicksDocID).then((GLPRes) => {
+        // console.log("GLP response:", GLPRes);
+        if (GLPRes) {
+          GetLocalGames().then((GLGRes) => {
+            if (GLPRes.length < GLGRes.length) {
+              for (i = GLPRes.length; i < GLGRes.length; i++) {
+                GLPRes.push("");
+              }
+            }
+          });
+          // console.log("setting picks to", GLPRes);
+          setPicks(GLPRes);
+        } else {
+        }
+      });
+    }
+  }, [groupPicksDocID]);
+
+  useEffect(() => {
+    if (translatedPicksDocID) {
+      getTranslatedFirestorePicks(curDate, groupID, translatedPicksDocID).then(
+        (res) => {
+          if (res) {
+            setTranslatedPicks(res);
+          } else {
+            let blankTranslatedPicks = [];
+            for (let i = 0; i < data.length; i++) {
+              blankTranslatedPicks.unshift("");
+            }
+            setTranslatedPicks(blankTranslatedPicks);
+          }
+        }
+      );
+    }
+  }, [translatedPicksDocID]);
 
   useEffect(() => {
     if (data) {
@@ -143,17 +170,6 @@ const GroupPicks = () => {
       });
     }
 
-    GetLocalPicks(curDate, "123456").then((GLPRes) => {
-      if (!GLPRes) {
-        // console.log("no response setting picks to []");
-        picksList = [];
-        for (let i = 0; i < data.length; i++) {
-          picksList.push("");
-        }
-        setPicks(picksList);
-      }
-    });
-
     if (!groupPicks) {
       let groupPicksBlank = [];
       for (let i = 0; i < data.length; i++) {
@@ -165,7 +181,14 @@ const GroupPicks = () => {
 
   useEffect(() => {}, [groupPicks]);
 
-  if (data && odds && oddsBool && translatedPicks && groupID) {
+  if (
+    data &&
+    odds &&
+    oddsBool &&
+    translatedPicks &&
+    groupID &&
+    translatedPicksDocID
+  ) {
     // console.log("log of odds", odds, picks);
     console.log("data is", data);
     return (
@@ -242,6 +265,7 @@ const GroupPicks = () => {
                 userID={userID}
                 picksDocID={picksDocID}
                 groupID={groupID}
+                translatedPicksDocID={translatedPicksDocID}
               />
             ))}
           </View>

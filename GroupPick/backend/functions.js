@@ -423,8 +423,7 @@ const UpdateLocalPicks = async (
   groupId,
   numberOfGames,
   userID,
-  picksDocID,
-  groupID
+  picksDocID
 ) => {
   try {
     // Records user picks to local storage
@@ -438,6 +437,7 @@ const UpdateLocalPicks = async (
         picksArray.push("");
       }
       picksArray[index] = pick;
+      // PLACEHOLDER: userId hardcoded
       await logFirestorePicks(date, picksArray, userID, picksDocID);
     } else {
       firestorePicks[index] = pick;
@@ -455,7 +455,7 @@ const UpdateLocalPicks = async (
   }
 };
 
-const GetLocalPicks = async (date, groupId) => {
+const GetLocalPicks = async (date, groupId, groupPicksDocID) => {
   // Records user picks to local storage
   ans = await AsyncStorage.getItem("picks").then((res) => {
     if (res) {
@@ -464,7 +464,7 @@ const GetLocalPicks = async (date, groupId) => {
       return null;
     }
   });
-  fireStoreAns = await getFirestorePicks(date, "123456");
+  fireStoreAns = await getFirestorePicks(date, groupId, groupPicksDocID);
   if (fireStoreAns) {
     return fireStoreAns;
   } else {

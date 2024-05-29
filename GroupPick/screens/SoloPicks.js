@@ -72,24 +72,28 @@ const SoloPicks = () => {
   // }, [userID]);
 
   useEffect(() => {
-    getFirestoreData(curDate).then((res) => {
-      console.log("got firestore data", res);
-      if (!res) {
-        GetGames().then((resGG) => {
-          logFirestoreData(curDate, resGG);
-          setData(resGG);
-        });
-      } else {
-        setData(res);
-      }
-    });
-
     getUserFirestorePicks(curDate, "L2tcqkRGYEEHb20DVbv5").then((res) => {
       setPicks(res);
     });
 
     // clearAll();
   }, []);
+
+  useEffect(() => {
+    if (groupID) {
+      getFirestoreData(curDate, groupID).then((res) => {
+        console.log("got firestore data", res);
+        if (!res) {
+          GetGames().then((resGG) => {
+            logFirestoreData(curDate, resGG);
+            setData(resGG);
+          });
+        } else {
+          setData(res);
+        }
+      });
+    }
+  }, [groupID]);
 
   useEffect(() => {
     if (data) {

@@ -51,8 +51,8 @@ const Tracker = () => {
         setData(res);
       }
     });
-
-    getFirestorePicks(curDate).then((res) => {
+    // PLACEHOLDER need to retrieve groupID first
+    getFirestorePicks(curDate, groupId).then((res) => {
       setPicks(res);
     });
 

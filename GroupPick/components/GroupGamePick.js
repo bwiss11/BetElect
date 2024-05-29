@@ -50,7 +50,12 @@ const GroupGamePick = (props) => {
               let translatedPicks = props.translatedPicks;
               translatedPicks[props.index] =
                 translatedPick[0] + " " + oddsConverted;
-              logGroupFirestoreTranslatedPicks(curDate, translatedPicks);
+              logGroupFirestoreTranslatedPicks(
+                curDate,
+                translatedPicks,
+                props.groupID,
+                props.translatedPicksDocID
+              );
             }
           }
         }}
