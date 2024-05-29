@@ -73,7 +73,6 @@ const userToPicksId = {
 };
 
 async function logFirestorePicks(date, picks, userId, pickId) {
-  console.log("logging Firestore picks userId and pickId", userId, pickId);
   // log to Group
   // const res = await updateDoc(
   //   doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
@@ -177,8 +176,12 @@ async function getFirestorePicks(date, groupId) {
 }
 
 async function getTranslatedFirestorePicks(date, groupId) {
+  // console.log("Group id in translated is", groupId);
+  if (!groupId) {
+    return [];
+  }
   const docSnap = await getDoc(
-    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "ISWTm7fI9MmHc2DxoK42")
+    doc(db, "groups", groupId, "picks", "ISWTm7fI9MmHc2DxoK42")
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];
@@ -246,6 +249,10 @@ async function getUserPicksDoc(userId) {
 }
 
 async function checkPickAgreement(date, groupId) {
+  // console.log("Group id in CPA", groupId);
+  if (!groupId) {
+    return [];
+  }
   pickMap = {};
   groupPicks = [];
   console.log("checking pick agreement");
@@ -299,10 +306,10 @@ async function checkPickAgreement(date, groupId) {
     }
     groupPicks.push(chosenPick);
   }
-  console.log("returning group picks from checkPickAgreement:", groupPicks);
+  // console.log("returning group picks from checkPickAgreement:", groupPicks);
   // PLACEHOLDER: GroupID hardcoded
   const res = await updateDoc(
-    doc(db, "groups", "8CRNyZRpMI69ogcSQkt3", "picks", "fXkpPmYflOV0SeVE4jSj"),
+    doc(db, "groups", groupId, "picks", "fXkpPmYflOV0SeVE4jSj"),
     {
       [date]: groupPicks,
     },

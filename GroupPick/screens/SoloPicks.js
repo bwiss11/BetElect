@@ -48,7 +48,6 @@ const SoloPicks = () => {
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
-        console.log("group ID is", res[1].groupId);
         setGroupID(res[1].groupId);
         getUserPicksDoc(res[0]).then((res) => {
           setPicksDocID(res[0]);

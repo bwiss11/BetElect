@@ -52,7 +52,6 @@ const GroupPicks = () => {
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
-        console.log("group ID is", res[1].groupId);
         setGroupID(res[1].groupId);
         getUserPicksDoc(res[0]).then((res) => {
           setPicksDocID(res[0]);
@@ -82,10 +81,6 @@ const GroupPicks = () => {
       }
     });
 
-    checkPickAgreement(curDate, "8CRNyZRpMI69ogcSQkt3").then((res) => {
-      setGroupPicks(res);
-    });
-
     GetLocalPicks(curDate, "123456").then((GLPRes) => {
       // console.log("GLP response:", GLPRes);
       if (GLPRes) {
@@ -104,6 +99,23 @@ const GroupPicks = () => {
 
     // clearAll();
   }, []);
+
+  useEffect(() => {
+    checkPickAgreement(curDate, groupID).then((res) => {
+      setGroupPicks(res);
+    });
+    getTranslatedFirestorePicks(curDate, groupID).then((res) => {
+      if (res) {
+        setTranslatedPicks(res);
+      } else {
+        let blankTranslatedPicks = [];
+        for (let i = 0; i < data.length; i++) {
+          blankTranslatedPicks.unshift("");
+        }
+        setTranslatedPicks(blankTranslatedPicks);
+      }
+    });
+  }, [groupID]);
 
   useEffect(() => {
     if (data) {
@@ -127,18 +139,6 @@ const GroupPicks = () => {
           });
           setOddsBool(true);
           // console.log("retrieved:", res);
-        }
-      });
-
-      getTranslatedFirestorePicks(curDate).then((res) => {
-        if (res) {
-          setTranslatedPicks(res);
-        } else {
-          let blankTranslatedPicks = [];
-          for (let i = 0; i < data.length; i++) {
-            blankTranslatedPicks.unshift("");
-          }
-          setTranslatedPicks(blankTranslatedPicks);
         }
       });
     }
