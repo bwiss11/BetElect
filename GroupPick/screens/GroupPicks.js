@@ -33,7 +33,13 @@ import {
   getGroupDataDoc,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 
 const GroupPicks = () => {
   const [name, setName] = useState("defaultName");
@@ -43,13 +49,13 @@ const GroupPicks = () => {
   const [picks, setPicks] = useState("");
   const [translatedPicks, setTranslatedPicks] = useState("");
   const [groupPicks, setGroupPicks] = useState("");
-  const auth = getAuth();
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
+  const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {

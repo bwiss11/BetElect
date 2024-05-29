@@ -73,44 +73,80 @@ const userToPicksId = {
 };
 
 async function logFirestorePicks(date, picks, userId, pickId) {
-  const res = await updateDoc(
-    doc(db, "users", userId, "picks", pickId),
-    {
-      [date]: picks,
-    },
-    { merge: true }
-  );
+  // const res = await updateDoc(
+  //   doc(db, "users", userId, "picks", pickId),
+  //   {
+  //     [date]: picks,
+  //   },
+  //   { merge: true }
+  // );
 
+  //
+  // console.log("userId is", userId);
+
+  // SPECIAL CODE FOR TESTING - logs user's picks for the whole group
+  if (userId == "L2tcqkRGYEEHb20DVbv5") {
+    let userInfo = await getUserInfo(userId);
+    let groupId = userInfo.groupId;
+    // console.log("groupId is", groupId);
+    let groupData = await getGroup(groupId);
+    let members = groupData.members;
+    console.log("members are", members);
+
+    for (let i = 0; i < members.length; i++) {
+      // console.log("member", i, "is", members[i]);
+      let memberId = members[i];
+      // let memberInfo = await getUserInfo(memberId);
+      let memberPicksDoc = await getUserPicksDoc(memberId);
+      console.log("member", memberId, "picks doc is", memberPicksDoc[0]);
+      await updateDoc(
+        doc(db, "users", memberId, "picks", memberPicksDoc[0]),
+        {
+          [date]: picks,
+        },
+        { merge: true }
+      );
+    }
+  } else {
+    let memberPicksDoc = await getUserPicksDoc(userId);
+    await updateDoc(
+      doc(db, "users", userId, "picks", memberPicksDoc[0]),
+      {
+        [date]: picks,
+      },
+      { merge: true }
+    );
+  }
   // PLACEHOLDER that logs the same picks for the whole group as the logged-in user's pick
-  const res1 = await updateDoc(
-    doc(
-      db,
-      "users",
-      "MJ53DXM7CXOzljAnlN5N",
-      "picks",
-      userToPicksId["MJ53DXM7CXOzljAnlN5N"]
-    ),
-    {
-      [date]: picks,
-    },
-    { merge: true }
-  );
-  const res2 = await updateDoc(
-    doc(
-      db,
-      "users",
-      "rDjcAkiv1vq2pIzzPNoZ",
-      "picks",
-      userToPicksId["rDjcAkiv1vq2pIzzPNoZ"]
-    ),
-    {
-      [date]: picks,
-    },
-    { merge: true }
-  );
+  // const res1 = await updateDoc(
+  //   doc(
+  //     db,
+  //     "users",
+  //     "MJ53DXM7CXOzljAnlN5N",
+  //     "picks",
+  //     userToPicksId["MJ53DXM7CXOzljAnlN5N"]
+  //   ),
+  //   {
+  //     [date]: picks,
+  //   },
+  //   { merge: true }
+  // );
+  // const res2 = await updateDoc(
+  //   doc(
+  //     db,
+  //     "users",
+  //     "rDjcAkiv1vq2pIzzPNoZ",
+  //     "picks",
+  //     userToPicksId["rDjcAkiv1vq2pIzzPNoZ"]
+  //   ),
+  //   {
+  //     [date]: picks,
+  //   },
+  //   { merge: true }
+  // );
   // PLACEHOLDER
 
-  return res;
+  // return res;
 }
 
 async function logGroupFirestoreTranslatedPicks(

@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { Text, StyleSheet, View, ActivityIndicatorBase } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Button,
+  ActivityIndicatorBase,
+} from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import { getGroup, getUserInfo } from "../backend/firestore";
 import MyGroupAvatar from "../components/MyGroupAvatar";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   getUserFirestorePicks,
   getFirestoreData,
@@ -20,13 +26,14 @@ import {
 const ProfilePage = () => {
   const [group, setGroup] = useState("");
   const [userInfo, setUserInfo] = useState("");
-  const auth = getAuth();
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
+  const [user, setUser] = useState(null); // Track user authentication state
+  const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
@@ -47,6 +54,42 @@ const ProfilePage = () => {
       // ...
     }
   });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      console.log("user is now", user);
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+  const handleAuthentication = async () => {
+    try {
+      if (user) {
+        // If user is already authenticated, log out
+        console.log("User logged out!");
+        await signOut(auth);
+        navigation.navigate("Login");
+      } else {
+        // Sign in or sign up
+        if (isLogin) {
+          // Sign in
+          await signInWithEmailAndPassword(auth, email, password);
+          console.log("User signed in, navigating to tabs");
+          navigation.navigate("Tabs");
+        } else {
+          // Sign up
+          await createUserWithEmailAndPassword(auth, email, password);
+          console.log("trying to sign up");
+          console.log("User created!");
+        }
+      }
+    } catch (error) {
+      // console.log("Erroemail and password", email, password);
+      console.error("Authentication error:", error.message);
+    }
+    console.log("returning with user as", user);
+  };
 
   useEffect(() => {}, []);
 
@@ -86,6 +129,13 @@ const ProfilePage = () => {
                 @{userInfo.username}
               </Caption>
             </View>
+          </View>
+          <View>
+            <Button
+              title="Logout"
+              onPress={handleAuthentication}
+              color="#e74c3c"
+            />
           </View>
           <View style={styles.groupContainer}>
             <View

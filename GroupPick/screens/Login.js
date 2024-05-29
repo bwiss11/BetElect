@@ -46,7 +46,6 @@ const AuthScreen = ({
   setIsLogin,
   handleAuthentication,
 }) => {
-  console.log("returning Auth Screen is Login?", isLogin);
   return (
     <View style={styles.authContainer}>
       <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
