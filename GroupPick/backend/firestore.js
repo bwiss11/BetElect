@@ -346,11 +346,8 @@ async function checkPickAgreement(date, groupId, groupPicksDocID) {
   // console.log("members are", docSnap.data().members);
   const members = docSnap.data().members;
   for (let i = 0; i < members.length; i++) {
-    userPicks = await getUserFirestorePicks(
-      date,
-      members[i],
-      userToPicksId[members[i]]
-    );
+    let memberPicksDoc = await getUserPicksDoc(members[i]);
+    userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
     for (let i = 0; i < userPicks.length; i++) {
       // console.log("hi");
       // pickMap[i] = 1;
