@@ -23,7 +23,7 @@ import {
   getTranslatedPicksDoc,
 } from "../backend/firestore";
 
-const ProfilePage = () => {
+const ProfilePage = ({ navigation }) => {
   const [group, setGroup] = useState("");
   const [userInfo, setUserInfo] = useState("");
   const [picksDocID, setPicksDocID] = useState("");
@@ -72,17 +72,17 @@ const ProfilePage = () => {
         navigation.navigate("Login");
       } else {
         // Sign in or sign up
-        if (isLogin) {
-          // Sign in
-          await signInWithEmailAndPassword(auth, email, password);
-          console.log("User signed in, navigating to tabs");
-          navigation.navigate("Tabs");
-        } else {
-          // Sign up
-          await createUserWithEmailAndPassword(auth, email, password);
-          console.log("trying to sign up");
-          console.log("User created!");
-        }
+        // if (isLogin) {
+        //   // Sign in
+        //   await signInWithEmailAndPassword(auth, email, password);
+        //   console.log("User signed in, navigating to tabs");
+        //   navigation.navigate("Tabs");
+        // } else {
+        //   // Sign up
+        //   await createUserWithEmailAndPassword(auth, email, password);
+        //   console.log("trying to sign up");
+        //   console.log("User created!");
+        // }
       }
     } catch (error) {
       // console.log("Erroemail and password", email, password);

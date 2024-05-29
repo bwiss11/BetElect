@@ -138,7 +138,7 @@ const Tabs = () => {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Stats"
         component={Stats}
         options={{
@@ -171,7 +171,7 @@ const Tabs = () => {
             );
           },
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         component={ProfilePage}
