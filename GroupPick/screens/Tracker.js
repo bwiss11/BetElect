@@ -90,12 +90,23 @@ const Tracker = () => {
       getGroupDataDoc(groupID).then((res) => {
         setGroupDataDocID(res[0]);
       });
+    }
+  }, [groupID]);
 
-      getFirestoreData(curDate, groupID).then((res) => {
-        console.log("got firestore data", res);
+  useEffect(() => {
+    if (groupPicksDocID) {
+      getFirestorePicks(curDate, groupID, groupPicksDocID).then((res) => {
+        setPicks(res);
+      });
+    }
+  }, [groupPicksDocID]);
+
+  useEffect(() => {
+    if (groupDataDocID) {
+      getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
           GetGames().then((resGG) => {
-            logFirestoreData(curDate, resGG);
+            logFirestoreData(curDate, resGG, groupID, groupDataDocID);
             setData(resGG);
           });
         } else {
@@ -103,17 +114,7 @@ const Tracker = () => {
         }
       });
     }
-  }, [groupID]);
-
-  useEffect(() => {
-    console.log("group id is and trying", groupID, groupPicksDocID);
-    if (groupPicksDocID) {
-      getFirestorePicks(curDate, groupID, groupPicksDocID).then((res) => {
-        console.log("setting picks to", res);
-        setPicks(res);
-      });
-    }
-  }, [groupPicksDocID]);
+  }, [groupDataDocID]);
 
   useEffect(() => {
     if (translatedPicksDocID) {
@@ -153,14 +154,6 @@ const Tracker = () => {
       });
     }
   }, [data]);
-
-  useEffect(() => {
-    console.log("data", data);
-    console.log("odds", odds);
-    console.log("oddsBool", oddsBool);
-    console.log("translatedpicks", translatedPicks);
-    console.log("picks", picks);
-  }, [data, odds, oddsBool, translatedPicks, picks]);
 
   if (data && odds && oddsBool && translatedPicks && picks) {
     return (

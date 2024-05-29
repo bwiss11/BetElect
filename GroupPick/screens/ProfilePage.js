@@ -3,24 +3,70 @@ import { Text, StyleSheet, View, ActivityIndicatorBase } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import { getGroup, getUserInfo } from "../backend/firestore";
 import MyGroupAvatar from "../components/MyGroupAvatar";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  getUserFirestorePicks,
+  getFirestoreData,
+  logFirestoreData,
+  getUserDoc,
+  getUserPicksDoc,
+  getGroupDataDoc,
+  getFirestorePicks,
+  getTranslatedFirestorePicks,
+  getGroupPicksDoc,
+  getTranslatedPicksDoc,
+} from "../backend/firestore";
 
 const ProfilePage = () => {
   const [group, setGroup] = useState("");
   const [userInfo, setUserInfo] = useState("");
+  const auth = getAuth();
+  const [picksDocID, setPicksDocID] = useState("");
+  const [userID, setUserID] = useState("");
+  const [groupID, setGroupID] = useState("");
+  const [groupDataDocID, setGroupDataDocID] = useState("");
+  const [groupPicksDocID, setGroupPicksDocID] = useState("");
+  const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user && !picksDocID) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      getUserDoc(uid).then((res) => {
+        setUserID(res[0]);
+        setGroupID(res[1].groupId);
+        getUserPicksDoc(res[0]).then((res) => {
+          setPicksDocID(res[0]);
+        });
+      });
+
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    // PLACEHOLDER groupID is hardcoded
-    getGroup("8CRNyZRpMI69ogcSQkt3").then((res) => {
-      setGroup(res);
-    });
-    // PLACEHOLDER userID is hardcoded
-    getUserInfo("L2tcqkRGYEEHb20DVbv5").then((res) => {
-      setUserInfo(res);
-    });
-  }, []);
+    if (groupID) {
+      getGroup(groupID).then((res) => {
+        setGroup(res);
+      });
+    }
+  }, [groupID]);
+
+  useEffect(() => {
+    if (userID) {
+      getUserInfo(userID).then((res) => {
+        setUserInfo(res);
+      });
+    }
+  }, [userID]);
 
   if (group && userInfo) {
-    console.log("gruoop is", group);
     let imageSource = userInfo.picUrl;
     return (
       <View style={styles.container}>

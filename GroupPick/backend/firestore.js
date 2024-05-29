@@ -146,9 +146,9 @@ async function logFirestoreData(date, data, groupId, groupDataDocID) {
   return res;
 }
 
-async function getFirestoreData(date, groupId) {
+async function getFirestoreData(date, groupId, groupDataDocID) {
   const docSnap = await getDoc(
-    doc(db, "groups", groupId, "data", "rIJmnAHZMTNloCCt237A")
+    doc(db, "groups", groupId, "data", groupDataDocID)
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];

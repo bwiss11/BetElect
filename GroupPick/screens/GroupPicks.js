@@ -138,7 +138,7 @@ const GroupPicks = () => {
 
   useEffect(() => {
     if (groupDataDocID) {
-      getFirestoreData(curDate, groupID).then((res) => {
+      getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
           GetGames().then((resGG) => {
             logFirestoreData(curDate, resGG, groupID, groupDataDocID);

@@ -87,8 +87,7 @@ const SoloPicks = () => {
 
   useEffect(() => {
     if (groupDataDocID) {
-      getFirestoreData(curDate, groupID).then((res) => {
-        console.log("got firestore data", res);
+      getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
           GetGames().then((resGG) => {
             logFirestoreData(curDate, resGG, groupDataDocID);
