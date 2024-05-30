@@ -72,6 +72,16 @@ const db = getFirestore(app);
 //   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
 // };
 
+async function createUserDoc(firebaseId, email, firstName, lastName) {
+  console.log("trying to create user with id", firebaseId);
+  await setDoc(doc(db, "users", firebaseId), {
+    firebaseID: firebaseId,
+    email: email,
+    firstName: firstName,
+    lastName: lastName,
+  });
+}
+
 async function logFirestorePicks(date, picks, userId, pickId) {
   // const res = await updateDoc(
   //   doc(db, "users", userId, "picks", pickId),
@@ -98,7 +108,7 @@ async function logFirestorePicks(date, picks, userId, pickId) {
       let memberId = members[i];
       // let memberInfo = await getUserInfo(memberId);
       let memberPicksDoc = await getUserPicksDoc(memberId);
-      console.log("member", memberId, "picks doc is", memberPicksDoc[0]);
+      // console.log("member", memberId, "picks doc is", memberPicksDoc[0]);
       await updateDoc(
         doc(db, "users", memberId, "picks", memberPicksDoc[0]),
         {
@@ -258,12 +268,15 @@ async function getUserInfo(userId) {
 }
 
 async function getUserDoc(firebaseID) {
+  console.log("getting docData for ", firebaseID);
   usersRef = collection(db, "users");
   const querySnapshot = await getDocs(
     query(usersRef, where("firebaseID", "==", firebaseID, limit(1)))
   );
   let ans;
+
   await querySnapshot.forEach((doc) => {
+    console.log("doc data is", doc.data(), doc.id);
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
@@ -407,6 +420,7 @@ export {
   getGroupPicksDoc,
   getTranslatedPicksDoc,
   getGroupDataDoc,
+  createUserDoc,
 };
 
 // Import the functions you need from the SDKs you need

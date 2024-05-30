@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { React, useState, useEffect } from "react";
-import { signUp, signIn } from "../backend/firestore";
+import { signUp, signIn, createUserDoc } from "../backend/firestore";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -45,25 +45,62 @@ const AuthScreen = ({
   isLogin,
   setIsLogin,
   handleAuthentication,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
 }) => {
   return (
     <View style={styles.authContainer}>
       <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
+      {isLogin ? (
+        <View>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
+            secureTextEntry
+          />
+        </View>
+      ) : (
+        <View>
+          <TextInput
+            style={styles.input}
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholder="First Name"
+          />
+          <TextInput
+            style={styles.input}
+            value={lastName}
+            onChangeText={setLastName}
+            placeholder="Last Name"
+          />
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
+            secureTextEntry
+          />
+        </View>
+      )}
 
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Password"
-        secureTextEntry
-      />
       <View style={styles.buttonContainer}>
         <Button
           title={isLogin ? "Sign In" : "Sign Up"}
@@ -102,6 +139,8 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null); // Track user authentication state
   const [isLogin, setIsLogin] = useState(true);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const auth = getAuth(app);
   // onAuthStateChanged(auth, (user) => {
   //   if (user) {
@@ -140,14 +179,21 @@ const Login = ({ navigation }) => {
         // Sign in or sign up
         if (isLogin) {
           // Sign in
-          await signInWithEmailAndPassword(auth, email, password);
+          signInWithEmailAndPassword(auth, email, password);
           console.log("User signed in, navigating to tabs");
           navigation.navigate("Tabs");
         } else {
           // Sign up
-          await createUserWithEmailAndPassword(auth, email, password);
-          console.log("trying to sign up");
-          console.log("User created!");
+          res = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          ).then((data) => {
+            console.log("uid", data.user.uid);
+            console.log("User created!");
+            createUserDoc(data.user.uid, email, firstName, lastName);
+            navigation.navigate("Tabs");
+          });
         }
       }
     } catch (error) {
@@ -180,6 +226,10 @@ const Login = ({ navigation }) => {
           isLogin={isLogin}
           setIsLogin={setIsLogin}
           handleAuthentication={handleAuthentication}
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
         />
       )}
     </ScrollView>

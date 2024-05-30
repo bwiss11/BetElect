@@ -41,8 +41,14 @@ const ProfilePage = ({ navigation }) => {
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
+        console.log("res is", uid, res);
         setUserID(res[0]);
-        setGroupID(res[1].groupId);
+        if (res[1].groupId) {
+          setGroupID(res[1].groupId);
+        } else {
+          setGroupID("none");
+        }
+
         getUserPicksDoc(res[0]).then((res) => {
           setPicksDocID(res[0]);
         });
@@ -94,10 +100,13 @@ const ProfilePage = ({ navigation }) => {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    if (groupID) {
+    console.log("groupID is", groupID);
+    if (groupID && groupID != "none") {
       getGroup(groupID).then((res) => {
         setGroup(res);
       });
+    } else if (groupID) {
+      setGroup("none");
     }
   }, [groupID]);
 
@@ -126,7 +135,7 @@ const ProfilePage = ({ navigation }) => {
                 {userInfo.firstName} {userInfo.lastName}
               </Title>
               <Caption style={[styles.caption, styles.text]}>
-                @{userInfo.username}
+                {userInfo.email}
               </Caption>
             </View>
           </View>
@@ -152,11 +161,13 @@ const ProfilePage = ({ navigation }) => {
                   marginTop: 20,
                 }}
               >
-                {group.members.map((member, index) => (
-                  <View style={styles.groupAvatars} key={index}>
-                    <MyGroupAvatar userId={member} />
-                  </View>
-                ))}
+                {group != "none"
+                  ? group.members.map((member, index) => (
+                      <View style={styles.groupAvatars} key={index}>
+                        <MyGroupAvatar userId={member} />
+                      </View>
+                    ))
+                  : "none"}
               </View>
             </View>
             <View style={{ alignItems: "center" }}>
