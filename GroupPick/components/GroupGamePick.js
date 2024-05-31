@@ -25,6 +25,7 @@ const GroupGamePick = (props) => {
         style={styles.checkButton}
         onPress={() => {
           if (props.groupPick) {
+            console.log("group pick is", props.groupPick);
             let translatedPick = TranslatePick(
               props.groupPick,
               props.awayTeamID,
@@ -50,6 +51,17 @@ const GroupGamePick = (props) => {
               let translatedPicks = props.translatedPicks;
               translatedPicks[props.index] =
                 translatedPick[0] + " " + oddsConverted;
+              for (let i = 0; i < translatedPicks.length; i++) {
+                if (!translatedPicks[i]) {
+                  translatedPicks[i] = "";
+                }
+                // console.log(
+                //   "i is",
+                //   i,
+                //   " translated pick is",
+                //   translatedPicks[i]
+                // );
+              }
               logGroupFirestoreTranslatedPicks(
                 curDate,
                 translatedPicks,

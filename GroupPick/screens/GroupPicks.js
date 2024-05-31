@@ -116,7 +116,7 @@ const GroupPicks = () => {
               }
             }
           });
-          // console.log("setting picks to", GLPRes);
+          console.log("setting picks to", GLPRes);
           setPicks(GLPRes);
         } else {
         }

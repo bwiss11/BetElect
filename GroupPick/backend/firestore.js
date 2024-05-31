@@ -166,6 +166,7 @@ async function logGroupFirestoreTranslatedPicks(
   translatedPicksDocID
 ) {
   // PLACEHOLDER: group id and translated picks document id hardcoded
+  console.log("all data", date, picks, groupID, translatedPicksDocID);
   const res = await updateDoc(
     doc(db, "groups", groupID, "picks", translatedPicksDocID),
     {
@@ -175,10 +176,11 @@ async function logGroupFirestoreTranslatedPicks(
   );
   // PLACEHOLDER
 
-  return res;
+  // return res;
 }
 
 async function logFirestoreData(date, data, groupId, groupDataDocID) {
+  console.log("other data", date, data, groupId, groupDataDocID);
   // PLACEHOLDER: group id and data document id hardcoded
   const res = await updateDoc(
     doc(db, "groups", groupId, "data", groupDataDocID),
