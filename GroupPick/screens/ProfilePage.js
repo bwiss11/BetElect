@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
   Button,
+  TextInput,
   ActivityIndicatorBase,
 } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
@@ -21,6 +22,8 @@ import {
   getTranslatedFirestorePicks,
   getGroupPicksDoc,
   getTranslatedPicksDoc,
+  createGroup,
+  joinGroup,
 } from "../backend/firestore";
 
 const ProfilePage = ({ navigation }) => {
@@ -29,6 +32,7 @@ const ProfilePage = ({ navigation }) => {
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [joinGroupID, setJoinGroupID] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
@@ -43,8 +47,8 @@ const ProfilePage = ({ navigation }) => {
       getUserDoc(uid).then((res) => {
         console.log("res is", uid, res);
         setUserID(res[0]);
-        if (res[1].groupId) {
-          setGroupID(res[1].groupId);
+        if (res[1].groupID) {
+          setGroupID(res[1].groupID);
         } else {
           setGroupID("none");
         }
@@ -118,6 +122,19 @@ const ProfilePage = ({ navigation }) => {
     }
   }, [userID]);
 
+  const handleJoinGroup = () => {
+    joinGroup(joinGroupID, userID).then((res) => {
+      setGroupID(res);
+    });
+  };
+
+  const handleCreateGroup = () => {
+    createGroup(userID).then((res) => {
+      console.log("setting roupId to", res);
+      setGroupID(res);
+    });
+  };
+
   if (group && userInfo) {
     let imageSource = userInfo.picUrl;
     return (
@@ -168,7 +185,30 @@ const ProfilePage = ({ navigation }) => {
                     </View>
                   ))
                 ) : (
-                  <Text style={styles.text}>Join a Group!</Text>
+                  <View>
+                    <Text style={styles.text}>Join or Create a Group!</Text>
+                    <View style={styles.buttonHolder}>
+                      <Button
+                        title="Create a Group"
+                        onPress={handleCreateGroup}
+                        color="#e74c3c"
+                      />
+                    </View>
+                    <View style={styles.buttonHolder}>
+                      <TextInput
+                        style={styles.input}
+                        value={joinGroupID}
+                        onChangeText={setJoinGroupID}
+                        placeholder="Group ID"
+                        autoCapitalize="none"
+                      />
+                      <Button
+                        title="Join a Group"
+                        onPress={handleJoinGroup}
+                        color="#e74c3c"
+                      />
+                    </View>
+                  </View>
                 )}
               </View>
             </View>
@@ -189,6 +229,9 @@ const ProfilePage = ({ navigation }) => {
                 <Text style={[styles.text, { marginTop: 10 }]}>
                   Tier 2 Agreement: {group.tier2Agreement} Votes (
                   {group.tier2BetSize} Units)
+                </Text>
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Group password: {group.password}
                 </Text>
               </View>
             ) : (
@@ -226,6 +269,15 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+    marginBottom: 10,
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 40,
+    paddingLeft: 30,
+    paddingRight: 30,
+    marginTop: 10,
     marginBottom: 10,
   },
   infoBoxWrapper: {
@@ -268,5 +320,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
+  },
+  buttonHolder: {
+    marginTop: 10,
   },
 });

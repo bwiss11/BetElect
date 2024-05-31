@@ -400,7 +400,63 @@ async function checkPickAgreement(date, groupId, groupPicksDocID) {
   return groupPicks;
 }
 
+async function createGroup(userId) {
+  try {
+    const docRef = await addDoc(collection(db, "groups"), {});
+    console.log("created group", docRef.id);
+    await updateDoc(
+      doc(db, "groups", docRef.id),
+      {
+        password: docRef.id,
+        groupId: docRef.id,
+        members: [],
+      },
+      { merge: true }
+    );
+    await joinGroup(docRef.id, userId);
+    console.log("returning ", docRef.id);
+    return docRef.id;
+  } catch (e) {
+    console.error(e);
+  }
+}
 // firebase.initializeApp(configuration);
+
+async function joinGroup(groupId, userId) {
+  // const docRef = await addDoc(collection(db, "groups"), {});
+
+  console.log("member", userId, "is joining group", groupId);
+
+  const retrievedDoc = await getDoc(doc(db, "groups", groupId));
+  let members = retrievedDoc.data().members;
+
+  try {
+    if (members) {
+      members.unshift(userId);
+    } else {
+      members = [userId];
+    }
+    await updateDoc(
+      doc(db, "groups", groupId),
+      {
+        members: members,
+      },
+      { merge: true }
+    );
+
+    await updateDoc(
+      doc(db, "users", userId),
+      {
+        groupID: groupId,
+      },
+      { merge: true }
+    );
+
+    return groupId;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 // const db = firebase.firestore();
 
@@ -424,6 +480,8 @@ export {
   getTranslatedPicksDoc,
   getGroupDataDoc,
   createUserDoc,
+  createGroup,
+  joinGroup,
 };
 
 // Import the functions you need from the SDKs you need

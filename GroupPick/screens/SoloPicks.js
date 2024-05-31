@@ -50,7 +50,12 @@ const SoloPicks = () => {
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
-        setGroupID(res[1].groupId);
+        if (res[1].groupId) {
+          setGroupID(res[1].groupId);
+        } else {
+          console.log("setting group id to none");
+          setGroupID("none");
+        }
         getUserPicksDoc(res[0]).then((res) => {
           setPicksDocID(res[0]);
         });
@@ -78,9 +83,14 @@ const SoloPicks = () => {
   }, []);
 
   useEffect(() => {
-    if (groupID) {
+    if (groupID && groupID != "none") {
       getGroupDataDoc(groupID).then((res) => {
         setGroupDataDocID(res[0]);
+      });
+    } else if (groupID == "none") {
+      GetGames().then((resGG) => {
+        // logFirestoreData(curDate, resGG, groupDataDocID);
+        setData(resGG);
       });
     }
   }, [groupID]);
@@ -146,8 +156,27 @@ const SoloPicks = () => {
     }
   }, [userID]);
 
+  useEffect(() => {
+    console.log(
+      "check these",
+      data,
+      odds,
+      oddsBool,
+      userID,
+      picksDocID,
+      groupID
+    );
+  }, [data, odds, oddsBool, userID, picksDocID, groupID]);
+
   if (data && odds && oddsBool && userID && picksDocID && groupID) {
-    // console.log("log of odds", odds, picks);
+    if (groupID == "none") {
+      console.log("no Group");
+      return (
+        <View>
+          <Text>Join a group to get started!</Text>
+        </View>
+      );
+    }
     return (
       <ScrollView style={styles.outermostContainer}>
         <View style={styles.container}>
