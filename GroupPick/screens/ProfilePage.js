@@ -161,33 +161,39 @@ const ProfilePage = ({ navigation }) => {
                   marginTop: 20,
                 }}
               >
-                {group != "none"
-                  ? group.members.map((member, index) => (
-                      <View style={styles.groupAvatars} key={index}>
-                        <MyGroupAvatar userId={member} />
-                      </View>
-                    ))
-                  : "none"}
+                {group != "none" ? (
+                  group.members.map((member, index) => (
+                    <View style={styles.groupAvatars} key={index}>
+                      <MyGroupAvatar userId={member} />
+                    </View>
+                  ))
+                ) : (
+                  <Text style={styles.text}>Join a Group!</Text>
+                )}
               </View>
             </View>
-            <View style={{ alignItems: "center" }}>
-              <Text
-                style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
-              >
-                Bankroll: ${group.bankroll}
-              </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Unit Size: ${group.bankroll / 100}
-              </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Tier 1 Agreement: {group.tier1Agreement} Votes (
-                {group.tier1BetSize} Units)
-              </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Tier 2 Agreement: {group.tier2Agreement} Votes (
-                {group.tier2BetSize} Units)
-              </Text>
-            </View>
+            {group != "none" ? (
+              <View style={{ alignItems: "center" }}>
+                <Text
+                  style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
+                >
+                  Bankroll: ${group.bankroll}
+                </Text>
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Unit Size: ${group.bankroll / 100}
+                </Text>
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Tier 1 Agreement: {group.tier1Agreement} Votes (
+                  {group.tier1BetSize} Units)
+                </Text>
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Tier 2 Agreement: {group.tier2Agreement} Votes (
+                  {group.tier2BetSize} Units)
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </View>

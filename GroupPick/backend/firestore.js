@@ -11,6 +11,7 @@ import {
   query,
   where,
   limit,
+  addDoc,
 } from "firebase/firestore";
 
 import { ScreenStackHeaderConfig } from "react-native-screens";
@@ -73,13 +74,13 @@ const db = getFirestore(app);
 // };
 
 async function createUserDoc(firebaseId, email, firstName, lastName) {
-  console.log("trying to create user with id", firebaseId);
   await setDoc(doc(db, "users", firebaseId), {
     firebaseID: firebaseId,
     email: email,
     firstName: firstName,
     lastName: lastName,
   });
+  const docRef = await addDoc(collection(db, "users", firebaseId, "picks"), {});
 }
 
 async function logFirestorePicks(date, picks, userId, pickId) {

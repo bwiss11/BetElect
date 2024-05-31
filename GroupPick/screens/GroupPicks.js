@@ -66,6 +66,7 @@ const GroupPicks = () => {
         setUserID(res[0]);
         setGroupID(res[1].groupId);
         getUserPicksDoc(res[0]).then((res) => {
+
           setPicksDocID(res[0]);
         });
       });
