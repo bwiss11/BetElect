@@ -40,35 +40,33 @@ const GroupGamePick = (props) => {
               props.over,
               props.under
             );
+            let oddsConverted = "";
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
+              console.log("setting odds converted to", translatedPick[1]);
             } else {
-              let oddsConverted = translatedPick[1];
+              oddsConverted = translatedPick[1];
               if (Number(oddsConverted) > 0) {
                 oddsConverted = "+" + oddsConverted;
               }
               setGroupPick(translatedPick[0] + " " + oddsConverted);
-              let translatedPicks = props.translatedPicks;
-              translatedPicks[props.index] =
-                translatedPick[0] + " " + oddsConverted;
-              for (let i = 0; i < translatedPicks.length; i++) {
-                if (!translatedPicks[i]) {
-                  translatedPicks[i] = "";
-                }
-                // console.log(
-                //   "i is",
-                //   i,
-                //   " translated pick is",
-                //   translatedPicks[i]
-                // );
-              }
-              logGroupFirestoreTranslatedPicks(
-                curDate,
-                translatedPicks,
-                props.groupID,
-                props.translatedPicksDocID
-              );
             }
+            let translatedPicks = props.translatedPicks;
+
+            translatedPicks[props.index] =
+              translatedPick[0] + " " + oddsConverted;
+
+            for (let i = 0; i < translatedPicks.length; i++) {
+              if (!translatedPicks[i]) {
+                translatedPicks[i] = "";
+              }
+            }
+            logGroupFirestoreTranslatedPicks(
+              curDate,
+              translatedPicks,
+              props.groupID,
+              props.translatedPicksDocID
+            );
           }
         }}
       >

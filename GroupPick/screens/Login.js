@@ -115,10 +115,10 @@ const AuthScreen = ({
             ? "Need an account? Sign Up"
             : "Already have an account? Sign In"}
         </Text>
-        <Button
+        {/* <Button
           title="Bypass Login"
           onPress={() => navigation.navigate("Tabs")}
-        ></Button>
+        ></Button> */}
       </View>
     </View>
   );

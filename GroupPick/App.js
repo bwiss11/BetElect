@@ -40,7 +40,7 @@ const loggedIn = false;
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Tabs" component={Tabs} />
       </Stack.Navigator>

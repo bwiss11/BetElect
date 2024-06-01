@@ -66,7 +66,6 @@ const GroupPicks = () => {
         setUserID(res[0]);
         setGroupID(res[1].groupID);
         getUserPicksDoc(res[0]).then((res) => {
-
           setPicksDocID(res[0]);
         });
       });
@@ -284,11 +283,11 @@ const GroupPicks = () => {
             ))}
           </View>
         </ScrollView>
-        <View style={styles.runButtonContainer}>
+        {/* <View style={styles.runButtonContainer}>
           <Pressable style={styles.runButton}>
             <Text style={styles.runButtonText}>Check Picks</Text>
           </Pressable>
-        </View>
+        </View> */}
       </>
     );
   }

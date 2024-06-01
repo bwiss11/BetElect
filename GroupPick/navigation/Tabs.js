@@ -30,6 +30,7 @@ const screenOptions = {
     backgroundColor: "black",
     color: "white",
   },
+  headerShown: false,
 };
 const Tabs = () => {
   return (
