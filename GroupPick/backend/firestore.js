@@ -79,6 +79,8 @@ async function createUserDoc(firebaseId, email, firstName, lastName) {
     email: email,
     firstName: firstName,
     lastName: lastName,
+    picUrl:
+      "https://as2.ftcdn.net/v2/jpg/00/75/13/25/1000_F_75132523_xkLZqbPQkUvVzWSftTf3nAGBjBFkcKuP.jpg",
   });
   const docRef = await addDoc(collection(db, "users", firebaseId, "picks"), {});
 }
@@ -271,7 +273,6 @@ async function getUserInfo(userId) {
 }
 
 async function getUserDoc(firebaseID) {
-  console.log("getting docData for ", firebaseID);
   usersRef = collection(db, "users");
   const querySnapshot = await getDocs(
     query(usersRef, where("firebaseID", "==", firebaseID, limit(1)))
@@ -279,7 +280,6 @@ async function getUserDoc(firebaseID) {
   let ans;
 
   await querySnapshot.forEach((doc) => {
-    console.log("doc data is", doc.data(), doc.id);
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
@@ -290,7 +290,7 @@ async function getUserDoc(firebaseID) {
 async function getGroupPicksDoc(groupID) {
   groupsRef = collection(db, "groups", groupID, "picks");
   const querySnapshot = await getDocs(
-    query(groupsRef, where("type", "==", "groupPicks", limit(1)))
+    query(groupsRef, where("type", "==", "genericPicks", limit(1)))
   );
   let ans;
   await querySnapshot.forEach((doc) => {
@@ -354,12 +354,6 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
     };
   }
 
-  // const userToPicksId = {
-  //   L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-  //   MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-  //   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-  // };
-
   const docSnap = await getDoc(doc(db, "groups", groupID));
   // console.log("members are", docSnap.data().members);
   const members = docSnap.data().members;
@@ -369,7 +363,6 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
     for (let i = 0; i < userPicks.length; i++) {
       // console.log("hi");
       // pickMap[i] = 1;
-      // console.log("pick is", userPicks[i]);
       // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
       pickMap[i][userPicks[i]] = pickMap[i][userPicks[i]] + 1;
     }
@@ -386,7 +379,11 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
         chosenPick = pick;
       }
     }
-    groupPicks.push(chosenPick);
+    if (!chosenPick) {
+      groupPicks.push("optOut");
+    } else {
+      groupPicks.push(chosenPick);
+    }
   }
   // console.log("returning group picks from checkPickAgreement:", groupPicks);
   // PLACEHOLDER: groupID hardcoded
@@ -413,6 +410,41 @@ async function createGroup(userId) {
       },
       { merge: true }
     );
+    console.log("docref id is", docRef.id);
+    const dataRef = await addDoc(
+      collection(db, "groups", docRef.id, "data"),
+      {}
+    );
+    await updateDoc(
+      doc(db, "groups", docRef.id, "data", dataRef.id),
+      {
+        type: "translatedPicks",
+      },
+      { merge: true }
+    );
+    const picksRef = await addDoc(
+      collection(db, "groups", docRef.id, "picks"),
+      {}
+    );
+    await updateDoc(
+      doc(db, "groups", docRef.id, "picks", picksRef.id),
+      {
+        type: "genericPicks",
+      },
+      { merge: true }
+    );
+    const translatedPicksRef = await addDoc(
+      collection(db, "groups", docRef.id, "picks"),
+      {}
+    );
+    await updateDoc(
+      doc(db, "groups", docRef.id, "picks", translatedPicksRef.id),
+      {
+        type: "translatedPicks",
+      },
+      { merge: true }
+    );
+
     await joinGroup(docRef.id, userId);
     console.log("returning ", docRef.id);
     return docRef.id;

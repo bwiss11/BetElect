@@ -45,7 +45,6 @@ const ProfilePage = ({ navigation }) => {
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
-        console.log("res is", uid, res);
         setUserID(res[0]);
         if (res[1].groupID) {
           setGroupID(res[1].groupID);
@@ -98,13 +97,11 @@ const ProfilePage = ({ navigation }) => {
       // console.log("Erroemail and password", email, password);
       console.error("Authentication error:", error.message);
     }
-    console.log("returning with user as", user);
   };
 
   useEffect(() => {}, []);
 
   useEffect(() => {
-    console.log("groupID is", groupID);
     if (groupID && groupID != "none") {
       getGroup(groupID).then((res) => {
         setGroup(res);
@@ -130,7 +127,7 @@ const ProfilePage = ({ navigation }) => {
 
   const handleCreateGroup = () => {
     createGroup(userID).then((res) => {
-      console.log("setting roupId to", res);
+      console.log("setting groupId to", res);
       setGroupID(res);
     });
   };

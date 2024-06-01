@@ -73,7 +73,7 @@ const GroupGameTopRow = (props) => {
         ))}
       </View>
       <View style={styles.check}>
-        {picksIn == 3 ? (
+        {picksIn == props.members.length ? (
           <Ionicons name="checkbox-outline" size={18} color="rgb(80,200,120)" />
         ) : (
           <View></View>
