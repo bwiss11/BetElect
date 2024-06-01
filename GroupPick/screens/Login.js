@@ -204,7 +204,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       {user ? (
         // Show user's email if user is authenticated
         // <AuthenticatedScreen
@@ -232,7 +232,7 @@ const Login = ({ navigation }) => {
           setLastName={setLastName}
         />
       )}
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -243,7 +243,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  container: { height: "100%", justifyContent: "center", alignItems: "center" },
+  container: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+  },
   buttonText: {
     color: "white",
   },
@@ -264,6 +269,7 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 30,
     paddingRight: 30,
+    margin: 5,
   },
   inputLabel: { fontSize: 17, fontWeight: "600", color: "white" },
   emailInput: {
@@ -292,6 +298,13 @@ const styles = StyleSheet.create({
   bypass: {
     marginTop: 30,
     alignSelf: "center",
+  },
+  toggleText: {
+    color: "white",
+  },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 10,
   },
   //   container: {
   //     flex: 1,

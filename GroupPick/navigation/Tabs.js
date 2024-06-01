@@ -34,7 +34,10 @@ const screenOptions = {
 };
 const Tabs = () => {
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Navigator
+      screenOptions={screenOptions}
+      sceneContainerStyle={{ backgroundColor: "black" }}
+    >
       <Tab.Screen
         name="Solo"
         component={SoloPicks}
