@@ -98,9 +98,9 @@ async function logFirestorePicks(date, picks, userId, pickId) {
   // SPECIAL CODE FOR TESTING - logs user's picks for the whole group
   if (userId == "L2tcqkRGYEEHb20DVbv5") {
     let userInfo = await getUserInfo(userId);
-    let groupId = userInfo.groupId;
-    // console.log("groupId is", groupId);
-    let groupData = await getGroup(groupId);
+    let groupID = userInfo.groupID;
+    // console.log("groupID is", groupID);
+    let groupData = await getGroup(groupID);
     let members = groupData.members;
     console.log("members are", members);
 
@@ -180,11 +180,11 @@ async function logGroupFirestoreTranslatedPicks(
   // return res;
 }
 
-async function logFirestoreData(date, data, groupId, groupDataDocID) {
-  console.log("other data", date, data, groupId, groupDataDocID);
+async function logFirestoreData(date, data, groupID, groupDataDocID) {
+  console.log("other data", date, data, groupID, groupDataDocID);
   // PLACEHOLDER: group id and data document id hardcoded
   const res = await updateDoc(
-    doc(db, "groups", groupId, "data", groupDataDocID),
+    doc(db, "groups", groupID, "data", groupDataDocID),
     {
       [date]: data,
     },
@@ -195,9 +195,9 @@ async function logFirestoreData(date, data, groupId, groupDataDocID) {
   return res;
 }
 
-async function getFirestoreData(date, groupId, groupDataDocID) {
+async function getFirestoreData(date, groupID, groupDataDocID) {
   const docSnap = await getDoc(
-    doc(db, "groups", groupId, "data", groupDataDocID)
+    doc(db, "groups", groupID, "data", groupDataDocID)
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];
@@ -207,9 +207,9 @@ async function getFirestoreData(date, groupId, groupDataDocID) {
   }
 }
 
-async function getFirestorePicks(date, groupId, groupPicksDocID) {
+async function getFirestorePicks(date, groupID, groupPicksDocID) {
   const docSnap = await getDoc(
-    doc(db, "groups", groupId, "picks", groupPicksDocID)
+    doc(db, "groups", groupID, "picks", groupPicksDocID)
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];
@@ -221,12 +221,12 @@ async function getFirestorePicks(date, groupId, groupPicksDocID) {
 
 async function getTranslatedFirestorePicks(
   date,
-  groupId,
+  groupID,
   translatedPicksDocID
 ) {
-  // console.log("Group id in translated is", groupId);
+  // console.log("Group id in translated is", groupID);
   const docSnap = await getDoc(
-    doc(db, "groups", groupId, "picks", translatedPicksDocID)
+    doc(db, "groups", groupID, "picks", translatedPicksDocID)
   );
   if (docSnap.exists()) {
     return docSnap.data()[date];
@@ -250,8 +250,8 @@ async function getUserFirestorePicks(date, userId, picksId) {
   }
 }
 
-async function getGroup(groupId) {
-  const docSnap = await getDoc(doc(db, "groups", groupId));
+async function getGroup(groupID) {
+  const docSnap = await getDoc(doc(db, "groups", groupID));
   if (docSnap.exists()) {
     return docSnap.data();
   } else {
@@ -326,8 +326,8 @@ async function getUserPicksDoc(userId) {
   return ans;
 }
 
-async function getGroupDataDoc(groupId) {
-  picksRef = collection(db, "groups", groupId, "data");
+async function getGroupDataDoc(groupID) {
+  picksRef = collection(db, "groups", groupID, "data");
   const querySnapshot = await getDocs(query(picksRef, limit(1)));
   let ans;
   await querySnapshot.forEach((doc) => {
@@ -337,8 +337,8 @@ async function getGroupDataDoc(groupId) {
   return ans;
 }
 
-async function checkPickAgreement(date, groupId, groupPicksDocID) {
-  // console.log("Group id in CPA", groupId);
+async function checkPickAgreement(date, groupID, groupPicksDocID) {
+  // console.log("Group id in CPA", groupID);
   pickMap = {};
   groupPicks = [];
 
@@ -360,7 +360,7 @@ async function checkPickAgreement(date, groupId, groupPicksDocID) {
   //   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
   // };
 
-  const docSnap = await getDoc(doc(db, "groups", groupId));
+  const docSnap = await getDoc(doc(db, "groups", groupID));
   // console.log("members are", docSnap.data().members);
   const members = docSnap.data().members;
   for (let i = 0; i < members.length; i++) {
@@ -389,9 +389,9 @@ async function checkPickAgreement(date, groupId, groupPicksDocID) {
     groupPicks.push(chosenPick);
   }
   // console.log("returning group picks from checkPickAgreement:", groupPicks);
-  // PLACEHOLDER: GroupID hardcoded
+  // PLACEHOLDER: groupID hardcoded
   const res = await updateDoc(
-    doc(db, "groups", groupId, "picks", groupPicksDocID),
+    doc(db, "groups", groupID, "picks", groupPicksDocID),
     {
       [date]: groupPicks,
     },
@@ -408,7 +408,7 @@ async function createGroup(userId) {
       doc(db, "groups", docRef.id),
       {
         password: docRef.id,
-        groupId: docRef.id,
+        groupID: docRef.id,
         members: [],
       },
       { merge: true }
@@ -422,12 +422,12 @@ async function createGroup(userId) {
 }
 // firebase.initializeApp(configuration);
 
-async function joinGroup(groupId, userId) {
+async function joinGroup(groupID, userId) {
   // const docRef = await addDoc(collection(db, "groups"), {});
 
-  console.log("member", userId, "is joining group", groupId);
+  console.log("member", userId, "is joining group", groupID);
 
-  const retrievedDoc = await getDoc(doc(db, "groups", groupId));
+  const retrievedDoc = await getDoc(doc(db, "groups", groupID));
   let members = retrievedDoc.data().members;
 
   try {
@@ -437,7 +437,7 @@ async function joinGroup(groupId, userId) {
       members = [userId];
     }
     await updateDoc(
-      doc(db, "groups", groupId),
+      doc(db, "groups", groupID),
       {
         members: members,
       },
@@ -447,12 +447,12 @@ async function joinGroup(groupId, userId) {
     await updateDoc(
       doc(db, "users", userId),
       {
-        groupID: groupId,
+        groupID: groupID,
       },
       { merge: true }
     );
 
-    return groupId;
+    return groupID;
   } catch (e) {
     console.error(e);
   }

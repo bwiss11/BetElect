@@ -50,8 +50,8 @@ const SoloPicks = () => {
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
-        if (res[1].groupId) {
-          setGroupID(res[1].groupId);
+        if (res[1].groupID) {
+          setGroupID(res[1].groupID);
         } else {
           console.log("setting group id to none");
           setGroupID("none");
