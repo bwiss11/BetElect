@@ -173,7 +173,7 @@ const SoloPicks = () => {
       console.log("no Group");
       return (
         <View>
-          <Text>Join a group to get started!</Text>
+          <Text>Join a group on the Profile tab to get started!</Text>
         </View>
       );
     }

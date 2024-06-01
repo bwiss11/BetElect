@@ -137,7 +137,13 @@ const ProfilePage = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <View style={styles.userInfoSection}>
-          <View style={{ flexDirection: "row", marginTop: 50 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 50,
+              alignItems: "center",
+            }}
+          >
             <Avatar.Image
               source={{
                 uri: imageSource,
@@ -153,88 +159,88 @@ const ProfilePage = ({ navigation }) => {
               </Caption>
             </View>
           </View>
-          <View>
+          <View style={styles.logoutButton}>
             <Button
               title="Logout"
               onPress={handleAuthentication}
               color="#e74c3c"
             />
           </View>
-          <View style={styles.groupContainer}>
+        </View>
+        <View style={styles.groupContainer}>
+          <View
+            style={{
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Title style={[styles.text]}>My Group</Title>
+            </View>
             <View
               style={{
-                alignItems: "center",
+                flexDirection: "row",
+                marginTop: 20,
               }}
             >
-              <View>
-                <Title style={[styles.text]}>My Group</Title>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 20,
-                }}
-              >
-                {group != "none" ? (
-                  group.members.map((member, index) => (
-                    <View style={styles.groupAvatars} key={index}>
-                      <MyGroupAvatar userId={member} />
-                    </View>
-                  ))
-                ) : (
-                  <View>
-                    <Text style={styles.text}>Join or Create a Group!</Text>
-                    <View style={styles.buttonHolder}>
-                      <Button
-                        title="Create a Group"
-                        onPress={handleCreateGroup}
-                        color="#e74c3c"
-                      />
-                    </View>
-                    <View style={styles.buttonHolder}>
-                      <TextInput
-                        style={styles.input}
-                        value={joinGroupID}
-                        onChangeText={setJoinGroupID}
-                        placeholder="Group ID"
-                        autoCapitalize="none"
-                      />
-                      <Button
-                        title="Join a Group"
-                        onPress={handleJoinGroup}
-                        color="#e74c3c"
-                      />
-                    </View>
+              {group != "none" ? (
+                group.members.map((member, index) => (
+                  <View style={styles.groupAvatars} key={index}>
+                    <MyGroupAvatar userId={member} />
                   </View>
-                )}
-              </View>
+                ))
+              ) : (
+                <View>
+                  <Text style={styles.text}>Join or Create a Group!</Text>
+                  <View style={styles.buttonHolder}>
+                    <Button
+                      title="Create a Group"
+                      onPress={handleCreateGroup}
+                      color="#e74c3c"
+                    />
+                  </View>
+                  <View style={styles.buttonHolder}>
+                    <TextInput
+                      style={styles.input}
+                      value={joinGroupID}
+                      onChangeText={setJoinGroupID}
+                      placeholder="Group ID"
+                      autoCapitalize="none"
+                    />
+                    <Button
+                      title="Join a Group"
+                      onPress={handleJoinGroup}
+                      color="#e74c3c"
+                    />
+                  </View>
+                </View>
+              )}
             </View>
-            {group != "none" ? (
-              <View style={{ alignItems: "center" }}>
-                <Text
-                  style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
-                >
-                  Bankroll: ${group.bankroll}
-                </Text>
-                <Text style={[styles.text, { marginTop: 10 }]}>
-                  Unit Size: ${group.bankroll / 100}
-                </Text>
-                <Text style={[styles.text, { marginTop: 10 }]}>
-                  Tier 1 Agreement: {group.tier1Agreement} Votes (
-                  {group.tier1BetSize} Units)
-                </Text>
-                <Text style={[styles.text, { marginTop: 10 }]}>
-                  Tier 2 Agreement: {group.tier2Agreement} Votes (
-                  {group.tier2BetSize} Units)
-                </Text>
-                <Text style={[styles.text, { marginTop: 10 }]}>
-                  Group password: {group.password}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
           </View>
+          {group != "none" ? (
+            <View style={{ alignItems: "center" }}>
+              <Text
+                style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
+              >
+                Bankroll: ${group.bankroll}
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Unit Size: ${group.bankroll / 100}
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Tier 1 Agreement: {group.tier1Agreement} Votes (
+                {group.tier1BetSize} Units)
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Tier 2 Agreement: {group.tier2Agreement} Votes (
+                {group.tier2BetSize} Units)
+              </Text>
+              <Text style={[styles.text, { marginTop: 10 }]}>
+                Group password: {group.password}
+              </Text>
+            </View>
+          ) : (
+            ""
+          )}
         </View>
       </View>
     );
@@ -320,5 +326,8 @@ const styles = StyleSheet.create({
   },
   buttonHolder: {
     marginTop: 10,
+  },
+  logoutButton: {
+    marginTop: 20,
   },
 });
