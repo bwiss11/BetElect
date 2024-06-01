@@ -31,6 +31,7 @@ import {
   getGroupPicksDoc,
   getTranslatedPicksDoc,
   getGroupDataDoc,
+  getGroup,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
 import {
@@ -52,6 +53,7 @@ const GroupPicks = () => {
   const [picksDocID, setPicksDocID] = useState("");
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [group, setGroup] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
@@ -97,6 +99,10 @@ const GroupPicks = () => {
       getGroupDataDoc(groupID).then((res) => {
         setGroupDataDocID(res[0]);
       });
+
+      getGroup(groupID).then((res) => {
+        setGroup(res);
+      });
     }
   }, [groupID]);
 
@@ -116,7 +122,7 @@ const GroupPicks = () => {
               }
             }
           });
-          console.log("setting picks to", GLPRes);
+          // console.log("setting picks to", GLPRes);
           setPicks(GLPRes);
         } else {
         }
@@ -200,10 +206,11 @@ const GroupPicks = () => {
     oddsBool &&
     translatedPicks &&
     groupID &&
-    translatedPicksDocID
+    translatedPicksDocID &&
+    group
   ) {
     // console.log("log of odds", odds, picks);
-    console.log("data is", data);
+    // console.log("data is", data);
     return (
       <>
         <ScrollView style={styles.outermostContainer} stickyHeaderIndices={[]}>
@@ -279,6 +286,7 @@ const GroupPicks = () => {
                 picksDocID={picksDocID}
                 groupID={groupID}
                 translatedPicksDocID={translatedPicksDocID}
+                unitSize={group.unitSize}
               />
             ))}
           </View>
@@ -302,6 +310,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "black",
     alignItems: "center",
+    marginTop: 25,
     //     backgroundImage:
     //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
   },

@@ -156,24 +156,14 @@ const SoloPicks = () => {
     }
   }, [userID]);
 
-  useEffect(() => {
-    console.log(
-      "check these",
-      data,
-      odds,
-      oddsBool,
-      userID,
-      picksDocID,
-      groupID
-    );
-  }, [data, odds, oddsBool, userID, picksDocID, groupID]);
-
   if (data && odds && oddsBool && userID && picksDocID && groupID) {
     if (groupID == "none") {
       console.log("no Group");
       return (
-        <View>
-          <Text>Join a group on the Profile tab to get started!</Text>
+        <View style={styles.placeholder}>
+          <Text style={styles.text}>
+            Join or create a group on the Profile tab to get started!
+          </Text>
         </View>
       );
     }
@@ -265,8 +255,14 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "black",
     alignItems: "center",
+    marginTop: 25,
     //     backgroundImage:
     //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
+  },
+  placeholder: {
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     color: "white",

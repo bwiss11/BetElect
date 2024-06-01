@@ -26,7 +26,6 @@ const Stats = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      console.log("user is now", user);
     });
 
     return () => unsubscribe();

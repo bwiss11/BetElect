@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "black",
   },
+
   buttonText: {
     color: "white",
   },
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "white",
     textAlign: "center",
-    marginBottom: 50,
+    marginBottom: 20,
   },
   form: {
     backgroundColor: "green",
@@ -269,7 +270,8 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 30,
     paddingRight: 30,
-    margin: 5,
+    marginTop: 5,
+    marginBottom: 5,
   },
   inputLabel: { fontSize: 17, fontWeight: "600", color: "white" },
   emailInput: {
@@ -305,6 +307,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginBottom: 10,
+    width: "100%",
+  },
+  authContainer: {
+    alignItems: "center",
   },
   //   container: {
   //     flex: 1,

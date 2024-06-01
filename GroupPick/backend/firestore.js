@@ -334,6 +334,7 @@ async function getGroupDataDoc(groupID) {
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
+  console.log("got group", ans);
   return ans;
 }
 
@@ -374,7 +375,7 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
     let chosenPick = "";
     for (let pick in gamePicks) {
       // PLACEHOLDER FOR number of picks needed for agreement
-      if (gamePicks[pick] > curMax && gamePicks[pick] > 1) {
+      if (gamePicks[pick] > curMax && gamePicks[pick] > members.length / 2) {
         curMax = gamePicks[pick];
         chosenPick = pick;
       }
@@ -397,7 +398,8 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
   return groupPicks;
 }
 
-async function createGroup(userId) {
+async function createGroup(userId, bankroll) {
+  console.log("bankroll suppposed to be ", bankroll);
   try {
     const docRef = await addDoc(collection(db, "groups"), {});
     console.log("created group", docRef.id);
@@ -407,6 +409,8 @@ async function createGroup(userId) {
         password: docRef.id,
         groupID: docRef.id,
         members: [],
+        bankroll: Number(bankroll),
+        unitSize: Number(bankroll / 100),
       },
       { merge: true }
     );

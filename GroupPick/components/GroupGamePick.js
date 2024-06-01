@@ -25,7 +25,6 @@ const GroupGamePick = (props) => {
         style={styles.checkButton}
         onPress={() => {
           if (props.groupPick) {
-            console.log("group pick is", props.groupPick);
             let translatedPick = TranslatePick(
               props.groupPick,
               props.awayTeamID,
@@ -41,6 +40,7 @@ const GroupGamePick = (props) => {
               props.under
             );
             let oddsConverted = "";
+            console.log("translated pick is", translatedPick);
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
               console.log("setting odds converted to", translatedPick[1]);
@@ -51,19 +51,26 @@ const GroupGamePick = (props) => {
                 oddsConverted = "+" + oddsConverted;
               }
               setGroupPick(
-                translatedPick[0] + (oddsConverted ? " " : "") + oddsConverted
+                (oddsConverted ? "$" + props.unitSize + "  |  " : "") +
+                  translatedPick[0] +
+                  (oddsConverted ? "  |  " : "") +
+                  oddsConverted
               );
             }
             let translatedPicks = props.translatedPicks;
 
             translatedPicks[props.index] =
-              translatedPick[0] + (oddsConverted ? " " : "") + oddsConverted;
+              (oddsConverted ? "$" + props.unitSize + "  |  " : "") +
+              translatedPick[0] +
+              (oddsConverted ? "  |  " : "") +
+              oddsConverted;
 
             for (let i = 0; i < translatedPicks.length; i++) {
               if (!translatedPicks[i]) {
                 translatedPicks[i] = "";
               }
             }
+            console.log("translatedPicks are", translatedPicks);
             logGroupFirestoreTranslatedPicks(
               curDate,
               translatedPicks,

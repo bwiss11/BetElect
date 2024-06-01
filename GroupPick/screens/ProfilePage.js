@@ -5,6 +5,7 @@ import {
   View,
   Button,
   TextInput,
+  Pressable,
   ActivityIndicatorBase,
 } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
@@ -33,6 +34,7 @@ const ProfilePage = ({ navigation }) => {
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [joinGroupID, setJoinGroupID] = useState("");
+  const [bankroll, setBankroll] = useState(0);
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
@@ -42,7 +44,7 @@ const ProfilePage = ({ navigation }) => {
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
       // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+      //  https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         setUserID(res[0]);
@@ -67,7 +69,6 @@ const ProfilePage = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      console.log("user is now", user);
     });
 
     return () => unsubscribe();
@@ -126,7 +127,7 @@ const ProfilePage = ({ navigation }) => {
   };
 
   const handleCreateGroup = () => {
-    createGroup(userID).then((res) => {
+    createGroup(userID, bankroll).then((res) => {
       console.log("setting groupId to", res);
       setGroupID(res);
     });
@@ -160,11 +161,11 @@ const ProfilePage = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.logoutButton}>
-            <Button
-              title="Logout"
-              onPress={handleAuthentication}
-              color="#e74c3c"
-            />
+            <Pressable style={styles.button} onPress={handleAuthentication}>
+              <View>
+                <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
+              </View>
+            </Pressable>
           </View>
         </View>
         <View style={styles.groupContainer}>
@@ -173,9 +174,14 @@ const ProfilePage = ({ navigation }) => {
               alignItems: "center",
             }}
           >
-            <View>
-              <Title style={[styles.text]}>My Group</Title>
-            </View>
+            {group != "none" ? (
+              <View>
+                <Title style={[styles.text]}>My Group</Title>
+              </View>
+            ) : (
+              ""
+            )}
+
             <View
               style={{
                 flexDirection: "row",
@@ -189,16 +195,36 @@ const ProfilePage = ({ navigation }) => {
                   </View>
                 ))
               ) : (
-                <View>
-                  <Text style={styles.text}>Join or Create a Group!</Text>
-                  <View style={styles.buttonHolder}>
-                    <Button
-                      title="Create a Group"
-                      onPress={handleCreateGroup}
-                      color="#e74c3c"
+                <View style={styles.newGroup}>
+                  <Text style={[styles.text, styles.titleText]}>
+                    Join or Create a Group!
+                  </Text>
+                  <View style={[styles.buttonHolder, styles.createGroup]}>
+                    <View>
+                      <Text style={styles.text}>Create a Group</Text>
+                    </View>
+                    <TextInput
+                      style={styles.input}
+                      value={bankroll}
+                      onChangeText={setBankroll}
+                      placeholder="$ Bankroll"
+                      autoCapitalize="none"
                     />
+                    <Pressable
+                      style={styles.button}
+                      onPress={handleCreateGroup}
+                    >
+                      <View>
+                        <Text style={[styles.text, styles.buttonText]}>
+                          CREATE GROUP
+                        </Text>
+                      </View>
+                    </Pressable>
                   </View>
                   <View style={styles.buttonHolder}>
+                    <View>
+                      <Text style={styles.text}>Join a Group</Text>
+                    </View>
                     <TextInput
                       style={styles.input}
                       value={joinGroupID}
@@ -206,11 +232,13 @@ const ProfilePage = ({ navigation }) => {
                       placeholder="Group ID"
                       autoCapitalize="none"
                     />
-                    <Button
-                      title="Join a Group"
-                      onPress={handleJoinGroup}
-                      color="#e74c3c"
-                    />
+                    <Pressable style={styles.button} onPress={handleJoinGroup}>
+                      <View>
+                        <Text style={[styles.text, styles.buttonText]}>
+                          JOIN GROUP
+                        </Text>
+                      </View>
+                    </Pressable>
                   </View>
                 </View>
               )}
@@ -224,18 +252,18 @@ const ProfilePage = ({ navigation }) => {
                 Bankroll: ${group.bankroll}
               </Text>
               <Text style={[styles.text, { marginTop: 10 }]}>
-                Unit Size: ${group.bankroll / 100}
+                Unit Size: ${group.unitSize}
               </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
+              {/* <Text style={[styles.text, { marginTop: 10 }]}>
                 Tier 1 Agreement: {group.tier1Agreement} Votes (
                 {group.tier1BetSize} Units)
               </Text>
               <Text style={[styles.text, { marginTop: 10 }]}>
                 Tier 2 Agreement: {group.tier2Agreement} Votes (
                 {group.tier2BetSize} Units)
-              </Text>
+              </Text> */}
               <Text style={[styles.text, { marginTop: 10 }]}>
-                Group password: {group.password}
+                Group Password: {group.password}
               </Text>
             </View>
           ) : (
@@ -254,6 +282,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
     alignItems: "center",
+    marginTop: 25,
   },
   text: {
     color: "white",
@@ -325,9 +354,29 @@ const styles = StyleSheet.create({
     color: "white",
   },
   buttonHolder: {
+    width: "100%",
     marginTop: 10,
   },
   logoutButton: {
     marginTop: 20,
+  },
+  newGroup: {
+    alignItems: "center",
+  },
+  createGroup: {
+    marginBottom: 50,
+  },
+  titleText: {
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: "rgb(60, 90, 190)",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 2,
+  },
+  buttonText: {
+    margin: 10,
   },
 });
