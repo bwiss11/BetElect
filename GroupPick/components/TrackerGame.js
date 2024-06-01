@@ -344,7 +344,8 @@ const TrackerGame = (props) => {
   let myTime = new Date(props.time).toLocaleTimeString([], {
     timeStyle: "short",
   });
-  if (liveData && status && translatedPick) {
+  if (liveData && status && translatedPick && translatedPick != "No Pick") {
+    console.log("translatedPick is", translatedPick, typeof translatedPick);
     return (
       <View style={containerStyle()}>
         <View style={pickStatusStyle()}>

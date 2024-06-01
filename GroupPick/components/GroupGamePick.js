@@ -46,15 +46,18 @@ const GroupGamePick = (props) => {
               console.log("setting odds converted to", translatedPick[1]);
             } else {
               oddsConverted = translatedPick[1];
+
               if (Number(oddsConverted) > 0) {
                 oddsConverted = "+" + oddsConverted;
               }
-              setGroupPick(translatedPick[0] + " " + oddsConverted);
+              setGroupPick(
+                translatedPick[0] + (oddsConverted ? " " : "") + oddsConverted
+              );
             }
             let translatedPicks = props.translatedPicks;
 
             translatedPicks[props.index] =
-              translatedPick[0] + " " + oddsConverted;
+              translatedPick[0] + (oddsConverted ? " " : "") + oddsConverted;
 
             for (let i = 0; i < translatedPicks.length; i++) {
               if (!translatedPicks[i]) {
