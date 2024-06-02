@@ -94,14 +94,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "left",
-    backgroundColor: "red",
     width: "100%",
     height: 50,
   },
   avatarsHolder: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "red",
   },
   groupAvatars: {
     alignItems: "center",
@@ -111,7 +109,6 @@ const styles = StyleSheet.create({
   pickHolder: {
     width: 10,
     minWidth: "100%",
-    backgroundColor: "red",
   },
 });
 

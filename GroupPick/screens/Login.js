@@ -51,74 +51,87 @@ const AuthScreen = ({
   setLastName,
 }) => {
   return (
-    <View style={styles.authContainer}>
-      <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
-      {isLogin ? (
-        <View>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Email"
-            autoCapitalize="none"
-          />
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Password"
-            secureTextEntry
-          />
+    <View>
+      <View style={styles.logoContainer}>
+        <View style={styles.logo}>
+          <Text style={styles.logoText}>BETELECT</Text>
         </View>
-      ) : (
-        <View>
-          <TextInput
-            style={styles.input}
-            value={firstName}
-            onChangeText={setFirstName}
-            placeholder="First Name"
-          />
-          <TextInput
-            style={styles.input}
-            value={lastName}
-            onChangeText={setLastName}
-            placeholder="Last Name"
-          />
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Email"
-            autoCapitalize="none"
-          />
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Password"
-            secureTextEntry
-          />
-        </View>
-      )}
-
-      <View style={styles.buttonContainer}>
-        <Button
-          title={isLogin ? "Sign In" : "Sign Up"}
-          onPress={() => handleAuthentication()}
-          color="#3498db"
-        />
       </View>
+      <View style={styles.authContainer}>
+        <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
+        {isLogin ? (
+          <View>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Password"
+              secureTextEntry
+            />
+          </View>
+        ) : (
+          <View>
+            <TextInput
+              style={styles.input}
+              value={firstName}
+              onChangeText={setFirstName}
+              placeholder="First Name"
+            />
+            <TextInput
+              style={styles.input}
+              value={lastName}
+              onChangeText={setLastName}
+              placeholder="Last Name"
+            />
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Password"
+              secureTextEntry
+            />
+          </View>
+        )}
 
-      <View style={styles.bottomContainer}>
-        <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
-          {isLogin
-            ? "Need an account? Sign Up"
-            : "Already have an account? Sign In"}
-        </Text>
-        {/* <Button
+        {isLogin ? (
+          <Pressable style={styles.button} onPress={handleAuthentication}>
+            <View>
+              <Text style={[styles.text, styles.buttonText]}>SIGN IN</Text>
+            </View>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.button} onPress={handleAuthentication}>
+            <View>
+              <Text style={[styles.text, styles.buttonText]}>SIGN UP</Text>
+            </View>
+          </Pressable>
+        )}
+
+        <View style={styles.bottomContainer}>
+          <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
+            {isLogin
+              ? "Need an account? Sign Up"
+              : "Already have an account? Sign In"}
+          </Text>
+          {/* <Button
           title="Bypass Login"
           onPress={() => navigation.navigate("Tabs")}
         ></Button> */}
+        </View>
       </View>
     </View>
   );
@@ -272,6 +285,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     marginTop: 5,
     marginBottom: 5,
+    minWidth: 300,
   },
   inputLabel: { fontSize: 17, fontWeight: "600", color: "white" },
   emailInput: {
@@ -311,7 +325,42 @@ const styles = StyleSheet.create({
   },
   authContainer: {
     alignItems: "center",
+    width: "100%",
   },
+  button: {
+    backgroundColor: "rgb(60, 90, 190)",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 2,
+    marginTop: 5,
+    marginBottom: 5,
+    minWidth: 300,
+  },
+  buttonText: {
+    margin: 10,
+    color: "white",
+  },
+  logoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 100,
+  },
+  logo: {
+    backgroundColor: "rgb(60, 90, 190)",
+    height: 50,
+    width: 200,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 2,
+  },
+  logoText: {
+    color: "white",
+    fontSize: 30,
+  },
+
   //   container: {
   //     flex: 1,
   //     width: "100%",

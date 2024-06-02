@@ -40,10 +40,8 @@ const GroupGamePick = (props) => {
               props.under
             );
             let oddsConverted = "";
-            console.log("translated pick is", translatedPick);
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
-              console.log("setting odds converted to", translatedPick[1]);
             } else {
               oddsConverted = translatedPick[1];
 
@@ -70,7 +68,6 @@ const GroupGamePick = (props) => {
                 translatedPicks[i] = "";
               }
             }
-            console.log("translatedPicks are", translatedPicks);
             logGroupFirestoreTranslatedPicks(
               curDate,
               translatedPicks,

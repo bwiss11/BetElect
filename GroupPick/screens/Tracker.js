@@ -9,17 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import {
   GetGames,
-  GetOdds,
   StoreData,
-  GetData,
-  clearAll,
   GetFormattedDate,
-  OddsMaker,
-  GetLocalPicks,
-  GetLocalGames,
   GetLocalOdds,
   GetLiveData,
   GetTeamData,
+  HandleOdds,
 } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
 import {
@@ -59,11 +54,13 @@ const Tracker = () => {
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
-        setUserID(res[0]);
-        setGroupID(res[1].groupID);
-        getUserPicksDoc(res[0]).then((res) => {
-          setPicksDocID(res[0]);
-        });
+        if (res) {
+          setUserID(res[0]);
+          setGroupID(res[1].groupID);
+          getUserPicksDoc(res[0]).then((res) => {
+            setPicksDocID(res[0]);
+          });
+        }
       });
 
       // ...
@@ -74,8 +71,10 @@ const Tracker = () => {
   });
 
   useEffect(() => {
-    GetLocalOdds().then((res) => {
-      setOdds(res);
+    console.log("calling handle odds from SoloPicks");
+    HandleOdds().then((res) => {
+      setOdds(res[1][curDate]);
+      setOddsBool(true);
     });
   }, []);
 
@@ -125,7 +124,7 @@ const Tracker = () => {
           } else {
             let blankTranslatedPicks = [];
             for (let i = 0; i < data.length; i++) {
-              blankTranslatedPicks.unshift("");
+              blankTranslatedPicks.push("");
             }
             setTranslatedPicks(blankTranslatedPicks);
           }
@@ -134,26 +133,7 @@ const Tracker = () => {
     }
   }, [translatedPicksDocID]);
 
-  useEffect(() => {
-    if (data) {
-      GetData(curDate).then((res) => {
-        if (!res) {
-          setTranslatedPicks([]);
-          StoreData().then(() => {
-            OddsMaker(data).then((res) => {
-              setOdds(res);
-            });
-            setOddsBool(true);
-          });
-        } else {
-          OddsMaker(data).then((res) => {
-            setOdds(res);
-          });
-          setOddsBool(true);
-        }
-      });
-    }
-  }, [data]);
+  useEffect(() => {}, [data]);
 
   if (data && odds && oddsBool && translatedPicks && picks) {
     return (

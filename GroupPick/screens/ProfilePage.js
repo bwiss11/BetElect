@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
+  ScrollView,
   View,
   Button,
   TextInput,
@@ -34,7 +35,7 @@ const ProfilePage = ({ navigation }) => {
   const [userID, setUserID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [joinGroupID, setJoinGroupID] = useState("");
-  const [bankroll, setBankroll] = useState(0);
+  const [bankroll, setBankroll] = useState("");
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const [groupPicksDocID, setGroupPicksDocID] = useState("");
   const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
@@ -47,16 +48,18 @@ const ProfilePage = ({ navigation }) => {
       //  https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
-        setUserID(res[0]);
-        if (res[1].groupID) {
-          setGroupID(res[1].groupID);
-        } else {
-          setGroupID("none");
-        }
+        if (res) {
+          setUserID(res[0]);
+          if (res[1].groupID) {
+            setGroupID(res[1].groupID);
+          } else {
+            setGroupID("none");
+          }
 
-        getUserPicksDoc(res[0]).then((res) => {
-          setPicksDocID(res[0]);
-        });
+          getUserPicksDoc(res[0]).then((res) => {
+            setPicksDocID(res[0]);
+          });
+        }
       });
 
       // ...
@@ -136,125 +139,129 @@ const ProfilePage = ({ navigation }) => {
   if (group && userInfo) {
     let imageSource = userInfo.picUrl;
     return (
-      <View style={styles.container}>
-        <View style={styles.userInfoSection}>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 50,
-              alignItems: "center",
-            }}
-          >
-            <Avatar.Image
-              source={{
-                uri: imageSource,
-              }}
-              size={100}
-            />
-            <View style={{ marginLeft: 20 }}>
-              <Title style={[styles.title, styles.text, { marginTop: 15 }]}>
-                {userInfo.firstName} {userInfo.lastName}
-              </Title>
-              <Caption style={[styles.caption, styles.text]}>
-                {userInfo.email}
-              </Caption>
-            </View>
-          </View>
-          <View style={styles.logoutButton}>
-            <Pressable style={styles.button} onPress={handleAuthentication}>
-              <View>
-                <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
-              </View>
-            </Pressable>
-          </View>
-        </View>
-        <View style={styles.groupContainer}>
-          <View
-            style={{
-              alignItems: "center",
-            }}
-          >
-            {group != "none" ? (
-              <View>
-                <Title style={[styles.text]}>My Group</Title>
-              </View>
-            ) : (
-              ""
-            )}
-
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.userInfoSection}>
             <View
               style={{
                 flexDirection: "row",
-                marginTop: 20,
+                marginTop: 50,
+                alignItems: "center",
+              }}
+            >
+              <Avatar.Image
+                source={{
+                  uri: imageSource,
+                }}
+                size={100}
+              />
+              <View style={{ marginLeft: 20 }}>
+                <Title style={[styles.title, styles.text, { marginTop: 15 }]}>
+                  {userInfo.firstName} {userInfo.lastName}
+                </Title>
+                <Caption style={[styles.caption, styles.text]}>
+                  {userInfo.email}
+                </Caption>
+              </View>
+            </View>
+            <View style={styles.logoutButton}>
+              <Pressable style={styles.button} onPress={handleAuthentication}>
+                <View>
+                  <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
+                </View>
+              </Pressable>
+            </View>
+          </View>
+          <View style={styles.groupContainer}>
+            <View
+              style={{
+                alignItems: "center",
               }}
             >
               {group != "none" ? (
-                group.members.map((member, index) => (
-                  <View style={styles.groupAvatars} key={index}>
-                    <MyGroupAvatar userId={member} />
-                  </View>
-                ))
-              ) : (
-                <View style={styles.newGroup}>
-                  <Text style={[styles.text, styles.titleText]}>
-                    Join or Create a Group!
-                  </Text>
-                  <View style={[styles.buttonHolder, styles.createGroup]}>
-                    <View>
-                      <Text style={styles.text}>Create a Group</Text>
-                    </View>
-                    <TextInput
-                      style={styles.input}
-                      value={bankroll}
-                      onChangeText={setBankroll}
-                      placeholder="$ Bankroll"
-                      autoCapitalize="none"
-                    />
-                    <Pressable
-                      style={styles.button}
-                      onPress={handleCreateGroup}
-                    >
-                      <View>
-                        <Text style={[styles.text, styles.buttonText]}>
-                          CREATE GROUP
-                        </Text>
-                      </View>
-                    </Pressable>
-                  </View>
-                  <View style={styles.buttonHolder}>
-                    <View>
-                      <Text style={styles.text}>Join a Group</Text>
-                    </View>
-                    <TextInput
-                      style={styles.input}
-                      value={joinGroupID}
-                      onChangeText={setJoinGroupID}
-                      placeholder="Group ID"
-                      autoCapitalize="none"
-                    />
-                    <Pressable style={styles.button} onPress={handleJoinGroup}>
-                      <View>
-                        <Text style={[styles.text, styles.buttonText]}>
-                          JOIN GROUP
-                        </Text>
-                      </View>
-                    </Pressable>
-                  </View>
+                <View>
+                  <Title style={[styles.text]}>My Group</Title>
                 </View>
+              ) : (
+                ""
               )}
-            </View>
-          </View>
-          {group != "none" ? (
-            <View style={{ alignItems: "center" }}>
-              <Text
-                style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 20,
+                }}
               >
-                Bankroll: ${group.bankroll}
-              </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Unit Size: ${group.unitSize}
-              </Text>
-              {/* <Text style={[styles.text, { marginTop: 10 }]}>
+                {group != "none" ? (
+                  group.members.map((member, index) => (
+                    <View style={styles.groupAvatars} key={index}>
+                      <MyGroupAvatar userId={member} />
+                    </View>
+                  ))
+                ) : (
+                  <View style={styles.newGroup}>
+                    <Text style={[styles.text, styles.titleText]}>
+                      Join or Create a Group!
+                    </Text>
+                    <View style={[styles.buttonHolder, styles.createGroup]}>
+                      <View>
+                        <Text style={styles.text}>Create a Group</Text>
+                      </View>
+                      <TextInput
+                        style={styles.input}
+                        value={bankroll}
+                        onChangeText={setBankroll}
+                        placeholder="$ Bankroll"
+                        autoCapitalize="none"
+                      />
+                      <Pressable
+                        style={styles.button}
+                        onPress={handleCreateGroup}
+                      >
+                        <View>
+                          <Text style={[styles.text, styles.buttonText]}>
+                            CREATE GROUP
+                          </Text>
+                        </View>
+                      </Pressable>
+                    </View>
+                    <View style={styles.buttonHolder}>
+                      <View>
+                        <Text style={styles.text}>Join a Group</Text>
+                      </View>
+                      <TextInput
+                        style={styles.input}
+                        value={joinGroupID}
+                        onChangeText={setJoinGroupID}
+                        placeholder="Group ID"
+                        autoCapitalize="none"
+                      />
+                      <Pressable
+                        style={styles.button}
+                        onPress={handleJoinGroup}
+                      >
+                        <View>
+                          <Text style={[styles.text, styles.buttonText]}>
+                            JOIN GROUP
+                          </Text>
+                        </View>
+                      </Pressable>
+                    </View>
+                  </View>
+                )}
+              </View>
+            </View>
+            {group != "none" ? (
+              <View style={{ alignItems: "center" }}>
+                <Text
+                  style={[styles.text, { marginTop: 30, fontWeight: "bold" }]}
+                >
+                  Bankroll: ${group.bankroll}
+                </Text>
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Unit Size: ${group.unitSize}
+                </Text>
+                {/* <Text style={[styles.text, { marginTop: 10 }]}>
                 Tier 1 Agreement: {group.tier1Agreement} Votes (
                 {group.tier1BetSize} Units)
               </Text>
@@ -262,14 +269,25 @@ const ProfilePage = ({ navigation }) => {
                 Tier 2 Agreement: {group.tier2Agreement} Votes (
                 {group.tier2BetSize} Units)
               </Text> */}
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Group Password: {group.password}
-              </Text>
-            </View>
-          ) : (
-            ""
-          )}
+                <Text style={[styles.text, { marginTop: 10 }]}>
+                  Group Password: {group.password}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+          </View>
         </View>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <View style={styles.logoutButton}>
+        <Pressable style={styles.button} onPress={handleAuthentication}>
+          <View>
+            <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
+          </View>
+        </Pressable>
       </View>
     );
   }

@@ -9,14 +9,9 @@ import {
 import { useEffect, useState } from "react";
 import {
   GetGames,
-  GetOdds,
-  StoreData,
-  GetData,
-  clearAll,
   GetFormattedDate,
-  OddsMaker,
-  GetLocalPicks,
-  GetLocalGames,
+  GetCurrentHours,
+  HandleOdds,
 } from "../backend/functions";
 import { Game } from "../components/Game";
 
@@ -43,22 +38,27 @@ const SoloPicks = () => {
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const auth = getAuth();
 
+  const oddsHours = GetCurrentHours();
+  const curDate = GetFormattedDate();
+
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
-        setUserID(res[0]);
-        if (res[1].groupID) {
-          setGroupID(res[1].groupID);
-        } else {
-          console.log("setting group id to none");
-          setGroupID("none");
+        if (res) {
+          setUserID(res[0]);
+          if (res[1].groupID) {
+            setGroupID(res[1].groupID);
+          } else {
+            console.log("setting group id to none");
+            setGroupID("none");
+          }
+          getUserPicksDoc(res[0]).then((res) => {
+            setPicksDocID(res[0]);
+          });
         }
-        getUserPicksDoc(res[0]).then((res) => {
-          setPicksDocID(res[0]);
-        });
       });
 
       // ...
@@ -68,7 +68,6 @@ const SoloPicks = () => {
     }
   });
   // const curDate = new Date(Date.now()).toISOString().split("T")[0];
-  const curDate = GetFormattedDate();
 
   // useEffect(() => {
   //   console.log("pickDoc ID is", picksDocID);
@@ -79,7 +78,11 @@ const SoloPicks = () => {
   // }, [userID]);
 
   useEffect(() => {
-    // clearAll();
+    console.log("calling handle odds from SoloPicks");
+    HandleOdds().then((res) => {
+      setOdds(res[1][curDate]);
+      setOddsBool(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -112,40 +115,7 @@ const SoloPicks = () => {
 
   useEffect(() => {
     if (data) {
-      // console.log("data is", data);
-      // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
-      //   console.log("are the odds set", res);
-      // });
-      GetData(curDate).then((res) => {
-        if (!res) {
-          setPicks([]);
-          StoreData().then(() => {
-            //   console.log("storing my data now");
-            OddsMaker(data).then((res) => {
-              setOdds(res);
-            });
-            setOddsBool(true);
-          });
-        } else {
-          OddsMaker(data).then((res) => {
-            setOdds(res);
-          });
-          setOddsBool(true);
-          // console.log("retrieved:", res);
-        }
-      });
     }
-
-    // GetLocalPicks(curDate, "123456").then((GLPRes) => {
-    //   if (!GLPRes) {
-    //     // console.log("no response setting picks to []");
-    //     picksList = [];
-    //     for (let i = 0; i < data.length; i++) {
-    //       picksList.push("");
-    //     }
-    //     setPicks(picksList);
-    //   }
-    // });
   }, [data]);
 
   useEffect(() => {

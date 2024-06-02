@@ -9,14 +9,10 @@ import {
 import { useEffect, useState } from "react";
 import {
   GetGames,
-  GetOdds,
   StoreData,
-  GetData,
-  clearAll,
   GetFormattedDate,
-  OddsMaker,
   GetLocalPicks,
-  GetLocalGames,
+  HandleOdds,
 } from "../backend/functions";
 
 import {
@@ -65,11 +61,14 @@ const GroupPicks = () => {
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
-        setUserID(res[0]);
-        setGroupID(res[1].groupID);
-        getUserPicksDoc(res[0]).then((res) => {
-          setPicksDocID(res[0]);
-        });
+        if (res) {
+          console.log("res is", res);
+          setUserID(res[0]);
+          setGroupID(res[1].groupID);
+          getUserPicksDoc(res[0]).then((res) => {
+            setPicksDocID(res[0]);
+          });
+        }
       });
 
       // ...
@@ -83,7 +82,12 @@ const GroupPicks = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    // clearAll();
+    console.log("calling handle odds from SoloPicks");
+    HandleOdds().then((res) => {
+      // console.log("res from handleOdds", res[1][curDate]);
+      setOdds(res[1][curDate]);
+      setOddsBool(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -112,21 +116,6 @@ const GroupPicks = () => {
         setGroupPicks(res);
       });
 
-      GetLocalPicks(curDate, groupID, groupPicksDocID).then((GLPRes) => {
-        // console.log("GLP response:", GLPRes);
-        if (GLPRes) {
-          GetLocalGames().then((GLGRes) => {
-            if (GLPRes.length < GLGRes.length) {
-              for (i = GLPRes.length; i < GLGRes.length; i++) {
-                GLPRes.push("");
-              }
-            }
-          });
-          // console.log("setting picks to", GLPRes);
-          setPicks(GLPRes);
-        } else {
-        }
-      });
     }
   }, [groupPicksDocID]);
 
@@ -164,35 +153,10 @@ const GroupPicks = () => {
   }, [groupDataDocID]);
 
   useEffect(() => {
-    if (data) {
-      // console.log("data is", data);
-      // AsyncStorage.getItem(curDate + "setOdds").then((res) => {
-      //   console.log("are the odds set", res);
-      // });
-      GetData(curDate).then((res) => {
-        if (!res) {
-          setPicks([]);
-          StoreData().then(() => {
-            //   console.log("storing my data now");
-            OddsMaker(data).then((res) => {
-              setOdds(res);
-            });
-            setOddsBool(true);
-          });
-        } else {
-          OddsMaker(data).then((res) => {
-            setOdds(res);
-          });
-          setOddsBool(true);
-          // console.log("retrieved:", res);
-        }
-      });
-    }
-
     if (!groupPicks) {
       let groupPicksBlank = [];
       for (let i = 0; i < data.length; i++) {
-        groupPicksBlank.unshift("");
+        groupPicksBlank.push("");
       }
       setGroupPicks(groupPicksBlank);
     }

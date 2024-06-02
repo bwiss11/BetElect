@@ -334,7 +334,6 @@ async function getGroupDataDoc(groupID) {
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
-  console.log("got group", ans);
   return ans;
 }
 
@@ -450,7 +449,6 @@ async function createGroup(userId, bankroll) {
     );
 
     await joinGroup(docRef.id, userId);
-    console.log("returning ", docRef.id);
     return docRef.id;
   } catch (e) {
     console.error(e);
@@ -468,7 +466,7 @@ async function joinGroup(groupID, userId) {
 
   try {
     if (members) {
-      members.unshift(userId);
+      members.push(userId);
     } else {
       members = [userId];
     }
@@ -491,6 +489,57 @@ async function joinGroup(groupID, userId) {
     return groupID;
   } catch (e) {
     console.error(e);
+  }
+}
+
+async function recordOdds(date, hours, odds) {
+  console.log("recording odds", date, hours, odds);
+  oddsRef = collection(db, "odds");
+  let ans;
+  const querySnapshot = await getDocs(
+    query(oddsRef, where("date", "==", date, limit(1)))
+  );
+  if (!querySnapshot.empty) {
+    await querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      ans = [doc.id, doc.data()];
+    });
+    console.log(
+      "got doc",
+      ans[0],
+      ans[1],
+      "hours",
+      ans[1].hours,
+      ans[1].hours == hours
+    );
+    // Only updates odds if odds for this hour have not been already recorded
+    if (ans[1].hours != hours) {
+      console.log("updating odds for hour", hours);
+      await updateDoc(
+        doc(db, "odds", ans[0]),
+        {
+          [date]: odds,
+          date: date,
+          hours: hours,
+        },
+        { merge: true }
+      );
+    } else {
+      console.log("don't need to update odds");
+    }
+  } else {
+    // Create odds collection and add odds
+    const docRef = await addDoc(collection(db, "odds"), {});
+    // console.log("created odds", docRef.id);
+    await updateDoc(
+      doc(db, "odds", docRef.id),
+      {
+        [date]: odds,
+        date: date,
+        hours: hours,
+      },
+      { merge: true }
+    );
   }
 }
 
@@ -518,6 +567,7 @@ export {
   createUserDoc,
   createGroup,
   joinGroup,
+  recordOdds,
 };
 
 // Import the functions you need from the SDKs you need
