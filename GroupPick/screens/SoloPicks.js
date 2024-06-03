@@ -80,7 +80,8 @@ const SoloPicks = () => {
   useEffect(() => {
     console.log("calling handle odds from SoloPicks");
     HandleOdds().then((res) => {
-      setOdds(res[1][curDate]);
+      console.log("res is", res);
+      setOdds(res);
       setOddsBool(true);
     });
   }, []);

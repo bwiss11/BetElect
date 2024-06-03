@@ -210,7 +210,7 @@ const HandleOdds = async () => {
   // Check if odds are already in db
   const retrievedOdds = await GetFirestoreOdds(curDate, curHours);
   // If odds are already in db, return the odds
-  if (retrievedOdds) {
+  if (retrievedOdds[1]) {
     console.log("returning odds without calling API");
     return retrievedOdds;
   } else {
@@ -265,10 +265,10 @@ const GetFirestoreOdds = async (date, hours) => {
 
     if (ans[1].hours == hours) {
       // console.log("returning firestore odds", ans);
-      return ans;
+      return [ans, true];
     }
   }
-  return null;
+  return [ans, false];
 };
 
 // const clearAll = async () => {
@@ -292,22 +292,39 @@ const OddsMaker = async (data, fullOdds) => {
     // Get current date object in YYYY-MM-DD format
     const curDate = GetFormattedDate();
     const curHours = GetCurrentHours();
-    // Use current date's key to get the associated odds if they've already been stored, else return null
-    // const jsonValue = await AsyncStorage.getItem(curDate);
+
     const firestoreOdds = await GetFirestoreOdds(curDate, curHours);
-    if (firestoreOdds) {
+    console.log("firestore oddds", firestoreOdds);
+    if (firestoreOdds[1]) {
       console.log(
         "firestore odds are and returning",
-        firestoreOdds[1][curDate]
+        firestoreOdds[0][1][curDate]
       );
-      return firestoreOdds != null ? firestoreOdds[1][curDate] : null;
+      return firestoreOdds ? firestoreOdds[0][1][curDate] : null;
     } else {
       console.log("creating odds template");
       object = {};
       if (data) {
         for (let i = 0; i < data.length; i++) {
+          let gameTime = new Date(data[i].gameDate);
+          let theCurTime = new Date(Date.now());
+          let difference = gameTime - theCurTime;
+          console.log(
+            "start time is",
+            gameTime,
+            " cur time is",
+            theCurTime,
+            "difference is",
+            gameTime - theCurTime
+          );
+          if (difference < 0 && firestoreOdds[1]) {
+            console.log("setting odds equal to", firestoreOdds[0][i]);
+            object[i] = firestoreOdds[0][i];
+            continue;
+          }
           //   console.log("data", data[i]);
           object[i] = {
+            startTime: "",
             awayMLOdds: "",
             homeMLOdds: "",
             awaySpread: "",
@@ -404,7 +421,7 @@ const OddsMaker = async (data, fullOdds) => {
                       fullOdds[j].bookmakers[0].markets[k].outcomes[1].price;
                   }
                 }
-
+                object[i].startTime = data[i].gameDate;
                 object[i].awayMLOdds = awayMLOdds != null ? awayMLOdds : "";
                 object[i].homeMLOdds = homeMLOdds != null ? homeMLOdds : "";
                 object[i].awaySpread = awaySpread != null ? awaySpread : "";

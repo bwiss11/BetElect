@@ -21,6 +21,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { NavigationHelpersContext } from "@react-navigation/native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDdTzGDjbAUQgy8NRhLdTSfSMbz21-sJu0",
@@ -54,7 +55,13 @@ const AuthScreen = ({
     <View>
       <View style={styles.logoContainer}>
         <View style={styles.logo}>
-          <Text style={styles.logoText}>BETELECT</Text>
+          <MaterialCommunityIcons name="vote" size={40} color="white" />
+          <View style={styles.name}>
+            <Text style={styles.logoText}>BETELECT</Text>
+            <Text style={[styles.text, styles.subText]}>
+              Group Sports Betting
+            </Text>
+          </View>
         </View>
       </View>
       <View style={styles.authContainer}>
@@ -122,11 +129,38 @@ const AuthScreen = ({
         )}
 
         <View style={styles.bottomContainer}>
-          <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
-            {isLogin
-              ? "Need an account? Sign Up"
-              : "Already have an account? Sign In"}
-          </Text>
+          {isLogin ? (
+            <View style={styles.signInUp}>
+              <View>
+                <Text style={styles.text}>Need an account? </Text>
+              </View>
+              <Pressable
+                style={styles.toggleText}
+                onPress={() => setIsLogin(!isLogin)}
+              >
+                <Text style={[styles.text, styles.clickableText]}>
+                  {" "}
+                  Sign Up
+                </Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View style={styles.signInUp}>
+              <View>
+                <Text style={styles.text}>Already have an account? </Text>
+              </View>
+              <Pressable
+                style={styles.toggleText}
+                onPress={() => setIsLogin(!isLogin)}
+              >
+                <Text style={[styles.text, styles.clickableText]}>
+                  {" "}
+                  Sign In
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
           {/* <Button
           title="Bypass Login"
           onPress={() => navigation.navigate("Tabs")}
@@ -259,12 +293,14 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
+    // alignContent: "center",
     backgroundColor: "black",
   },
 
   buttonText: {
-    color: "white",
+    padding: 10,
+    fontWeight: 700,
   },
   title: {
     fontSize: 27,
@@ -337,29 +373,44 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     minWidth: 300,
   },
-  buttonText: {
-    margin: 10,
-    color: "white",
-  },
   logoContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 100,
+    marginBottom: 50,
+    height: 80,
   },
   logo: {
+    flex: 1,
+    flexDirection: "row",
     backgroundColor: "rgb(60, 90, 190)",
-    height: 50,
-    width: 200,
+    height: "100%",
+    width: 225,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
     borderColor: "white",
     borderWidth: 2,
+    marginBottom: 5,
   },
   logoText: {
+    marginLeft: 10,
     color: "white",
     fontSize: 30,
   },
+  text: {
+    color: "white",
+  },
+  name: { justifyContent: "center", alignItems: "center" },
+  subText: {
+    fontSize: 12,
+  },
+  signInUp: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 3,
+    maxHeight: 20,
+  },
+  clickableText: { fontWeight: 700 },
 
   //   container: {
   //     flex: 1,

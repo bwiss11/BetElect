@@ -71,9 +71,8 @@ const Tracker = () => {
   });
 
   useEffect(() => {
-    console.log("calling handle odds from SoloPicks");
     HandleOdds().then((res) => {
-      setOdds(res[1][curDate]);
+      setOdds(res[0][1][curDate]);
       setOddsBool(true);
     });
   }, []);

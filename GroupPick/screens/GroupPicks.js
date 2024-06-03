@@ -82,10 +82,9 @@ const GroupPicks = () => {
   const curDate = GetFormattedDate();
 
   useEffect(() => {
-    console.log("calling handle odds from SoloPicks");
     HandleOdds().then((res) => {
-      // console.log("res from handleOdds", res[1][curDate]);
-      setOdds(res[1][curDate]);
+      console.log("res from handleOdds", res);
+      setOdds(res[0][1][curDate]);
       setOddsBool(true);
     });
   }, []);
@@ -115,7 +114,6 @@ const GroupPicks = () => {
       checkPickAgreement(curDate, groupID, groupPicksDocID).then((res) => {
         setGroupPicks(res);
       });
-
     }
   }, [groupPicksDocID]);
 
