@@ -226,7 +226,8 @@ const HandleOdds = async () => {
     oddsMakerOdds = await OddsMaker(gameData, oddsData);
     // Store the newly created odds in the database, and return the odds
     await recordOdds(curDate, curHours, oddsMakerOdds);
-    return oddsMakerOdds;
+    const retrievedOdds = await GetFirestoreOdds(curDate, curHours);
+    return retrievedOdds;
   }
 };
 
