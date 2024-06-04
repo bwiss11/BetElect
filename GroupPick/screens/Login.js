@@ -212,9 +212,17 @@ const Login = ({ navigation }) => {
     return () => unsubscribe();
   }, [auth]);
 
-  useEffect(() => {
-    // console.log("on reload user is", user);
-  }, []);
+  // useEffect(() => {
+  //   console.log("should be alerting");
+  //   Alert.alert("Alert Title", "My Alert Msg", [
+  //     {
+  //       text: "Cancel",
+  //       onPress: () => console.log("Cancel Pressed"),
+  //       style: "cancel",
+  //     },
+  //     { text: "OK", onPress: () => console.log("OK Pressed") },
+  //   ]);
+  // }, []);
 
   const handleAuthentication = async () => {
     try {
@@ -226,9 +234,25 @@ const Login = ({ navigation }) => {
         // Sign in or sign up
         if (isLogin) {
           // Sign in
-          signInWithEmailAndPassword(auth, email, password);
-          console.log("User signed in, navigating to tabs");
-          navigation.navigate("Tabs");
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            // console.log("User signed in, navigating to tabs");
+            // navigation.navigate("Tabs");
+          } catch (error) {
+            // console.log("ERROR is", error);
+            console.log("invalid credentials");
+            setEmail("");
+            setPassword("");
+            // Alert.alert({
+            //   title: "Invalid Credentials",
+            //   message: "Invalid username and password combination",
+            //   buttons: [
+            //     {
+            //       text: "OK",
+            //     },
+            //   ],
+            // });
+          }
         } else {
           // Sign up
           res = await createUserWithEmailAndPassword(

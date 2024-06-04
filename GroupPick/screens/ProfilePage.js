@@ -281,15 +281,14 @@ const ProfilePage = ({ navigation }) => {
       </ScrollView>
     );
   } else {
-    return (
-      <View style={styles.logoutButton}>
-        <Pressable style={styles.button} onPress={handleAuthentication}>
-          <View>
-            <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
-          </View>
-        </Pressable>
-      </View>
-    );
+    return "";
+    // <View style={styles.logoutButton}>
+    //   <Pressable style={styles.button} onPress={handleAuthentication}>
+    //     <View>
+    //       <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
+    //     </View>
+    //   </Pressable>
+    // </View>
   }
 };
 
