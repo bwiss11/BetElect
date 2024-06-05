@@ -220,6 +220,7 @@ const HandleOdds = async () => {
       "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/?apiKey=a1a8c66ce88c82f5342af641c0ecd4a8&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
     );
     const oddsData = await response.json();
+    console.log("oddsData in HandleOdds is", oddsData);
 
     // Use the data from the odds-api to create the odds
     gameData = await GetGames();
@@ -283,7 +284,11 @@ const GetFirestoreOdds = async (date, hours) => {
 // };
 
 const OddsMaker = async (data, fullOdds) => {
-  console.log("\n\n\nCALLING ODDSMAKER\n\n\n\n with data", data);
+  console.log(
+    "\n\n\nCALLING ODDSMAKER\n\n\n\n with data and fullOdds",
+    data,
+    fullOdds
+  );
   if (!data) {
     console.log("returning null");
     return null;
@@ -307,6 +312,7 @@ const OddsMaker = async (data, fullOdds) => {
       object = {};
       if (data) {
         for (let i = 0; i < data.length; i++) {
+          console.log("top level i is", i);
           let gameTime = new Date(data[i].gameDate);
           let theCurTime = new Date(Date.now());
           let difference = gameTime - theCurTime;
@@ -318,7 +324,16 @@ const OddsMaker = async (data, fullOdds) => {
             "difference is",
             gameTime - theCurTime
           );
-          if (difference < 0 && firestoreOdds[1]) {
+          if (i == 0) {
+            console.log(
+              "testing",
+              firestoreOdds[0][1][curDate][i + 1],
+              "testing2",
+              firestoreOdds[0][1],
+              curDate
+            );
+          }
+          if (difference < 0 && firestoreOdds[0][i]) {
             console.log("setting odds equal to", firestoreOdds[0][i]);
             object[i] = firestoreOdds[0][i];
             continue;
@@ -340,23 +355,26 @@ const OddsMaker = async (data, fullOdds) => {
           homeTeam = data[i].teams.home.team.name;
           gameDate = data[i].gameDate;
           if (fullOdds) {
+            let awayMLOdds;
+            let homeMLOdds;
+            let awaySpread;
+            let homeSpread;
+            let awaySpreadOdds;
+            let homeSpreadOdds;
+            let total;
+            let overOdds;
+            let underOdds;
+            let foundBool = false;
             for (let j = 0; j < fullOdds.length; j++) {
               // console.log("cur object", fullOdds[j]);
               // console.log(fullOdds[j].commence_time.split("T")[0]);
-              let awayMLOdds;
-              let homeMLOdds;
-              let awaySpread;
-              let homeSpread;
-              let awaySpreadOdds;
-              let homeSpreadOdds;
-              let total;
-              let overOdds;
-              let underOdds;
               if (
                 fullOdds[j].away_team == awayTeam &&
-                fullOdds[j].home_team == homeTeam
+                fullOdds[j].home_team == homeTeam &&
+                !foundBool
                 // gameDate == fullOdds[j].commence_time
               ) {
+                foundBool = true;
                 for (
                   let k = 0;
                   k < fullOdds[j].bookmakers[0].markets.length;
@@ -441,7 +459,6 @@ const OddsMaker = async (data, fullOdds) => {
       }
       //   console.log(object);
       //   console.log(object[1]);
-      console.log("filled out object is", object);
       if (object != {}) {
         return object;
       } else {
