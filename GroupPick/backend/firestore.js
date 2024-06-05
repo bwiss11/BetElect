@@ -360,29 +360,34 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
   for (let i = 0; i < members.length; i++) {
     let memberPicksDoc = await getUserPicksDoc(members[i]);
     userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
-    for (let i = 0; i < userPicks.length; i++) {
-      // console.log("hi");
-      // pickMap[i] = 1;
-      // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
-      pickMap[i][userPicks[i]] = pickMap[i][userPicks[i]] + 1;
-    }
-  }
-
-  for (let i = 0; i < userPicks.length; i++) {
-    let gamePicks = pickMap[i];
-    let curMax = 0;
-    let chosenPick = "";
-    for (let pick in gamePicks) {
-      // PLACEHOLDER FOR number of picks needed for agreement
-      if (gamePicks[pick] > curMax && gamePicks[pick] > members.length / 2) {
-        curMax = gamePicks[pick];
-        chosenPick = pick;
+    if (userPicks) {
+      for (let i = 0; i < userPicks.length; i++) {
+        // console.log("hi");
+        // pickMap[i] = 1;
+        // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
+        pickMap[i][userPicks[i]] = pickMap[i][userPicks[i]] + 1;
       }
-    }
-    if (!chosenPick) {
-      groupPicks.push("optOut");
-    } else {
-      groupPicks.push(chosenPick);
+
+      for (let i = 0; i < userPicks.length; i++) {
+        let gamePicks = pickMap[i];
+        let curMax = 0;
+        let chosenPick = "";
+        for (let pick in gamePicks) {
+          // PLACEHOLDER FOR number of picks needed for agreement
+          if (
+            gamePicks[pick] > curMax &&
+            gamePicks[pick] > members.length / 2
+          ) {
+            curMax = gamePicks[pick];
+            chosenPick = pick;
+          }
+        }
+        if (!chosenPick) {
+          groupPicks.push("optOut");
+        } else {
+          groupPicks.push(chosenPick);
+        }
+      }
     }
   }
   // console.log("returning group picks from checkPickAgreement:", groupPicks);

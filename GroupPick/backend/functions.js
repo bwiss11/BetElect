@@ -324,7 +324,7 @@ const OddsMaker = async (data, fullOdds) => {
             "difference is",
             gameTime - theCurTime
           );
-          if (i == 0) {
+          if (i == 0 && firestoreOdds[0]) {
             console.log(
               "testing",
               firestoreOdds[0][1][curDate][i + 1],
@@ -333,7 +333,7 @@ const OddsMaker = async (data, fullOdds) => {
               curDate
             );
           }
-          if (difference < 0 && firestoreOdds[0][i]) {
+          if (difference < 0 && firestoreOdds[0] && firestoreOdds[0][i]) {
             console.log("setting odds equal to", firestoreOdds[0][i]);
             object[i] = firestoreOdds[0][i];
             continue;
