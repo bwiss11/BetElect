@@ -339,6 +339,7 @@ async function getGroupDataDoc(groupID) {
 
 async function checkPickAgreement(date, groupID, groupPicksDocID) {
   // console.log("Group id in CPA", groupID);
+  console.log("checking pick agreement", date, groupID, groupPicksDocID);
   pickMap = {};
   groupPicks = [];
 
@@ -360,37 +361,29 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
   for (let i = 0; i < members.length; i++) {
     let memberPicksDoc = await getUserPicksDoc(members[i]);
     userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
+    console.log("user picks are", userPicks);
     if (userPicks) {
-      for (let i = 0; i < userPicks.length; i++) {
+      for (let j = 0; j < userPicks.length; j++) {
         // console.log("hi");
         // pickMap[i] = 1;
         // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
-        pickMap[i][userPicks[i]] = pickMap[i][userPicks[i]] + 1;
-      }
-
-      for (let i = 0; i < userPicks.length; i++) {
-        let gamePicks = pickMap[i];
-        let curMax = 0;
-        let chosenPick = "";
-        for (let pick in gamePicks) {
-          // PLACEHOLDER FOR number of picks needed for agreement
-          if (
-            gamePicks[pick] > curMax &&
-            gamePicks[pick] > members.length / 2
-          ) {
-            curMax = gamePicks[pick];
-            chosenPick = pick;
-          }
-        }
-        if (!chosenPick) {
-          groupPicks.push("optOut");
-        } else {
-          groupPicks.push(chosenPick);
-        }
+        pickMap[j][userPicks[j]] = pickMap[j][userPicks[j]] + 1;
       }
     }
   }
-  // console.log("returning group picks from checkPickAgreement:", groupPicks);
+  for (let i = 0; i < userPicks.length; i++) {
+    obj = pickMap[i];
+    let max = 0;
+    let maxKey = "";
+
+    for (let pick in obj) {
+      if (obj[pick] > max) {
+        max = obj[pick];
+        maxKey = pick;
+      }
+    }
+    groupPicks[i] = maxKey;
+  }
   // PLACEHOLDER: groupID hardcoded
   const res = await updateDoc(
     doc(db, "groups", groupID, "picks", groupPicksDocID),
@@ -403,7 +396,6 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
 }
 
 async function createGroup(userId, bankroll) {
-  console.log("bankroll suppposed to be ", bankroll);
   try {
     const docRef = await addDoc(collection(db, "groups"), {});
     console.log("created group", docRef.id);
