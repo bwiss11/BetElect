@@ -371,27 +371,30 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
       }
     }
   }
-  for (let i = 0; i < userPicks.length; i++) {
-    obj = pickMap[i];
-    let max = 0;
-    let maxKey = "";
+  if (userPicks) {
+    for (let i = 0; i < userPicks.length; i++) {
+      obj = pickMap[i];
+      let max = 0;
+      let maxKey = "";
 
-    for (let pick in obj) {
-      if (obj[pick] > max) {
-        max = obj[pick];
-        maxKey = pick;
+      for (let pick in obj) {
+        if (obj[pick] > max) {
+          max = obj[pick];
+          maxKey = pick;
+        }
       }
+      groupPicks[i] = maxKey;
     }
-    groupPicks[i] = maxKey;
+    // PLACEHOLDER: groupID hardcoded
+    const res = await updateDoc(
+      doc(db, "groups", groupID, "picks", groupPicksDocID),
+      {
+        [date]: groupPicks,
+      },
+      { merge: true }
+    );
   }
-  // PLACEHOLDER: groupID hardcoded
-  const res = await updateDoc(
-    doc(db, "groups", groupID, "picks", groupPicksDocID),
-    {
-      [date]: groupPicks,
-    },
-    { merge: true }
-  );
+  console.log("returning", groupPicks);
   return groupPicks;
 }
 

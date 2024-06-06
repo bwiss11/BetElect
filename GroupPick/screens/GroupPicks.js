@@ -84,10 +84,15 @@ const GroupPicks = () => {
   useEffect(() => {
     HandleOdds().then((res) => {
       console.log("res from handleOdds", res);
-      setOdds(res[0][1][curDate]);
+      console.log("odds setting to", res[0][1]["odds"]);
+      setOdds(res[0][1]["odds"]);
       setOddsBool(true);
     });
   }, []);
+
+  useEffect(() => {
+    // Forced reload when groupPicks is updated
+  }, [groupPicks]);
 
   useEffect(() => {
     if (groupID) {
@@ -161,6 +166,33 @@ const GroupPicks = () => {
   }, [data]);
 
   useEffect(() => {}, [groupPicks]);
+
+  useEffect(() => {
+    console.log(
+      "check these",
+      data,
+      "odds",
+      odds,
+      "oddsBool",
+      oddsBool,
+      "translatedPicks",
+      translatedPicks,
+      "groupID",
+      groupID,
+      "translateDPicksDocID",
+      translatedPicksDocID,
+      "group",
+      group
+    );
+  }, [
+    data,
+    odds,
+    oddsBool,
+    translatedPicks,
+    groupID,
+    translatedPicksDocID,
+    group,
+  ]);
 
   if (
     data &&
