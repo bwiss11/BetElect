@@ -24,6 +24,7 @@ const GroupGamePick = (props) => {
       <Pressable
         style={styles.checkButton}
         onPress={() => {
+          console.log("group Pick is", props.groupPick);
           if (props.groupPick) {
             let translatedPick = TranslatePick(
               props.groupPick,
@@ -40,6 +41,7 @@ const GroupGamePick = (props) => {
               props.under
             );
             let oddsConverted = "";
+            console.log("translated pick is", translatedPick);
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
             } else {

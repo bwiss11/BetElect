@@ -643,7 +643,7 @@ const TranslatePick = (
 
   if (!pick) {
     return thisPick;
-  } else if (pick == "optOut") {
+  } else if (pick == "optOut" || pick == "No Pick") {
     thisPick[0] = "No Pick";
     return thisPick;
   }

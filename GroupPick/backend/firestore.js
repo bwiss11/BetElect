@@ -373,17 +373,21 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
   }
   if (userPicks) {
     for (let i = 0; i < userPicks.length; i++) {
-      obj = pickMap[i];
       let max = 0;
       let maxKey = "";
-
+      obj = pickMap[i];
+      console.log("object is ", obj);
       for (let pick in obj) {
         if (obj[pick] > max) {
           max = obj[pick];
           maxKey = pick;
         }
       }
-      groupPicks[i] = maxKey;
+      if (max > members.length / 2) {
+        groupPicks[i] = maxKey;
+      } else {
+        groupPicks[i] = "No Pick";
+      }
     }
     // PLACEHOLDER: groupID hardcoded
     const res = await updateDoc(
