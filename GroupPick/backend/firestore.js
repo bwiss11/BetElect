@@ -511,11 +511,11 @@ async function recordOdds(date, hours, odds) {
     );
     // Only updates odds if odds for this hour have not been already recorded
     if (ans[1].hours != hours) {
-      console.log("updating odds for hour", hours);
+      console.log("updating odds for hour", hours, odds, date, ans);
       await updateDoc(
         doc(db, "odds", ans[0]),
         {
-          [date]: odds,
+          odds: odds,
           date: date,
           hours: hours,
         },
@@ -527,11 +527,11 @@ async function recordOdds(date, hours, odds) {
   } else {
     // Create odds collection and add odds
     const docRef = await addDoc(collection(db, "odds"), {});
-    // console.log("created odds", docRef.id);
+    console.log("created odds", docRef.id, odds, date, hours);
     await updateDoc(
       doc(db, "odds", docRef.id),
       {
-        [date]: odds,
+        odds: odds,
         date: date,
         hours: hours,
       },

@@ -190,18 +190,18 @@ const StoreData = async () => {
 
   console.log("dummy response", dummyRes);
 
-  try {
-    console.log("calling oddsmaker from store data", copiedData);
-    await OddsMaker(copiedData);
-    const jsonValue = JSON.stringify(data);
-    const curDate = GetFormattedDate();
-    // Store json object response as "current data":"betting odds object"
-    // await AsyncStorage.setItem(curDate, jsonValue).then(() => {
-    //   //   console.log("placed data");
-    // });
-  } catch (e) {
-    // saving error
-  }
+  // try {
+  //   console.log("calling oddsmaker from store data", copiedData);
+  //   await OddsMaker(copiedData);
+  //   const jsonValue = JSON.stringify(data);
+  //   const curDate = GetFormattedDate();
+  //   // Store json object response as "current data":"betting odds object"
+  //   // await AsyncStorage.setItem(curDate, jsonValue).then(() => {
+  //   //   //   console.log("placed data");
+  //   // });
+  // } catch (e) {
+  //   // saving error
+  // }
 };
 
 const HandleOdds = async () => {
@@ -226,6 +226,7 @@ const HandleOdds = async () => {
     gameData = await GetGames();
     oddsMakerOdds = await OddsMaker(gameData, oddsData);
     // Store the newly created odds in the database, and return the odds
+
     await recordOdds(curDate, curHours, oddsMakerOdds);
     const retrievedOdds = await GetFirestoreOdds(curDate, curHours);
     return retrievedOdds;
@@ -266,7 +267,7 @@ const GetFirestoreOdds = async (date, hours) => {
     });
 
     if (ans[1].hours == hours) {
-      // console.log("returning firestore odds", ans);
+      console.log("returning firestore odds", ans);
       return [ans, true];
     }
   }
@@ -313,32 +314,6 @@ const OddsMaker = async (data, fullOdds) => {
       if (data) {
         for (let i = 0; i < data.length; i++) {
           console.log("top level i is", i);
-          let gameTime = new Date(data[i].gameDate);
-          let theCurTime = new Date(Date.now());
-          let difference = gameTime - theCurTime;
-          console.log(
-            "start time is",
-            gameTime,
-            " cur time is",
-            theCurTime,
-            "difference is",
-            gameTime - theCurTime
-          );
-          if (i == 0 && firestoreOdds[0]) {
-            console.log(
-              "testing",
-              firestoreOdds[0][1][curDate][i + 1],
-              "testing2",
-              firestoreOdds[0][1],
-              curDate
-            );
-          }
-          if (difference < 0 && firestoreOdds[0] && firestoreOdds[0][i]) {
-            console.log("setting odds equal to", firestoreOdds[0][i]);
-            object[i] = firestoreOdds[0][i];
-            continue;
-          }
-          //   console.log("data", data[i]);
           object[i] = {
             startTime: "",
             awayMLOdds: "",
@@ -351,6 +326,66 @@ const OddsMaker = async (data, fullOdds) => {
             overOdds: "",
             underOdds: "",
           };
+          console.log("object is", object[i]);
+          let gameTime = new Date(data[i].gameDate);
+          let theCurTime = new Date(Date.now());
+          let difference = gameTime - theCurTime;
+          console.log(
+            "start time is",
+            gameTime,
+            " cur time is",
+            theCurTime,
+            "difference is",
+            gameTime - theCurTime
+          );
+          if (i == 0 && firestoreOdds[0]) {
+            console.log("testing2", firestoreOdds, curDate);
+          }
+          if (difference < 0 && firestoreOdds[0]) {
+            console.log(
+              "setting odds equal to",
+              firestoreOdds[0][1]["odds"][i],
+              "break",
+              firestoreOdds[0],
+              "break2",
+              firestoreOdds[0][1]
+            );
+            let simplifiedOdds = firestoreOdds[0][1]["odds"][i];
+            console.log("simplifiedOdds are", simplifiedOdds);
+            console.log("object 2.0 is", object[i]);
+            object[i].startTime = data[i].gameDate;
+            object[i].awayMLOdds = simplifiedOdds["awayMLOdds"]
+              ? simplifiedOdds["awayMLOdds"]
+              : "";
+            object[i].homeMLOdds = simplifiedOdds["homeMLOdds"]
+              ? simplifiedOdds["homeMLOdds"]
+              : "";
+            object[i].awaySpread = simplifiedOdds["awaySpread"]
+              ? simplifiedOdds["awaySpread"]
+              : "";
+            object[i].homeSpread = simplifiedOdds["homeSpread"]
+              ? simplifiedOdds["homeSpread"]
+              : "";
+            object[i].awaySpreadOdds = simplifiedOdds["awaySpreadOdds"]
+              ? simplifiedOdds["awaySpreadOdds"]
+              : "";
+            object[i].homeSpreadOdds = simplifiedOdds["homeSpreadOdds"]
+              ? simplifiedOdds["homeSpreadOdds"]
+              : "";
+            object[i].total = simplifiedOdds["total"]
+              ? simplifiedOdds["total"]
+              : "";
+            object[i].overOdds = simplifiedOdds["overOdds"]
+              ? simplifiedOdds["overOdds"]
+              : "";
+            object[i].underOdds = simplifiedOdds["underOdds"]
+              ? simplifiedOdds["underOdds"]
+              : "";
+            console.log("object and continuing", object[i]);
+            continue;
+          }
+          //   console.log("data", data[i]);
+
           awayTeam = data[i].teams.away.team.name;
           homeTeam = data[i].teams.home.team.name;
           gameDate = data[i].gameDate;
@@ -460,6 +495,7 @@ const OddsMaker = async (data, fullOdds) => {
       //   console.log(object);
       //   console.log(object[1]);
       if (object != {}) {
+        console.log("returning object", object);
         return object;
       } else {
         return null;
