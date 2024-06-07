@@ -14,16 +14,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 
-import { ScreenStackHeaderConfig } from "react-native-screens";
-import { getLocaleDirection } from "react-native-web/dist/cjs/modules/useLocale";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-// import { getFirestore, doc, setDoc } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDdTzGDjbAUQgy8NRhLdTSfSMbz21-sJu0",
   authDomain: "grouppick-74cf0.firebaseapp.com",
@@ -34,46 +25,12 @@ const firebaseConfig = {
   measurementId: "G-EXLBQ3SP17",
 };
 
-// Initialize Firebase
+// Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
-
-const auth = getAuth();
-const signUp = () => {
-  createUserWithEmailAndPassword(auth, "emaily@email.com", "passwordtest")
-    .then(() => {
-      console.log("user created!");
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-// function GetGames2() {
-//   const curDate = GetFormattedDate();
-//   return fetch(
-//     "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher&startDate=" +
-//       curDate +
-//       "&endDate=" +
-//       curDate
-//   )
-//     .then((res) => {
-//       data = res.json();
-//       return data;
-//     })
-//     .then((data) => {
-//       return data.dates[0].games;
-//     });
-// }
-
 const db = getFirestore(app);
 
-// const userToPicksId = {
-//   L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-//   MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-//   rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-// };
-
 async function createUserDoc(firebaseId, email, firstName, lastName) {
+  // Creates a document for a new user
   await setDoc(doc(db, "users", firebaseId), {
     firebaseID: firebaseId,
     email: email,
@@ -86,80 +43,15 @@ async function createUserDoc(firebaseId, email, firstName, lastName) {
 }
 
 async function logFirestorePicks(date, picks, userId, pickId) {
-  // const res = await updateDoc(
-  //   doc(db, "users", userId, "picks", pickId),
-  //   {
-  //     [date]: picks,
-  //   },
-  //   { merge: true }
-  // );
-
-  //
-  // console.log("userId is", userId);
-
-  // SPECIAL CODE FOR TESTING - logs user's picks for the whole group
-  if (userId == "L2tcqkRGYEEHb20DVbv5") {
-    let userInfo = await getUserInfo(userId);
-    let groupID = userInfo.groupID;
-    // console.log("groupID is", groupID);
-    let groupData = await getGroup(groupID);
-    let members = groupData.members;
-    console.log("members are", members);
-
-    for (let i = 0; i < members.length; i++) {
-      // console.log("member", i, "is", members[i]);
-      let memberId = members[i];
-      // let memberInfo = await getUserInfo(memberId);
-      let memberPicksDoc = await getUserPicksDoc(memberId);
-      // console.log("member", memberId, "picks doc is", memberPicksDoc[0]);
-      await updateDoc(
-        doc(db, "users", memberId, "picks", memberPicksDoc[0]),
-        {
-          [date]: picks,
-        },
-        { merge: true }
-      );
-    }
-  } else {
-    let memberPicksDoc = await getUserPicksDoc(userId);
-    await updateDoc(
-      doc(db, "users", userId, "picks", memberPicksDoc[0]),
-      {
-        [date]: picks,
-      },
-      { merge: true }
-    );
-  }
-  // PLACEHOLDER that logs the same picks for the whole group as the logged-in user's pick
-  // const res1 = await updateDoc(
-  //   doc(
-  //     db,
-  //     "users",
-  //     "MJ53DXM7CXOzljAnlN5N",
-  //     "picks",
-  //     userToPicksId["MJ53DXM7CXOzljAnlN5N"]
-  //   ),
-  //   {
-  //     [date]: picks,
-  //   },
-  //   { merge: true }
-  // );
-  // const res2 = await updateDoc(
-  //   doc(
-  //     db,
-  //     "users",
-  //     "rDjcAkiv1vq2pIzzPNoZ",
-  //     "picks",
-  //     userToPicksId["rDjcAkiv1vq2pIzzPNoZ"]
-  //   ),
-  //   {
-  //     [date]: picks,
-  //   },
-  //   { merge: true }
-  // );
-  // PLACEHOLDER
-
-  // return res;
+  // Logs individual user's picks in their own document
+  let memberPicksDoc = await getUserPicksDoc(userId);
+  await updateDoc(
+    doc(db, "users", userId, "picks", memberPicksDoc[0]),
+    {
+      [date]: picks,
+    },
+    { merge: true }
+  );
 }
 
 async function logGroupFirestoreTranslatedPicks(
@@ -168,23 +60,18 @@ async function logGroupFirestoreTranslatedPicks(
   groupID,
   translatedPicksDocID
 ) {
-  // PLACEHOLDER: group id and translated picks document id hardcoded
-  console.log("picks", picks);
-  const res = await updateDoc(
+  // Logs the translated picks (e.g. "Royals ML" instead of "homeML") into the group's translated picks document
+  await updateDoc(
     doc(db, "groups", groupID, "picks", translatedPicksDocID),
     {
       [date]: picks,
     },
     { merge: true }
   );
-  // PLACEHOLDER
-
-  // return res;
 }
 
 async function logFirestoreData(date, data, groupID, groupDataDocID) {
-  console.log("other data", date, data, groupID, groupDataDocID);
-  // PLACEHOLDER: group id and data document id hardcoded
+  // Logs a day's game data to the group's database ("data" collection)
   const res = await updateDoc(
     doc(db, "groups", groupID, "data", groupDataDocID),
     {
@@ -192,24 +79,24 @@ async function logFirestoreData(date, data, groupID, groupDataDocID) {
     },
     { merge: true }
   );
-  // PLACEHOLDER
-
   return res;
 }
 
 async function getFirestoreData(date, groupID, groupDataDocID) {
+  // Retrieves stored data for the day's MLB games from the group's database
   const docSnap = await getDoc(
     doc(db, "groups", groupID, "data", groupDataDocID)
   );
   if (docSnap.exists()) {
+    console.log("no such document");
     return docSnap.data()[date];
   } else {
-    console.log("no such document");
     return null;
   }
 }
 
 async function getFirestorePicks(date, groupID, groupPicksDocID) {
+  // Retrieves the group's raw picks (e.g. "homeML", "over", etc.) from Firestore and returns them
   const docSnap = await getDoc(
     doc(db, "groups", groupID, "picks", groupPicksDocID)
   );
@@ -226,7 +113,7 @@ async function getTranslatedFirestorePicks(
   groupID,
   translatedPicksDocID
 ) {
-  // console.log("Group id in translated is", groupID);
+  // Retrieves the group's translated picks (e.g. "Royals ML", "o8.5", etc.) from Firestore and returns them
   const docSnap = await getDoc(
     doc(db, "groups", groupID, "picks", translatedPicksDocID)
   );
@@ -239,8 +126,8 @@ async function getTranslatedFirestorePicks(
 }
 
 async function getUserFirestorePicks(date, userId, picksId) {
+  // Retrieves an individual user's picks from Firestore and returns them
   let userPicksDocId = await getUserPicksDoc(userId);
-  // console.log("userpicksdocid is", userPicksDocId);
   const docSnap = await getDoc(
     doc(db, "users", userId, "picks", userPicksDocId[0])
   );
@@ -253,6 +140,7 @@ async function getUserFirestorePicks(date, userId, picksId) {
 }
 
 async function getGroup(groupID) {
+  // Gets a group's information from Firestore and returns it
   const docSnap = await getDoc(doc(db, "groups", groupID));
   if (docSnap.exists()) {
     return docSnap.data();
@@ -263,6 +151,7 @@ async function getGroup(groupID) {
 }
 
 async function getUserInfo(userId) {
+  // Gets a user's information from Firestore and returns it
   const docSnap = await getDoc(doc(db, "users", userId));
   if (docSnap.exists()) {
     return docSnap.data();
@@ -273,6 +162,7 @@ async function getUserInfo(userId) {
 }
 
 async function getUserDoc(firebaseID) {
+  // Gets the user's document from Firestore and returns its id and its data
   usersRef = collection(db, "users");
   const querySnapshot = await getDocs(
     query(usersRef, where("firebaseID", "==", firebaseID, limit(1)))
@@ -283,11 +173,11 @@ async function getUserDoc(firebaseID) {
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
-
   return ans;
 }
 
 async function getGroupPicksDoc(groupID) {
+  // Gets the group's raw picks document from Firestore and returns its id and its data
   groupsRef = collection(db, "groups", groupID, "picks");
   const querySnapshot = await getDocs(
     query(groupsRef, where("type", "==", "genericPicks", limit(1)))
@@ -297,11 +187,11 @@ async function getGroupPicksDoc(groupID) {
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
-
   return ans;
 }
 
 async function getTranslatedPicksDoc(groupID) {
+  // Gets the group's translated picks document from Firestore and returns its id and its data
   groupsRef = collection(db, "groups", groupID, "picks");
   const querySnapshot = await getDocs(
     query(groupsRef, where("type", "==", "translatedPicks", limit(1)))
@@ -311,11 +201,11 @@ async function getTranslatedPicksDoc(groupID) {
     // doc.data() is never undefined for query doc snapshots
     ans = [doc.id, doc.data()];
   });
-
   return ans;
 }
 
 async function getUserPicksDoc(userId) {
+  // Gets individual user's picks document from Firestore and returns its id and its data
   picksRef = collection(db, "users", userId, "picks");
   const querySnapshot = await getDocs(query(picksRef, limit(1)));
   let ans;
@@ -327,6 +217,7 @@ async function getUserPicksDoc(userId) {
 }
 
 async function getGroupDataDoc(groupID) {
+  // Gets the document that stores the day's MLB game data from Firestore and returns its id and data
   picksRef = collection(db, "groups", groupID, "data");
   const querySnapshot = await getDocs(query(picksRef, limit(1)));
   let ans;
@@ -338,11 +229,11 @@ async function getGroupDataDoc(groupID) {
 }
 
 async function checkPickAgreement(date, groupID, groupPicksDocID) {
-  // console.log("Group id in CPA", groupID);
-  console.log("checking pick agreement", date, groupID, groupPicksDocID);
+  // Checks pick agreement for the given group
+
+  // Iniitializes object and array for analyzing and recording group picks
   pickMap = {};
   groupPicks = [];
-
   for (let i = 0; i < 20; i++) {
     pickMap[i] = {
       awayML: 0,
@@ -355,41 +246,45 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
     };
   }
 
+  // Gets group's document
   const docSnap = await getDoc(doc(db, "groups", groupID));
-  // console.log("members are", docSnap.data().members);
+
+  // Goes through each member's picks and adds each game's "vote" to the object recording the number of votes for each pick for each game
   const members = docSnap.data().members;
   for (let i = 0; i < members.length; i++) {
     let memberPicksDoc = await getUserPicksDoc(members[i]);
     userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
-    console.log("user picks are", userPicks);
     if (userPicks) {
+      // Casts the user's "vote" for each game
       for (let j = 0; j < userPicks.length; j++) {
-        // console.log("hi");
-        // pickMap[i] = 1;
-        // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
         pickMap[j][userPicks[j]] = pickMap[j][userPicks[j]] + 1;
       }
     }
   }
+
+  // Figures out which pick for each game got the most votes, and records it as the group's pick if it is a majority
   if (userPicks) {
+    // Goes through each game
     for (let i = 0; i < userPicks.length; i++) {
       let max = 0;
       let maxKey = "";
       obj = pickMap[i];
-      console.log("object is ", obj);
+      // Goes through each pick option for the given game
       for (let pick in obj) {
         if (obj[pick] > max) {
+          // Updates the highest vote-getter
           max = obj[pick];
           maxKey = pick;
         }
       }
+      // Checks if there is a majority, and if so, records the pick
       if (max > members.length / 2) {
         groupPicks[i] = maxKey;
       } else {
         groupPicks[i] = "No Pick";
       }
     }
-    // PLACEHOLDER: groupID hardcoded
+    // Updates the group's pick in Firestore database
     const res = await updateDoc(
       doc(db, "groups", groupID, "picks", groupPicksDocID),
       {
@@ -398,14 +293,16 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
       { merge: true }
     );
   }
-  console.log("returning", groupPicks);
+
+  // Returns the group's picks
   return groupPicks;
 }
 
 async function createGroup(userId, bankroll) {
+  // Creates a new group with passed-in group information
   try {
     const docRef = await addDoc(collection(db, "groups"), {});
-    console.log("created group", docRef.id);
+    // Sets password to the group document's newly assigned id number
     await updateDoc(
       doc(db, "groups", docRef.id),
       {
@@ -417,18 +314,11 @@ async function createGroup(userId, bankroll) {
       },
       { merge: true }
     );
-    console.log("docref id is", docRef.id);
-    const dataRef = await addDoc(
-      collection(db, "groups", docRef.id, "data"),
-      {}
-    );
-    await updateDoc(
-      doc(db, "groups", docRef.id, "data", dataRef.id),
-      {
-        type: "translatedPicks",
-      },
-      { merge: true }
-    );
+
+    // Adds a new data collection and document for the group
+    await addDoc(collection(db, "groups", docRef.id, "data"), {});
+
+    // Adds a new picks collection and creates new documents for generic picks and translated picks
     const picksRef = await addDoc(
       collection(db, "groups", docRef.id, "picks"),
       {}
@@ -452,22 +342,20 @@ async function createGroup(userId, bankroll) {
       { merge: true }
     );
 
+    // User that created group is set to join the group
     await joinGroup(docRef.id, userId);
     return docRef.id;
   } catch (e) {
     console.error(e);
   }
 }
-// firebase.initializeApp(configuration);
 
 async function joinGroup(groupID, userId) {
-  // const docRef = await addDoc(collection(db, "groups"), {});
-
-  console.log("member", userId, "is joining group", groupID);
-
+  // Passed-in user joins the passed-in group
   const retrievedDoc = await getDoc(doc(db, "groups", groupID));
   let members = retrievedDoc.data().members;
 
+  // Adds user to the group's members list and updates it
   try {
     if (members) {
       members.push(userId);
@@ -482,6 +370,7 @@ async function joinGroup(groupID, userId) {
       { merge: true }
     );
 
+    // Adds the group to the user's individual document
     await updateDoc(
       doc(db, "users", userId),
       {
@@ -497,9 +386,10 @@ async function joinGroup(groupID, userId) {
 }
 
 async function recordOdds(date, hours, odds) {
-  console.log("recording odds", date, hours, odds);
+  // Records the odds for the given hour of the given date
   oddsRef = collection(db, "odds");
   let ans;
+  // Gets the day's odds if they already exist
   const querySnapshot = await getDocs(
     query(oddsRef, where("date", "==", date, limit(1)))
   );
@@ -508,17 +398,8 @@ async function recordOdds(date, hours, odds) {
       // doc.data() is never undefined for query doc snapshots
       ans = [doc.id, doc.data()];
     });
-    console.log(
-      "got doc",
-      ans[0],
-      ans[1],
-      "hours",
-      ans[1].hours,
-      ans[1].hours == hours
-    );
     // Only updates odds if odds for this hour have not been already recorded
     if (ans[1].hours != hours) {
-      console.log("updating odds for hour", hours, odds, date, ans);
       await updateDoc(
         doc(db, "odds", ans[0]),
         {
@@ -529,12 +410,11 @@ async function recordOdds(date, hours, odds) {
         { merge: true }
       );
     } else {
-      console.log("don't need to update odds");
+      //  Not need to update odds if they've already been recorded this hour
     }
   } else {
-    // Create odds collection and add odds
+    // No odds yet for the day, so create odds collection and add odds
     const docRef = await addDoc(collection(db, "odds"), {});
-    console.log("created odds", docRef.id, odds, date, hours);
     await updateDoc(
       doc(db, "odds", docRef.id),
       {
@@ -546,8 +426,6 @@ async function recordOdds(date, hours, odds) {
     );
   }
 }
-
-// const db = firebase.firestore();
 
 export {
   app,
@@ -562,7 +440,6 @@ export {
   getTranslatedFirestorePicks,
   logFirestoreData,
   getFirestoreData,
-  signUp,
   getUserDoc,
   getUserPicksDoc,
   getGroupPicksDoc,
@@ -573,25 +450,3 @@ export {
   joinGroup,
   recordOdds,
 };
-
-// Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDdTzGDjbAUQgy8NRhLdTSfSMbz21-sJu0",
-//   authDomain: "grouppick-74cf0.firebaseapp.com",
-//   projectId: "grouppick-74cf0",
-//   storageBucket: "grouppick-74cf0.appspot.com",
-//   messagingSenderId: "89195551212",
-//   appId: "1:89195551212:web:d9e338711c2baf3c0708c9",
-//   measurementId: "G-EXLBQ3SP17"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);

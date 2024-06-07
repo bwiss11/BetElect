@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { React, useState, useEffect } from "react";
-import { signUp, signIn, createUserDoc } from "../backend/firestore";
+import { createUserDoc } from "../backend/firestore";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
