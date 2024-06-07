@@ -1,18 +1,9 @@
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-  Pressable,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
 import { useEffect, useState } from "react";
 import { GetGames, GetFormattedDate, HandleOdds } from "../backend/functions";
 
 import {
-  getUserInfo,
   checkPickAgreement,
-  logGroupFirestoreTranslatedPicks,
   getTranslatedFirestorePicks,
   getFirestoreData,
   logFirestoreData,
@@ -24,16 +15,9 @@ import {
   getGroup,
 } from "../backend/firestore";
 import { GroupPicksGame } from "../components/GroupPicksGame";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const GroupPicks = () => {
-  const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
@@ -51,12 +35,12 @@ const GroupPicks = () => {
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+      // User is signed in and their picks document id has not yet been recorded
+      // Gets user's picks document
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         if (res) {
-          console.log("res is", res);
+          // Set state for UserID, groupID, and picksDocID
           setUserID(res[0]);
           setGroupID(res[1].groupID);
           getUserPicksDoc(res[0]).then((res) => {
@@ -64,21 +48,16 @@ const GroupPicks = () => {
           });
         }
       });
-
-      // ...
     } else {
       // User is signed out
-      // ...
     }
   });
 
-  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
   const curDate = GetFormattedDate();
 
   useEffect(() => {
+    // Gets odds either from database or from an API call, sets odds-related state variables
     HandleOdds().then((res) => {
-      console.log("res from handleOdds", res);
-      console.log("odds setting to", res[0][1]["odds"]);
       setOdds(res[0][1]["odds"]);
       setOddsBool(true);
     });
@@ -89,6 +68,7 @@ const GroupPicks = () => {
   }, [groupPicks]);
 
   useEffect(() => {
+    // Gets group-related data and sets group-related state variables after the groupID has been set
     if (groupID) {
       getGroupPicksDoc(groupID).then((res) => {
         setGroupPicksDocID(res[0]);
@@ -109,6 +89,7 @@ const GroupPicks = () => {
   }, [groupID]);
 
   useEffect(() => {
+    // Checks for pick agreement amongst the group members after the group's pick document has been set
     if (groupPicksDocID) {
       checkPickAgreement(curDate, groupID, groupPicksDocID).then((res) => {
         setGroupPicks(res);
@@ -117,6 +98,7 @@ const GroupPicks = () => {
   }, [groupPicksDocID]);
 
   useEffect(() => {
+    // Gets the group's translated picks and sets the associated state variable, or creates a blank array if there are no translated picks yet
     if (translatedPicksDocID) {
       getTranslatedFirestorePicks(curDate, groupID, translatedPicksDocID).then(
         (res) => {
@@ -135,6 +117,7 @@ const GroupPicks = () => {
   }, [translatedPicksDocID]);
 
   useEffect(() => {
+    // Retrieves the group's logged MLB game data from either the Firestore database or an API call
     if (groupDataDocID) {
       getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
@@ -150,6 +133,7 @@ const GroupPicks = () => {
   }, [groupDataDocID]);
 
   useEffect(() => {
+    // Creates a blank temmplate for the group's picks if it hasn't already been set
     if (!groupPicks) {
       let groupPicksBlank = [];
       for (let i = 0; i < data.length; i++) {
@@ -161,33 +145,6 @@ const GroupPicks = () => {
 
   useEffect(() => {}, [groupPicks]);
 
-  useEffect(() => {
-    console.log(
-      "check these",
-      data,
-      "odds",
-      odds,
-      "oddsBool",
-      oddsBool,
-      "translatedPicks",
-      translatedPicks,
-      "groupID",
-      groupID,
-      "translateDPicksDocID",
-      translatedPicksDocID,
-      "group",
-      group
-    );
-  }, [
-    data,
-    odds,
-    oddsBool,
-    translatedPicks,
-    groupID,
-    translatedPicksDocID,
-    group,
-  ]);
-
   if (
     data &&
     odds &&
@@ -197,8 +154,6 @@ const GroupPicks = () => {
     translatedPicksDocID &&
     group
   ) {
-    // console.log("log of odds", odds, picks);
-    // console.log("data is", data);
     return (
       <>
         <ScrollView style={styles.outermostContainer} stickyHeaderIndices={[]}>
@@ -279,11 +234,6 @@ const GroupPicks = () => {
             ))}
           </View>
         </ScrollView>
-        {/* <View style={styles.runButtonContainer}>
-          <Pressable style={styles.runButton}>
-            <Text style={styles.runButtonText}>Check Picks</Text>
-          </Pressable>
-        </View> */}
       </>
     );
   }
@@ -299,8 +249,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     marginTop: 25,
-    //     backgroundImage:
-    //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
   },
   text: {
     color: "white",
@@ -334,7 +282,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(60, 90, 190)",
     borderWidth: 1,
     alignItems: "center",
-    // padding: 20,
     justifyContent: "center",
     padding: 10,
   },
