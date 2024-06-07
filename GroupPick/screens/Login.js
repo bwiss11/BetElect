@@ -1,14 +1,11 @@
 import {
-  SafeAreaView,
   View,
   Text,
   Pressable,
   StyleSheet,
-  Alert,
   TextInput,
   KeyboardAvoidingView,
   Button,
-  ScrollView,
 } from "react-native";
 import { React, useState, useEffect } from "react";
 import { createUserDoc } from "../backend/firestore";
@@ -20,9 +17,9 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { NavigationHelpersContext } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDdTzGDjbAUQgy8NRhLdTSfSMbz21-sJu0",
   authDomain: "grouppick-74cf0.firebaseapp.com",
@@ -35,8 +32,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-const auth = getAuth();
 
 const AuthScreen = ({
   email,
@@ -160,23 +155,8 @@ const AuthScreen = ({
               </Pressable>
             </View>
           )}
-
-          {/* <Button
-          title="Bypass Login"
-          onPress={() => navigation.navigate("Tabs")}
-        ></Button> */}
         </View>
       </View>
-    </View>
-  );
-};
-
-const AuthenticatedScreen = ({ user, handleAuthentication }) => {
-  return (
-    <View style={styles.authContainer}>
-      <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.emailText}>{user.email}</Text>
-      <Button title="Logout" onPress={handleAuthentication} color="#e74c3c" />
     </View>
   );
 };
@@ -189,106 +169,55 @@ const Login = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const auth = getAuth(app);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     // User is signed in, see docs for a list of available properties
-  //     // https://firebase.google.com/docs/reference/js/auth.user
-  //     const uid = user.uid;
-  //     console.log("current user on Login page is", uid);
-  //     // ...
-  //     // handleAuthentication();
-  //     // navigation.navigate("Tabs");
-  //   } else {
-  //     // User is signed out
-  //     // ...
-  //   }
-  // });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
-
     return () => unsubscribe();
   }, [auth]);
 
-  // useEffect(() => {
-  //   console.log("should be alerting");
-  //   Alert.alert("Alert Title", "My Alert Msg", [
-  //     {
-  //       text: "Cancel",
-  //       onPress: () => console.log("Cancel Pressed"),
-  //       style: "cancel",
-  //     },
-  //     { text: "OK", onPress: () => console.log("OK Pressed") },
-  //   ]);
-  // }, []);
-
   const handleAuthentication = async () => {
+    // Change the logged in/logged out state of the user
     try {
       if (user) {
         // If user is already authenticated, log out
-        console.log("User logged out!");
         await signOut(auth);
       } else {
         // Sign in or sign up
         if (isLogin) {
-          // Sign in
+          // Signs the user in
           try {
             await signInWithEmailAndPassword(auth, email, password);
-            // console.log("User signed in, navigating to tabs");
-            // navigation.navigate("Tabs");
           } catch (error) {
             // console.log("ERROR is", error);
             console.log("invalid credentials");
             setEmail("");
             setPassword("");
-            // Alert.alert({
-            //   title: "Invalid Credentials",
-            //   message: "Invalid username and password combination",
-            //   buttons: [
-            //     {
-            //       text: "OK",
-            //     },
-            //   ],
-            // });
           }
         } else {
-          // Sign up
+          // Signs the user up by creating them a new account in Firebase Auth
           res = await createUserWithEmailAndPassword(
             auth,
             email,
             password
           ).then((data) => {
-            console.log("uid", data.user.uid);
-            console.log("User created!");
             createUserDoc(data.user.uid, email, firstName, lastName);
             navigation.navigate("Tabs");
           });
         }
       }
     } catch (error) {
-      // console.log("Erroemail and password", email, password);
+      // Couldn't authenticate user
       console.error("Authentication error:", error.message);
     }
-    console.log("returning with user as", user);
   };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       {user ? (
-        // Show user's email if user is authenticated
-        // <AuthenticatedScreen
-        //   user={user}
-        //   handleAuthentication={handleAuthentication}
-        // />
         navigation.navigate("Tabs")
       ) : (
-        // <AuthenticatedScreen
-        //   user={user}
-        //   handleAuthentication={handleAuthentication}
-        // />
-        // Show sign-in or sign-up form if user is not authenticated
         <AuthScreen
           email={email}
           setEmail={setEmail}
@@ -317,8 +246,6 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     justifyContent: "center",
-    // alignItems: "center",
-    // alignContent: "center",
     backgroundColor: "black",
   },
 
@@ -435,25 +362,4 @@ const styles = StyleSheet.create({
     maxHeight: 20,
   },
   clickableText: { fontWeight: 700 },
-
-  //   container: {
-  //     flex: 1,
-  //     width: "100%",
-  //     backgroundColor: "black",
-  //     alignItems: "center",
-  //     paddingBottom: 100,
-  //   },
 });
-
-// const Login = ({ navigation }) => {
-//   return (
-//     <View style={styles.outermostContainer}>
-//       <Pressable onPress={() => navigation.navigate("Tabs")}>
-//         <Text style={styles.buttonText}>Login Button</Text>
-//       </Pressable>
-//       <Pressable onPress={signUp()}>
-//         <Text style={styles.buttonText}>Test Button</Text>
-//       </Pressable>
-//     </View>
-//   );
-// };
