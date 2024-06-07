@@ -7,7 +7,6 @@ import { TrackerGameStatus } from "./TrackerGameStatus";
 import {
   GetTeamData,
   GetLiveData,
-  GetLocalPicks,
   GetFormattedDate,
 } from "../backend/functions";
 import { useEffect, useState } from "react";

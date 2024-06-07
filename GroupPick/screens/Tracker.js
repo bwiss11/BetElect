@@ -1,21 +1,6 @@
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-  Pressable,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
 import { useEffect, useState } from "react";
-import {
-  GetGames,
-  StoreData,
-  GetFormattedDate,
-  GetLocalOdds,
-  GetLiveData,
-  GetTeamData,
-  HandleOdds,
-} from "../backend/functions";
+import { GetGames, GetFormattedDate, HandleOdds } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
 import {
   getUserFirestorePicks,

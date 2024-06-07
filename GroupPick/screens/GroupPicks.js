@@ -7,13 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import { useEffect, useState } from "react";
-import {
-  GetGames,
-  StoreData,
-  GetFormattedDate,
-  GetLocalPicks,
-  HandleOdds,
-} from "../backend/functions";
+import { GetGames, GetFormattedDate, HandleOdds } from "../backend/functions";
 
 import {
   getUserInfo,

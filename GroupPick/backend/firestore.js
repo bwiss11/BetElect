@@ -113,7 +113,7 @@ async function getTranslatedFirestorePicks(
   groupID,
   translatedPicksDocID
 ) {
-  // Retrieves the group's translated picks (e.g. "Royals ML", "o8.5", etc.) from Firestore and returns them
+  // Retrieves the group's translated picks (e.g. "Royals ML", "Under 8.5", etc.) from Firestore and returns them
   const docSnap = await getDoc(
     doc(db, "groups", groupID, "picks", translatedPicksDocID)
   );
