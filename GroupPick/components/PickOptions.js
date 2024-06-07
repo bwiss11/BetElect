@@ -7,11 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import {
-  UpdateLocalPicks,
-  GetLocalPicks,
-  GetFormattedDate,
-} from "../backend/functions";
+import { GetFormattedDate } from "../backend/functions";
 import { getUserFirestorePicks } from "../backend/firestore";
 
 // const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
@@ -24,21 +20,6 @@ const PickOptions = (props) => {
   const [userPick, setUserPick] = useState("");
   // picksCopy = GetLocalPicks(curDate, "123456");
   picksCopy = getUserFirestorePicks(curDate, props.userID);
-  useEffect(() => {
-    if (userPick) {
-      UpdateLocalPicks(
-        props.index,
-        userPick,
-        picksCopy,
-        curDate,
-        "123456",
-        props.numberOfGames,
-        props.userID,
-        props.picksDocID,
-        props.groupID
-      );
-    }
-  }, [userPick]);
 
   useEffect(() => {
     // console.log(
