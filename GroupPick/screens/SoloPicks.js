@@ -1,11 +1,4 @@
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-  Pressable,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
 import { useEffect, useState } from "react";
 import {
   GetGames,
@@ -27,7 +20,6 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const SoloPicks = () => {
-  const [name, setName] = useState("defaultName");
   const [data, setData] = useState("");
   const [odds, setOdds] = useState("");
   const [oddsBool, setOddsBool] = useState(false);
@@ -38,16 +30,16 @@ const SoloPicks = () => {
   const [groupDataDocID, setGroupDataDocID] = useState("");
   const auth = getAuth();
 
-  const oddsHours = GetCurrentHours();
   const curDate = GetFormattedDate();
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+      // User is signed in and their picks document id has not yet been recorded
+      // Gets user's picks document
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         if (res) {
+          // Set state for UserID, groupID, and picksDocID
           setUserID(res[0]);
           if (res[1].groupID) {
             setGroupID(res[1].groupID);
@@ -60,40 +52,27 @@ const SoloPicks = () => {
           });
         }
       });
-
-      // ...
     } else {
       // User is signed out
-      // ...
     }
   });
-  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
-
-  // useEffect(() => {
-  //   console.log("pickDoc ID is", picksDocID);
-  // }, [picksDocID]);
-
-  // useEffect(() => {
-  //   console.log("user ID is", userID);
-  // }, [userID]);
 
   useEffect(() => {
-    console.log("calling handle odds from SoloPicks");
+    // Gets odds either from database or from an API call, sets odds-related state variables
     HandleOdds().then((res) => {
-      console.log("res is", res[0][1]["odds"]);
       setOdds(res[0][1]["odds"]);
       setOddsBool(true);
     });
   }, []);
 
   useEffect(() => {
+    // Once the groupID has been set, sets the group's data document ID and the day's game data
     if (groupID && groupID != "none") {
       getGroupDataDoc(groupID).then((res) => {
         setGroupDataDocID(res[0]);
       });
     } else if (groupID == "none") {
       GetGames().then((resGG) => {
-        // logFirestoreData(curDate, resGG, groupDataDocID);
         setData(resGG);
       });
     }
@@ -101,6 +80,7 @@ const SoloPicks = () => {
 
   useEffect(() => {
     if (groupDataDocID) {
+      // Logs MLB game data to Firestore if it hasn't already been logged and sets the state variable for data
       getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
           GetGames().then((resGG) => {
@@ -115,12 +95,8 @@ const SoloPicks = () => {
   }, [groupDataDocID]);
 
   useEffect(() => {
-    if (data) {
-    }
-  }, [data]);
-
-  useEffect(() => {
     if (userID) {
+      // Gets the individual user's picks and sets the state variable accordingly
       getUserFirestorePicks(curDate, userID).then((res) => {
         setPicks(res);
       });
@@ -129,7 +105,7 @@ const SoloPicks = () => {
 
   if (data && odds && oddsBool && userID && picksDocID && groupID) {
     if (groupID == "none") {
-      console.log("no Group");
+      // Prompts the user to join a group if they haven't already
       return (
         <View style={styles.placeholder}>
           <Text style={styles.text}>
@@ -227,8 +203,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     marginTop: 25,
-    //     backgroundImage:
-    //       "linear-gradient(to bottom, rgb(60, 90, 190, 100), rgb(150, 150, 255, 100))",
   },
   placeholder: {
     height: "100%",
