@@ -227,6 +227,74 @@ async function getGroupDataDoc(groupID) {
   });
   return ans;
 }
+// async function checkPickAgreement(date, groupID, groupPicksDocID) {
+//   // console.log("Group id in CPA", groupID);
+//   console.log("checking pick agreement", date, groupID, groupPicksDocID);
+//   pickMap = {};
+//   groupPicks = [];
+//   for (let i = 0; i < 20; i++) {
+//     pickMap[i] = {
+//       awayML: 0,
+//       awaySpread: 0,
+//       homeML: 0,
+//       homeSpread: 0,
+//       over: 0,
+//       under: 0,
+//       optOut: 0,
+//     };
+//   }
+//   const docSnap = await getDoc(doc(db, "groups", groupID));
+//   // console.log("members are", docSnap.data().members);
+//   const members = docSnap.data().members;
+//   let length = 0;
+//   for (let i = 0; i < members.length; i++) {
+//     let memberPicksDoc = await getUserPicksDoc(members[i]);
+//     userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
+//     if (userPicks) {
+//       length = userPicks.length;
+//       for (let j = 0; j < userPicks.length; j++) {
+//         // console.log("hi");
+//         // pickMap[i] = 1;
+//         // console.log("current value for that pick is", pickMap[i][userPicks[i]]);
+//         pickMap[j][userPicks[j]] = pickMap[j][userPicks[j]] + 1;
+//       }
+//     }
+//   }
+//   if (pickMap) {
+//     for (let i = 0; i < length; i++) {
+//       console.log("i is", i);
+//       obj = pickMap[i];
+//       console.log("obj is", obj);
+//       let max = 0;
+//       let maxKey = "";
+
+//       obj = pickMap[i];
+//       console.log("object is ", obj);
+//       for (let pick in obj) {
+//         if (obj[pick] > max) {
+//           max = obj[pick];
+//           maxKey = pick;
+//         }
+//       }
+//       groupPicks[i] = maxKey;
+//       if (max > members.length / 2) {
+//         groupPicks[i] = maxKey;
+//       } else {
+//         groupPicks[i] = "No Pick";
+//       }
+//     }
+//     // PLACEHOLDER: groupID hardcoded
+//     const res = await updateDoc(
+//       doc(db, "groups", groupID, "picks", groupPicksDocID),
+//       {
+//         [date]: groupPicks,
+//       },
+//       { merge: true }
+//     );
+//   }
+//   console.log("returning", groupPicks);
+//   return groupPicks;
+// }
 
 async function checkPickAgreement(date, groupID, groupPicksDocID) {
   // Checks pick agreement for the given group
@@ -251,10 +319,14 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
 
   // Goes through each member's picks and adds each game's "vote" to the object recording the number of votes for each pick for each game
   const members = docSnap.data().members;
+  let length = 0;
   for (let i = 0; i < members.length; i++) {
     let memberPicksDoc = await getUserPicksDoc(members[i]);
     userPicks = await getUserFirestorePicks(date, members[i], memberPicksDoc);
     if (userPicks) {
+      if (!length) {
+        length = userPicks.length;
+      }
       // Casts the user's "vote" for each game
       for (let j = 0; j < userPicks.length; j++) {
         pickMap[j][userPicks[j]] = pickMap[j][userPicks[j]] + 1;
@@ -263,9 +335,10 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
   }
 
   // Figures out which pick for each game got the most votes, and records it as the group's pick if it is a majority
-  if (userPicks) {
+  // If any of the users made picks, length will be set to something other than 0
+  if (length) {
     // Goes through each game
-    for (let i = 0; i < userPicks.length; i++) {
+    for (let i = 0; i < length; i++) {
       let max = 0;
       let maxKey = "";
       obj = pickMap[i];
@@ -293,7 +366,6 @@ async function checkPickAgreement(date, groupID, groupPicksDocID) {
       { merge: true }
     );
   }
-
   // Returns the group's picks
   return groupPicks;
 }
