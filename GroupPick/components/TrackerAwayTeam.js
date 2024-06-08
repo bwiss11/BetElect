@@ -11,12 +11,13 @@ import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 
 const TrackerAwayTeam = (props) => {
-  // console.log("TAT props are:", props);
+  // Away team bucket for Tracker tab
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
   const [logo, setLogo] = useState("");
 
   useEffect(() => {
+    // Gets team and starter info/stats and sets related state variables
     if (props.starterID) {
       GetPitcherStats(props.starterID).then((res) => {
         if (res) {
@@ -28,28 +29,24 @@ const TrackerAwayTeam = (props) => {
     }
     GetTeamData(props.teamID).then((res) => {
       setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
-      // console.log("Team data set to", [
-      //   res.teams[0].franchiseName,
-      //   res.teams[0].clubName,
-      // ]);
     });
-    // GetTeamLogo(props.teamID).then((res) => {
-    //   console.log("team logo:", res.toString());
-    //   setLogo(res.toString());
-    //   // setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
-    // });
   }, []);
 
+  // Gets team's logo from ESPN's API based on team id
   let imageLink =
     "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/" +
     logoMap[props.teamID] +
     ".png";
 
+  // Special handling of team logos that are too dark to see with a black background
   const tooDarkTeamIDs = new Set([115, 135, 147]);
 
   function dynamicImageStyle() {
+    // Sets the styling of the logo based on game status
     if (props.status == "Final" || props.detailedState == "Postponed") {
+      // Game is finalized and should be darkened
       if (tooDarkTeamIDs.has(props.teamID)) {
+        // Special styling for team logos that are too dark to see on black background
         return {
           height: 40,
           width: 40,
@@ -58,7 +55,7 @@ const TrackerAwayTeam = (props) => {
           tintColor: "rgba(255, 255, 255, 1)",
         };
       } else if (props.teamID == 134) {
-        // Pirates logo should be yellow
+        // Pirates logo special handling - should be yellow
         return {
           height: 40,
           width: 40,
@@ -67,6 +64,7 @@ const TrackerAwayTeam = (props) => {
           tintColor: "rgba(253, 184, 39, 1)",
         };
       } else {
+        // Styling for logos that are still visible with black background
         return {
           height: 40,
           width: 40,
@@ -75,6 +73,7 @@ const TrackerAwayTeam = (props) => {
         };
       }
     } else {
+      // Styling for logos that are still visible with black background
       return {
         height: 40,
         width: 40,
@@ -85,6 +84,7 @@ const TrackerAwayTeam = (props) => {
   }
 
   function textStyle() {
+    // Sets the styling of text based on game status
     if (props.status == "Final" || props.detailedState == "Postponed") {
       return {
         fontWeight: "bold",

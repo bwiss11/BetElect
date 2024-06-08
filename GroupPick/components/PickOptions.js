@@ -1,51 +1,24 @@
 import { React, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
-
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { GetFormattedDate } from "../backend/functions";
 import { getUserFirestorePicks } from "../backend/firestore";
 
-// const jsonPicks = await JSON.parse(AsyncStorage.getItem("picks"));
-
 const PickOptions = (props) => {
-  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
+  // Clickable pick options to be displayed for each game on Solo tab
+  const [userPick, setUserPick] = useState("");
   const curDate = GetFormattedDate();
 
-  // console.log("picks are", JSON.parse(AsyncStorage.getItem("picks")));
-  const [userPick, setUserPick] = useState("");
-  // picksCopy = GetLocalPicks(curDate, "123456");
-  picksCopy = getUserFirestorePicks(curDate, props.userID);
-
   useEffect(() => {
-    // console.log(
-    //   "pick should be getting set as ",
-    //   picksCopy[props.index],
-    //   picksCopy
-    // );
-    // GetLocalPicks(curDate, "123456").then((res) => {
-    //   if (res && res[props.index]) {
-    //     setUserPick(res[props.index]);
-    //   }
-    // });
-
+    // Retrieves user's picks from Firestore and sets the related state variable
     picksCopy = getUserFirestorePicks(curDate, props.userID).then((res) => {
       if (res && res[props.index]) {
         setUserPick(res[props.index]);
       }
     });
-    // if (picksCopy[props.index]) {
-    //   console.log("setting user pick to:", picksCopy[props.index]);
-    //   setUserPick(picksCopy[props.index]);
-    // }
   }, []);
 
-  // console.log("in pick options");
   if (props.status != "Postponed") {
+    // Special handling if the game has been postponed
     return (
       <View style={styles.outerContainer}>
         <View style={styles.container}>
@@ -201,6 +174,7 @@ const PickOptions = (props) => {
       </View>
     );
   } else {
+    // Return statement for all games that have not been postponed
     return (
       <View style={styles.outerContainer}>
         <View style={styles.container}>
@@ -210,14 +184,12 @@ const PickOptions = (props) => {
           <Pressable style={styles.button25MiddleLeft}>
             <Text style={styles.text}>-</Text>
           </Pressable>
-
           <Pressable style={styles.button25LeftRight}>
             <Text style={styles.text}>-</Text>
           </Pressable>
           <Pressable style={styles.button25RightLeft}>
             <Text style={styles.text}>-</Text>
           </Pressable>
-
           <Pressable style={styles.button25MiddleRight}>
             <Text style={styles.text}>-</Text>
           </Pressable>
@@ -234,6 +206,7 @@ const PickOptions = (props) => {
     );
   }
 };
+
 const styles = StyleSheet.create({
   outerContainer: {
     width: "100%",
@@ -242,9 +215,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
-    // justifyContent: "space-between",
     flex: 1,
-    // flexWrap: "wrap",
   },
   buttons: {
     justifyContent: "center",

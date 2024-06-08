@@ -1,41 +1,23 @@
 import { React, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { Avatar } from "react-native-paper";
 import { getUserInfo, getUserFirestorePicks } from "../backend/firestore";
 import { GetFormattedDate } from "../backend/functions";
 
 const GroupGameAvatar = (props) => {
-  // console.log("gga props", props);
   const [picUrl, setPicUrl] = useState("");
   const [pick, setPick] = useState("");
 
   const curDate = GetFormattedDate();
 
   useEffect(() => {
+    // Gets the user's profile pic url and sets its associated state variable
     getUserInfo(props.userId).then((res) => {
       setPicUrl(res.picUrl);
     });
 
-    // PLACEHOLDER
-    const userToPicksId = {
-      L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-      MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-      rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-    };
-    //
-
-    getUserFirestorePicks(
-      curDate,
-      props.userId,
-      userToPicksId[props.userId]
-    ).then((res) => {
-      // console.log(props.userId, "retrieved picks in GGA are", res);
+    // Gets individual user's Firestore picks and sets the pick for this particular game
+    getUserFirestorePicks(curDate, props.userId).then((res) => {
       if (res && res[props.index] && res[props.index]) {
         setPick(res[props.index]);
       }
@@ -43,13 +25,15 @@ const GroupGameAvatar = (props) => {
   }, []);
 
   function dynamicOpacity(pick) {
+    // If the user has made their pick, their avatar will be lit up
     if (pick) {
       return {
         opacity: 1,
       };
     } else {
+      // If the user has not made their pick for this game, their avatar will be greyed out
       return {
-        opacity: 0.5,
+        opacity: 0.35,
       };
     }
   }

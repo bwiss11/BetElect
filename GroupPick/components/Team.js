@@ -11,12 +11,12 @@ import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 
 const Team = (props) => {
+  // Team buckets to be displayed on Solo tab
   const [pitcherStats, setPitcherStats] = useState("");
   const [teamData, setTeamData] = useState("");
-  const [logo, setLogo] = useState("");
-  // console.log("Team props", props, props.starterID);
 
   useEffect(() => {
+    // Gets team and starter info/stats and sets related state variables
     if (props.starterID) {
       GetPitcherStats(props.starterID).then((res) => {
         if (res) {
@@ -28,24 +28,17 @@ const Team = (props) => {
     }
     GetTeamData(props.teamID).then((res) => {
       setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
-      // console.log("Team data set to", [
-      //   res.teams[0].franchiseName,
-      //   res.teams[0].clubName,
-      // ]);
     });
-    // GetTeamLogo(props.teamID).then((res) => {
-    //   console.log("team logo:", res.toString());
-    //   setLogo(res.toString());
-    //   // setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
-    // });
   }, []);
 
+  // Gets team's logo from ESPN's API based on team id
   let imageLink =
     "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/" +
     logoMap[props.teamID] +
     ".png";
 
   function dynamicStyle(teamType) {
+    // Sets the styling of the team bucket to be displayed depending if home (left) or away (right) team
     if (teamType == "away") {
       return {
         borderTopWidth: 2,
@@ -144,7 +137,6 @@ const styles = StyleSheet.create({
   },
   teamInfo: {
     color: "red",
-    // textTransform: "uppercase",
     alignItems: "center",
     margin: 5,
     marginTop: 10,

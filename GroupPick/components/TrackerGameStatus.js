@@ -1,15 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { PickOptions } from "./PickOptions";
-import { TrackerAwayTeam } from "./TrackerAwayTeam";
-import { GetTeamData, GetLiveData } from "../backend/functions";
-import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 const TrackerGameStatus = (props) => {
-  // console.log("tGS props", props);
-
+  // Game status for game buckets in Tracker tab - shows start time if not started yet, inning if started, "Final"/"Postponed" if finished/never started
   function textStyle() {
+    // Styles text based on game's status
     if (props.gameState == "Final" || props.detailedState == "Postponed") {
       return {
         color: "rgba(255,255,255, 0.8)",
@@ -23,7 +19,10 @@ const TrackerGameStatus = (props) => {
       };
     }
   }
+
+  // If game has started
   if (props.gameStatus != "Preview" && props.status.slice(0, 3) == "Top") {
+    // If top of inning
     return (
       <View style={styles.container}>
         <AntDesign name="caretup" size={18} color="black" paddingTop={5} />
@@ -31,6 +30,7 @@ const TrackerGameStatus = (props) => {
       </View>
     );
   } else if (
+    // If bottom of inning
     props.gameStatus != "Preview" &&
     props.status.slice(0, 3) == "Bot"
   ) {
@@ -42,6 +42,7 @@ const TrackerGameStatus = (props) => {
     );
   }
   return (
+    // If game is not currently in progress
     <Text style={textStyle()}>
       {props.status == "Final"
         ? props.status

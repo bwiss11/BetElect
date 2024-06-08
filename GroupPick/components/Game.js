@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  // console.log("game props", props);
+  // Individual game buckets for SoloPicks tab
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
@@ -77,8 +77,6 @@ const styles = StyleSheet.create({
   },
   pickOptionsContainer: {
     width: "100%",
-    // backgroundColor: "black",
-    // height: "30%",
   },
   time: {
     padding: 5,

@@ -1,22 +1,16 @@
 import { React, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
-import { getUserInfo, getUserFirestorePicks } from "../backend/firestore";
-import { GetFormattedDate } from "../backend/functions";
+import { View, Text, StyleSheet } from "react-native";
+import { Avatar } from "react-native-paper";
+import { getUserInfo } from "../backend/firestore";
 
 const MyGroupAvatar = (props) => {
+  // Avatars to be displayed for group members on Profile page
   const [picUrl, setPicUrl] = useState("");
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
+    // Gets user information from Firestore and sets related state variables
     getUserInfo(props.userId).then((res) => {
-      console.log("avatar info is", res);
       setFirstName(res.firstName);
       setPicUrl(res.picUrl);
     });

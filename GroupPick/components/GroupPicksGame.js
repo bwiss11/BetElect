@@ -8,13 +8,11 @@ import { getGroup } from "../backend/firestore";
 import { GroupGamePick } from "./GroupGamePick";
 
 const GroupPicksGame = (props) => {
-  // console.log("gpg props", props);
-
+  // Group tab's game bucket to be displayed
   const [members, setMembers] = useState("");
 
-  let myTime = new Date(props.time);
-
   useEffect(() => {
+    // Gets group members from Firestore
     getGroup(props.groupID).then((res) => {
       setMembers(res.members);
     });
@@ -49,9 +47,7 @@ const GroupPicksGame = (props) => {
             starterID={props.homeStarterPlayerID}
           />
         </View>
-        {/* <View style={styles.pickHolder}> */}
         <GroupGamePick {...props}></GroupGamePick>
-        {/* </View> */}
       </View>
     );
   }

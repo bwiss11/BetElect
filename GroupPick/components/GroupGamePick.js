@@ -1,30 +1,25 @@
 import { React, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { TranslatePick, GetFormattedDate } from "../backend/functions";
 import { logGroupFirestoreTranslatedPicks } from "../backend/firestore";
-import { PickOptions } from "./PickOptions";
 
 const curDate = GetFormattedDate();
 const GroupGamePick = (props) => {
   useEffect(() => {
+    // Sets the group's pick
     if (props.translatedPicks && props.translatedPicks[props.index]) {
       setGroupPick(props.translatedPicks[props.index]);
     }
   }, []);
 
+  // Initially pick is shown as a dash
   const [groupPick, setGroupPick] = useState("-");
+
   return (
     <View style={styles.container}>
       <Pressable
         style={styles.checkButton}
         onPress={() => {
-          console.log("group Pick is", props.groupPick);
           if (props.groupPick) {
             let translatedPick = TranslatePick(
               props.groupPick,
@@ -41,12 +36,10 @@ const GroupGamePick = (props) => {
               props.under
             );
             let oddsConverted = "";
-            console.log("translated pick is", translatedPick);
             if (translatedPick[0] == "No Pick") {
               setGroupPick(translatedPick);
             } else {
               oddsConverted = translatedPick[1];
-
               if (Number(oddsConverted) > 0) {
                 oddsConverted = "+" + oddsConverted;
               }

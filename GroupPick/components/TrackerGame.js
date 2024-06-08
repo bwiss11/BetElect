@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
-import { PickOptions } from "./PickOptions";
+import { StyleSheet, View, Text } from "react-native";
 import { TrackerAwayTeam } from "./TrackerAwayTeam";
 import { TrackerHomeTeam } from "./TrackerHomeTeam";
 import { TrackerGameStatus } from "./TrackerGameStatus";
@@ -10,14 +9,9 @@ import {
   GetFormattedDate,
 } from "../backend/functions";
 import { useEffect, useState } from "react";
-import teamIDMap from "../teamIDMap.json";
 
 const TrackerGame = (props) => {
-  // console.log("trackergame props:", props);
-  if (props.detailedState == "Postponed") {
-    console.log("this game  in TrackerGame is postponed", props);
-  }
-  const [logo, setLogo] = useState("");
+  // Game bucket for Tracker tab
   const [liveData, setLiveData] = useState("");
   const [status, setStatus] = useState("");
   const [translatedPick, setTranslatedPick] = useState("");
@@ -25,39 +19,34 @@ const TrackerGame = (props) => {
   const [pickType, setPickType] = useState("");
   const [pickStatus, setPickStatus] = useState("");
 
-  // const curDate = new Date(Date.now()).toISOString().split("T")[0];
-  const curDate = GetFormattedDate();
-
   useEffect(() => {
+    // Gets the live game data from MLB's API and sets the associated state variable
     GetLiveData(props.gameID).then((res) => {
       setLiveData(res);
     });
-    // console.log("setting pikc to", props.translatedPicks[props.index]);
+    // Sets the translated pick and the pick type state variables
     setTranslatedPick(props.translatedPicks[props.index]);
-    // console.log("setting picktype to", props.picks[props.index]);
     setPickType([
       props.picks[props.index],
       props.awaySpread,
       props.homeSpread,
       props.total,
     ]);
-    // console.log(
-    //   "picks is:",
-    //   props.picks,
-    //   props.index,
-    //   props.picks[props.index]
-    // );
   }, []);
 
-  useEffect(() => {}, [liveData]);
+  useEffect(() => {
+    //Forced refresh when liveData is updated
+  }, [liveData]);
 
   useEffect(() => {
+    // Gets and sets team data
     GetTeamData(props.awayTeamID).then((res) => {
       setTeamData([res.teams[0].franchiseName, res.teams[0].clubName]);
     });
   }, []);
 
   useEffect(() => {
+    // Sets game status based on live data information, finalizes pick status if game has ended
     if (liveData.status == "Final") {
       setStatus("Final");
       if (pickStatus == "winning") {
@@ -79,14 +68,19 @@ const TrackerGame = (props) => {
       status &&
       status.slice(status.length - 1, status.length) != "M"
     ) {
+      // Evaluates whether the pick for the game is winning, losing, won, lost, or tied
+      // Gets current scores
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
 
+      // Checks status of the pick
       if (props.detailedState == "Postponed") {
         setPickStatus("tied final");
       } else {
         if (liveData.status != "Preview") {
+          // Game has already started
           if (pickType[0] == "homeML") {
+            // Checks home ML pick status
             if (homeScore > awayScore) {
               if (liveData.status == "Final") {
                 setPickStatus("won");
@@ -103,6 +97,7 @@ const TrackerGame = (props) => {
               setPickStatus("tied");
             }
           } else if (pickType[0] == "awayML") {
+            // Checks away ML pick status
             if (homeScore > awayScore) {
               if (liveData.status == "Final") {
                 setPickStatus("lost");
@@ -119,6 +114,7 @@ const TrackerGame = (props) => {
               setPickStatus("tied");
             }
           } else if (pickType[0] == "homeSpread") {
+            // Checks home spread pick status
             if (homeScore + pickType[2] > awayScore) {
               if (liveData.status == "Final") {
                 setPickStatus("won");
@@ -135,6 +131,7 @@ const TrackerGame = (props) => {
               setPickStatus("tied");
             }
           } else if (pickType[0] == "awaySpread") {
+            // Checks away spread pick status
             if (awayScore + pickType[1] > homeScore) {
               if (liveData.status == "Final") {
                 setPickStatus("won");
@@ -151,6 +148,7 @@ const TrackerGame = (props) => {
               setPickStatus("tied");
             }
           } else if (pickType[0] == "over") {
+            // Checks over pick status
             if (awayScore + homeScore > pickType[3]) {
               if (liveData.status == "Final") {
                 setPickStatus("won");
@@ -167,6 +165,7 @@ const TrackerGame = (props) => {
               setPickStatus("tied");
             }
           } else if (pickType[0] == "under") {
+            // Checks under pick status
             if (awayScore + homeScore < pickType[3]) {
               if (liveData.status == "Final") {
                 setPickStatus("won");
@@ -193,7 +192,9 @@ const TrackerGame = (props) => {
   }, [pickType, liveData]);
 
   const pickStatusStyle = () => {
+    // Sets the pick's background color based on its status
     if (pickStatus == "winning") {
+      // Light green if winning
       return {
         backgroundColor: "rgba(20, 186, 65, 0.25)",
         flex: 1,
@@ -204,16 +205,16 @@ const TrackerGame = (props) => {
         borderColor: "black",
       };
     } else if (pickStatus == "won") {
+      // Dark green if won
       return {
         backgroundColor: "rgb(2,75,48)",
         flex: 1,
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
-        // borderTopLeftRadius: 5,
-        // borderTopRightRadius: 5,
       };
     } else if (pickStatus == "losing") {
+      // Light red if losing
       return {
         backgroundColor: "rgba(235, 31, 45, 0.25)",
         flex: 1,
@@ -224,6 +225,7 @@ const TrackerGame = (props) => {
         borderColor: "black",
       };
     } else if (pickStatus == "lost") {
+      // Dark red if won
       return {
         backgroundColor: "rgb(114, 0, 0)",
         flex: 1,
@@ -232,9 +234,6 @@ const TrackerGame = (props) => {
         color: "white",
         fontWeight: "bold",
         justifyContent: "center",
-
-        // borderTopLeftRadius: 5,
-        // borderTopRightRadius: 5,
       };
     } else if (pickStatus == "tied final") {
       return {
@@ -261,6 +260,7 @@ const TrackerGame = (props) => {
   };
 
   const textStatusStyle = () => {
+    // Sets text style based on pick status
     if (
       pickStatus == "won" ||
       pickStatus == "lost" ||
@@ -279,6 +279,7 @@ const TrackerGame = (props) => {
   };
 
   const containerStyle = () => {
+    // Sets stylilng based on pick status - black background if game has finished
     if (
       pickStatus == "won" ||
       pickStatus == "lost" ||
@@ -317,6 +318,7 @@ const TrackerGame = (props) => {
   };
 
   function teamsContainerStyle() {
+    // Sets stylilng based on pick status - black background if game has finished
     if (status == "Final" || props.detailedState == "Postponed") {
       return {
         width: "100%",

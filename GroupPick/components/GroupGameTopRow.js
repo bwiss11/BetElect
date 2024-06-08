@@ -1,18 +1,7 @@
 import { React, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
-import {
-  getGroup,
-  getUserInfo,
-  getUserFirestorePicks,
-} from "../backend/firestore";
+import { View, Text, StyleSheet } from "react-native";
+import { getUserFirestorePicks } from "../backend/firestore";
 import { GetFormattedDate } from "../backend/functions";
-import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import GroupGameAvatar from "./GroupGameAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -25,32 +14,9 @@ const userToPicksId = {
 const curDate = GetFormattedDate();
 
 const GroupGameTopRow = (props) => {
+  // Top row of game bucket on Group tab, including time, group member avatars, and check mark if all members' picks are in
   const [picksIn, setPicksIn] = useState(0);
-  // const [members, setMembers] = useState("");
-  // console.log("ggtr props", props);
-
   let myTime = new Date(props.time);
-
-  useEffect(() => {
-    let pickCount = 0;
-    for (i = 0; i < props.members.length; i++) {
-      getUserFirestorePicks(
-        curDate,
-        props.members[i],
-        userToPicksId[props.members[i]]
-      ).then((res) => {
-        // console.log(props.userId, "retrieved picks in GGA are", res);
-        if (res && res[props.index]) {
-          setPicksIn((picksIn) => picksIn + 1);
-        }
-      });
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("picksInarenow", picksIn);
-  // }, [picksIn]);
-
   return (
     <View style={styles.topRow}>
       <View style={styles.timeHolder}>
@@ -95,7 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   timeHolder: {
-    // marginRight: 20,
     flexShrink: 1,
     width: "30%",
     alignContent: "center",
