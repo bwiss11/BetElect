@@ -3,17 +3,16 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SoloPicks from "../screens/SoloPicks";
 import GroupPicks from "../screens/GroupPicks";
-import Stats from "../screens/Stats";
 import ProfilePage from "../screens/ProfilePage";
 import Tracker from "../screens/Tracker";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+// Creates tab navigation between the 4 main screens of the app
 const Tab = createBottomTabNavigator();
 
-console.log("on tabs page");
+// Defines screen styling
 const screenOptions = {
   tabBarShowLabel: false,
   tabBarActiveTintColor: "rgb(150, 150, 255, 100)",
@@ -32,6 +31,7 @@ const screenOptions = {
   },
   headerShown: false,
 };
+
 const Tabs = () => {
   return (
     <Tab.Navigator
@@ -142,40 +142,6 @@ const Tabs = () => {
           },
         }}
       />
-      {/* <Tab.Screen
-        name="Stats"
-        component={Stats}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Entypo
-                  name="bar-graph"
-                  size={24}
-                  color={focused ? "white" : "grey"}
-                />
-                <Text
-                  style={
-                    focused
-                      ? {
-                          fontSize: 11,
-                          fontWeight: "bold",
-                          color: "white",
-                        }
-                      : {
-                          fontSize: 11,
-                          fontWeight: "bold",
-                          color: "grey",
-                        }
-                  }
-                >
-                  Stats
-                </Text>
-              </View>
-            );
-          },
-        }}
-      /> */}
       <Tab.Screen
         name="Profile"
         component={ProfilePage}
