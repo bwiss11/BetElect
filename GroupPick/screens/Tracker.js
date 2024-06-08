@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { GetGames, GetFormattedDate, HandleOdds } from "../backend/functions";
 import { TrackerGame } from "../components/TrackerGame";
 import {
-  getUserFirestorePicks,
   getFirestoreData,
   logFirestoreData,
   getUserDoc,
@@ -35,11 +34,12 @@ const Tracker = () => {
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+      // User is signed in and their picks document id has not yet been recorded
+      // Gets user's picks document
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         if (res) {
+          // Set state for UserID, groupID, and picksDocID
           setUserID(res[0]);
           setGroupID(res[1].groupID);
           getUserPicksDoc(res[0]).then((res) => {
@@ -47,15 +47,13 @@ const Tracker = () => {
           });
         }
       });
-
-      // ...
     } else {
       // User is signed out
-      // ...
     }
   });
 
   useEffect(() => {
+    // Gets odds either from database or from an API call, sets odds-related state variables
     HandleOdds().then((res) => {
       setOdds(res[0][1][curDate]);
       setOddsBool(true);
@@ -63,6 +61,7 @@ const Tracker = () => {
   }, []);
 
   useEffect(() => {
+    // Once the groupID has been set, sets the group's data document ids, and both raw and translated picks document ids
     if (groupID) {
       getGroupPicksDoc(groupID).then((res) => {
         setGroupPicksDocID(res[0]);
@@ -77,6 +76,7 @@ const Tracker = () => {
   }, [groupID]);
 
   useEffect(() => {
+    // Gets the group's picks from Firestore
     if (groupPicksDocID) {
       getFirestorePicks(curDate, groupID, groupPicksDocID).then((res) => {
         setPicks(res);
@@ -85,6 +85,7 @@ const Tracker = () => {
   }, [groupPicksDocID]);
 
   useEffect(() => {
+    // Logs the MLB game data to the database if it hasn't been already
     if (groupDataDocID) {
       getFirestoreData(curDate, groupID, groupDataDocID).then((res) => {
         if (!res) {
@@ -100,6 +101,7 @@ const Tracker = () => {
   }, [groupDataDocID]);
 
   useEffect(() => {
+    // Gets the group's translated picks and sets the associated state variable, or creates a blank array if there are no translated picks yet
     if (translatedPicksDocID) {
       getTranslatedFirestorePicks(curDate, groupID, translatedPicksDocID).then(
         (res) => {

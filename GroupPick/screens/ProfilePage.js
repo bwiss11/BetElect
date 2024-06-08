@@ -4,26 +4,16 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  Button,
   TextInput,
   Pressable,
-  ActivityIndicatorBase,
 } from "react-native";
-import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
+import { Avatar, Title, Caption } from "react-native-paper";
 import { getGroup, getUserInfo } from "../backend/firestore";
 import MyGroupAvatar from "../components/MyGroupAvatar";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {
-  getUserFirestorePicks,
-  getFirestoreData,
-  logFirestoreData,
   getUserDoc,
   getUserPicksDoc,
-  getGroupDataDoc,
-  getFirestorePicks,
-  getTranslatedFirestorePicks,
-  getGroupPicksDoc,
-  getTranslatedPicksDoc,
   createGroup,
   joinGroup,
 } from "../backend/firestore";
@@ -36,36 +26,30 @@ const ProfilePage = ({ navigation }) => {
   const [groupID, setGroupID] = useState("");
   const [joinGroupID, setJoinGroupID] = useState("");
   const [bankroll, setBankroll] = useState("");
-  const [groupDataDocID, setGroupDataDocID] = useState("");
-  const [groupPicksDocID, setGroupPicksDocID] = useState("");
-  const [translatedPicksDocID, setTranslatedPicksDocID] = useState("");
   const [user, setUser] = useState(null); // Track user authentication state
   const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {
     if (user && !picksDocID) {
-      // User is signed in, see docs for a list of available properties
-      //  https://firebase.google.com/docs/reference/js/auth.user
+      // User is signed in and their picks document id has not yet been recorded
+      // Gets user's picks document
       const uid = user.uid;
       getUserDoc(uid).then((res) => {
         if (res) {
+          // Set state for UserID, groupID, and picksDocID
           setUserID(res[0]);
           if (res[1].groupID) {
             setGroupID(res[1].groupID);
           } else {
             setGroupID("none");
           }
-
           getUserPicksDoc(res[0]).then((res) => {
             setPicksDocID(res[0]);
           });
         }
       });
-
-      // ...
     } else {
       // User is signed out
-      // ...
     }
   });
 
@@ -73,9 +57,9 @@ const ProfilePage = ({ navigation }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
-
     return () => unsubscribe();
   }, [auth]);
+
   const handleAuthentication = async () => {
     try {
       if (user) {
@@ -84,28 +68,14 @@ const ProfilePage = ({ navigation }) => {
         await signOut(auth);
         navigation.navigate("Login");
       } else {
-        // Sign in or sign up
-        // if (isLogin) {
-        //   // Sign in
-        //   await signInWithEmailAndPassword(auth, email, password);
-        //   console.log("User signed in, navigating to tabs");
-        //   navigation.navigate("Tabs");
-        // } else {
-        //   // Sign up
-        //   await createUserWithEmailAndPassword(auth, email, password);
-        //   console.log("trying to sign up");
-        //   console.log("User created!");
-        // }
       }
     } catch (error) {
-      // console.log("Erroemail and password", email, password);
       console.error("Authentication error:", error.message);
     }
   };
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
+    // Sets the group
     if (groupID && groupID != "none") {
       getGroup(groupID).then((res) => {
         setGroup(res);
@@ -116,6 +86,7 @@ const ProfilePage = ({ navigation }) => {
   }, [groupID]);
 
   useEffect(() => {
+    // Gets user info and sets associated state variable
     if (userID) {
       getUserInfo(userID).then((res) => {
         setUserInfo(res);
@@ -124,14 +95,15 @@ const ProfilePage = ({ navigation }) => {
   }, [userID]);
 
   const handleJoinGroup = () => {
+    // Adds a user to the group
     joinGroup(joinGroupID, userID).then((res) => {
       setGroupID(res);
     });
   };
 
   const handleCreateGroup = () => {
+    // Creates a new group
     createGroup(userID, bankroll).then((res) => {
-      console.log("setting groupId to", res);
       setGroupID(res);
     });
   };
@@ -261,14 +233,6 @@ const ProfilePage = ({ navigation }) => {
                 <Text style={[styles.text, { marginTop: 10 }]}>
                   Unit Size: ${group.unitSize}
                 </Text>
-                {/* <Text style={[styles.text, { marginTop: 10 }]}>
-                Tier 1 Agreement: {group.tier1Agreement} Votes (
-                {group.tier1BetSize} Units)
-              </Text>
-              <Text style={[styles.text, { marginTop: 10 }]}>
-                Tier 2 Agreement: {group.tier2Agreement} Votes (
-                {group.tier2BetSize} Units)
-              </Text> */}
                 <Text style={[styles.text, { marginTop: 10 }]}>
                   Group Password: {group.password}
                 </Text>
@@ -282,13 +246,6 @@ const ProfilePage = ({ navigation }) => {
     );
   } else {
     return "";
-    // <View style={styles.logoutButton}>
-    //   <Pressable style={styles.button} onPress={handleAuthentication}>
-    //     <View>
-    //       <Text style={[styles.text, styles.buttonText]}>LOGOUT</Text>
-    //     </View>
-    //   </Pressable>
-    // </View>
   }
 };
 

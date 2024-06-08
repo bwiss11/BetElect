@@ -1,16 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Alert,
-  TextInput,
-  KeyboardAvoidingView,
-  Button,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
 import {
   getAuth,
@@ -30,11 +19,11 @@ const Stats = () => {
 
     return () => unsubscribe();
   }, [auth]);
+
   const handleAuthentication = async () => {
     try {
       if (user) {
         // If user is already authenticated, log out
-        console.log("User logged out!");
         await signOut(auth);
         navigation.navigate("Login");
       } else {
@@ -52,10 +41,8 @@ const Stats = () => {
         }
       }
     } catch (error) {
-      // console.log("Erroemail and password", email, password);
       console.error("Authentication error:", error.message);
     }
-    console.log("returning with user as", user);
   };
 
   return (
