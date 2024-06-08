@@ -107,7 +107,7 @@ const SoloPicks = () => {
       // Prompts the user to join a group if they haven't already
       return (
         <View style={styles.placeholder}>
-          <Text style={styles.text}>
+          <Text style={[styles.text, styles.placeholderText]}>
             Join or create a group on the Profile tab to get started!
           </Text>
         </View>
@@ -221,5 +221,8 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginTop: 15,
+  },
+  placeholderText: {
+    textAlign: "center",
   },
 });

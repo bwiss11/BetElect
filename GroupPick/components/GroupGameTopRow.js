@@ -5,18 +5,24 @@ import { GetFormattedDate } from "../backend/functions";
 import GroupGameAvatar from "./GroupGameAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const userToPicksId = {
-  L2tcqkRGYEEHb20DVbv5: "JU9K63mDllpPQbDt1Gx9",
-  MJ53DXM7CXOzljAnlN5N: "gN6Pk4d81ocdGoXwlmnv",
-  rDjcAkiv1vq2pIzzPNoZ: "0PlJUzddfM5kKnAgis0k",
-};
-
 const curDate = GetFormattedDate();
 
 const GroupGameTopRow = (props) => {
   // Top row of game bucket on Group tab, including time, group member avatars, and check mark if all members' picks are in
   const [picksIn, setPicksIn] = useState(0);
   let myTime = new Date(props.time);
+
+  useEffect(() => {
+    // Checks how many of the users have made their picks
+    for (i = 0; i < props.members.length; i++) {
+      getUserFirestorePicks(curDate, props.members[i]).then((res) => {
+        if (res && res[props.index]) {
+          setPicksIn((picksIn) => picksIn + 1);
+        }
+      });
+    }
+  }, []);
+
   return (
     <View style={styles.topRow}>
       <View style={styles.timeHolder}>

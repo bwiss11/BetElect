@@ -1,12 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Pressable } from "react-native";
-import {
-  GetGames,
-  GetOdds,
-  GetPitcherStats,
-  GetTeamData,
-  GetTeamLogo,
-} from "../backend/functions";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { GetPitcherStats, GetTeamData } from "../backend/functions";
 import { useEffect, useState } from "react";
 import logoMap from "../logoMap.json";
 

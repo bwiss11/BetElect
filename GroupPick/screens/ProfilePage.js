@@ -205,7 +205,7 @@ const ProfilePage = ({ navigation }) => {
                         style={styles.input}
                         value={joinGroupID}
                         onChangeText={setJoinGroupID}
-                        placeholder="Group ID"
+                        placeholder="Group Password"
                         autoCapitalize="none"
                       />
                       <Pressable
