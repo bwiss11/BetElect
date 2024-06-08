@@ -42,6 +42,7 @@ const Tabs = () => {
         name="Solo"
         component={SoloPicks}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => {
             return (
               <View style={{ alignItems: "center", justifyContent: "center" }}>

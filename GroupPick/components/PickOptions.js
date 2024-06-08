@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { GetFormattedDate } from "../backend/functions";
+import { GetFormattedDate, UpdatePicks } from "../backend/functions";
 import { getUserFirestorePicks } from "../backend/firestore";
 
 const PickOptions = (props) => {
@@ -16,6 +16,22 @@ const PickOptions = (props) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (userPick) {
+      UpdatePicks(
+        props.index,
+        userPick,
+        picksCopy,
+        curDate,
+        "123456",
+        props.numberOfGames,
+        props.userID,
+        props.picksDocID,
+        props.groupID
+      );
+    }
+  }, [userPick]);
 
   if (props.status != "Postponed") {
     // Special handling if the game has been postponed

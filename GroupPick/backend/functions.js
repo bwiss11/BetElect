@@ -12,7 +12,6 @@ import { collection, getDocs, query, where, limit } from "firebase/firestore";
 
 function GetGames() {
   // Gets the current day's game data from MLB's API and returns it
-  console.log("calling GetGames");
   const curDate = GetFormattedDate();
   return fetch(
     "https://statsapi.mlb.com/api/v1/schedule?sportId=1&hydrate=probablePitcher&startDate=" +
@@ -322,6 +321,44 @@ const GetCurrentHours = () => {
   return hours;
 };
 
+const UpdatePicks = async (
+  index,
+  pick,
+  picksCopy,
+  date,
+  groupId,
+  numberOfGames,
+  userID,
+  picksDocID
+) => {
+  try {
+    // Updates user's Firestore picks in database
+    // Gets Firestore picks
+    const firestorePicks = await getUserFirestorePicks(date, userID);
+    if (!firestorePicks) {
+      // If no picks are in Firestore
+      let picksArray = [];
+      for (let i = 0; i < numberOfGames; i++) {
+        picksArray.push("");
+      }
+      picksArray[index] = pick;
+      // Logs blank picks array into Firestore
+      await logFirestorePicks(date, picksArray, userID, picksDocID);
+    } else {
+      firestorePicks[index] = pick;
+      for (let i = 0; i < firestorePicks.length; i++) {
+        if (!firestorePicks[i]) {
+          firestorePicks[i] = "";
+        }
+      }
+      await logFirestorePicks(date, firestorePicks, userID, picksDocID);
+    }
+  } catch (e) {
+    console.log(e);
+    // error reading value
+  }
+};
+
 const GetLiveData = async (MLBGamePk) => {
   // Gets a game's live data from MLB's API
   return fetch(
@@ -424,4 +461,5 @@ export {
   TranslatePick,
   GetCurrentHours,
   HandleOdds,
+  UpdatePicks,
 };
