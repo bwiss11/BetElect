@@ -55,7 +55,7 @@ const Tracker = () => {
   useEffect(() => {
     // Gets odds either from database or from an API call, sets odds-related state variables
     HandleOdds().then((res) => {
-      setOdds(res[0][1][curDate]);
+      setOdds(res[0][1]["odds"]);
       setOddsBool(true);
     });
   }, []);
@@ -120,6 +120,10 @@ const Tracker = () => {
   }, [translatedPicksDocID]);
 
   useEffect(() => {}, [data]);
+
+  useEffect(() => {
+    console.log("check these", data, odds, oddsBool, translatedPicks, picks);
+  }, [data, odds, oddsBool, translatedPicks, picks]);
 
   if (data && odds && oddsBool && translatedPicks && picks) {
     return (
