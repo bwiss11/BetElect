@@ -72,7 +72,6 @@ const TrackerGame = (props) => {
       // Gets current scores
       awayScore = liveData.awayTeamRuns;
       homeScore = liveData.homeTeamRuns;
-
       // Checks status of the pick
       if (props.detailedState == "Postponed") {
         setPickStatus("tied final");
