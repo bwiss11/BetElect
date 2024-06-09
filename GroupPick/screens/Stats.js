@@ -31,12 +31,11 @@ const Stats = () => {
         if (isLogin) {
           // Sign in
           await signInWithEmailAndPassword(auth, email, password);
-          console.log("User signed in, navigating to tabs");
+          console.log("User signed in");
           navigation.navigate("Tabs");
         } else {
           // Sign up
           await createUserWithEmailAndPassword(auth, email, password);
-          console.log("trying to sign up");
           console.log("User created!");
         }
       }

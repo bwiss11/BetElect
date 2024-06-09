@@ -130,7 +130,6 @@ const OddsMaker = async (data, fullOdds) => {
       if (data) {
         // Initializes each games odds as blank to start
         for (let i = 0; i < data.length; i++) {
-          console.log("top level i is", i);
           object[i] = {
             startTime: "",
             awayMLOdds: "",
@@ -290,7 +289,6 @@ const OddsMaker = async (data, fullOdds) => {
       }
       // Returns the odds object if it exists
       if (object != {}) {
-        console.log("returning object", object);
         return object;
       } else {
         return null;

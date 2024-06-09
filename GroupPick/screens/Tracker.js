@@ -121,10 +121,6 @@ const Tracker = () => {
 
   useEffect(() => {}, [data]);
 
-  useEffect(() => {
-    console.log("check these", data, odds, oddsBool, translatedPicks, picks);
-  }, [data, odds, oddsBool, translatedPicks, picks]);
-
   if (data && odds && oddsBool && translatedPicks && picks) {
     return (
       <ScrollView style={styles.outermostContainer}>

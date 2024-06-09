@@ -190,7 +190,6 @@ const Login = ({ navigation }) => {
           try {
             await signInWithEmailAndPassword(auth, email, password);
           } catch (error) {
-            // console.log("ERROR is", error);
             console.log("invalid credentials");
             setEmail("");
             setPassword("");
