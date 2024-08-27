@@ -4,7 +4,7 @@ import { PickOptions } from "./PickOptions";
 import { Team } from "./Team";
 
 const Game = (props) => {
-  // Individual game buckets for SoloPicks tab
+  // Individual game component for SoloPicks tab
   let myTime = new Date(props.time);
   return (
     <View style={styles.container}>
