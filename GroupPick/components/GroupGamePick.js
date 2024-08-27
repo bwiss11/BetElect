@@ -12,7 +12,7 @@ const GroupGamePick = (props) => {
     }
   }, []);
 
-  // Initially pick is shown as a dash
+  // Pick is shown as a dash by default
   const [groupPick, setGroupPick] = useState("-");
 
   return (
